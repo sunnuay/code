@@ -5,9 +5,8 @@
             "name": "gdb",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/main.exe",
+            "program": "${workspaceFolder}/main",
             "cwd": "${workspaceFolder}",
-            "preLaunchTask": "make",
         }
     ]
 }

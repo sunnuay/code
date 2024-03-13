@@ -1,14 +1,18 @@
 SOURCE = sorting_algorithm
 TARGET = main.exe
 
-DIRECTORY = $(SOURCE)_o
+FOLDER = .build
+DIRECTORY = $(FOLDER)/$(SOURCE)
 OBJECTS := $(patsubst $(SOURCE)/%.c,$(DIRECTORY)/%.o,$(wildcard $(SOURCE)/*.c))
 OBJECTS += $(patsubst $(SOURCE)/%.cpp,$(DIRECTORY)/%.o,$(wildcard $(SOURCE)/*.cpp))
 
-all: $(DIRECTORY) $(TARGET)
+all: $(FOLDER) $(DIRECTORY) $(TARGET)
+
+$(FOLDER):
+	mkdir $@
 
 $(DIRECTORY):
-	mkdir $@
+	cd $(FOLDER) && mkdir $(SOURCE)
 
 $(TARGET): $(OBJECTS)
 	g++ $^ -o $@
@@ -17,7 +21,7 @@ $(DIRECTORY)/%.o: $(SOURCE)/%.c
 	g++ $< -o $@ -c -g
 
 $(DIRECTORY)/%.o: $(SOURCE)/%.cpp
-	g++ $< -o $@ -c -g -I .
+	g++ $< -o $@ -c -g
 
 clean:
-	rm -rf $(DIRECTORY) $(TARGET)
+	rm -rf $(FOLDER) $(TARGET)
