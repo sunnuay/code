@@ -1,6 +1,5 @@
-SOURCE = sorting_algorithm
-TARGET = main.exe
-
+SOURCE = 
+TARGET = .main
 FOLDER = .build
 DIRECTORY = $(FOLDER)/$(SOURCE)
 OBJECTS := $(patsubst $(SOURCE)/%.c,$(DIRECTORY)/%.o,$(wildcard $(SOURCE)/*.c))

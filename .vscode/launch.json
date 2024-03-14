@@ -5,8 +5,17 @@
             "name": "gdb",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/main",
+            "program": "${workspaceFolder}/.main",
             "cwd": "${workspaceFolder}",
-        }
+            "MIMode": "gdb",
+        },
+        {
+            "name": "lldb",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/.main",
+            "cwd": "${workspaceFolder}",
+            "MIMode": "lldb",
+        },
     ]
 }
