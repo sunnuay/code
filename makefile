@@ -1,4 +1,4 @@
-SOURCE = 
+SOURCE = sorting_algorithm
 TARGET = .main
 FOLDER = .build
 DIRECTORY = $(FOLDER)/$(SOURCE)
@@ -21,6 +21,9 @@ $(DIRECTORY)/%.o: $(SOURCE)/%.c
 
 $(DIRECTORY)/%.o: $(SOURCE)/%.cpp
 	g++ $< -o $@ -c -g
+
+run:
+	./$(TARGET)
 
 clean:
 	rm -rf $(FOLDER) $(TARGET)
