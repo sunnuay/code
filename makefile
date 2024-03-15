@@ -1,29 +1,25 @@
 SOURCE = sorting_algorithm
-TARGET = .main
 FOLDER = .build
-DIRECTORY = $(FOLDER)/$(SOURCE)
-OBJECTS := $(patsubst $(SOURCE)/%.c,$(DIRECTORY)/%.o,$(wildcard $(SOURCE)/*.c))
-OBJECTS += $(patsubst $(SOURCE)/%.cpp,$(DIRECTORY)/%.o,$(wildcard $(SOURCE)/*.cpp))
+TARGET = .main
+OBJECTS := $(patsubst $(SOURCE)/%.c,$(FOLDER)/%.o,$(wildcard $(SOURCE)/*.c))
+OBJECTS += $(patsubst $(SOURCE)/%.cpp,$(FOLDER)/%.o,$(wildcard $(SOURCE)/*.cpp))
 
-all: $(FOLDER) $(DIRECTORY) $(TARGET)
+a: $(FOLDER) $(TARGET)
 
 $(FOLDER):
 	mkdir $@
 
-$(DIRECTORY):
-	cd $(FOLDER) && mkdir $(SOURCE)
-
 $(TARGET): $(OBJECTS)
 	g++ $^ -o $@
 
-$(DIRECTORY)/%.o: $(SOURCE)/%.c
+$(FOLDER)/%.o: $(SOURCE)/%.c
 	g++ $< -o $@ -c -g
 
-$(DIRECTORY)/%.o: $(SOURCE)/%.cpp
+$(FOLDER)/%.o: $(SOURCE)/%.cpp
 	g++ $< -o $@ -c -g
 
-run:
+r:
 	./$(TARGET)
 
-clean:
+c:
 	rm -rf $(FOLDER) $(TARGET)
