@@ -1,6 +1,6 @@
 from PIL import Image
 
-with open("nyancat/nyancat.txt", "r") as f:
+with open("nyancat_gif/nyancat.txt", "r") as f:
     txt = f.read()
 
 colors = [
@@ -23,7 +23,7 @@ for i in range(6):
             images[i].putpixel((k, j), colors[n])
 
 images[0].save(
-    fp="nyancat/nyancat.gif",
+    fp="nyancat_gif/nyancat.gif",
     save_all=True,
     append_images=images[1:],
     loop=0,
