@@ -1,9 +1,4 @@
-void swap2(int *x, int *y)
-{
-    int t = *x;
-    *x = *y;
-    *y = t;
-}
+void swap(int *a, int *b);
 
 void quick_sort_recursive(int arr[], int start, int end)
 {
@@ -17,10 +12,10 @@ void quick_sort_recursive(int arr[], int start, int end)
             left++;
         while (arr[right] >= mid && left < right)
             right--;
-        swap2(&arr[left], &arr[right]);
+        swap(&arr[left], &arr[right]);
     }
     if (arr[left] >= arr[end])
-        swap2(&arr[left], &arr[end]);
+        swap(&arr[left], &arr[end]);
     else
         left++;
     if (left)

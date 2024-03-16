@@ -4,7 +4,8 @@ TARGET = .main
 OBJECTS := $(patsubst $(SOURCE)/%.c,$(FOLDER)/%.o,$(wildcard $(SOURCE)/*.c))
 OBJECTS += $(patsubst $(SOURCE)/%.cpp,$(FOLDER)/%.o,$(wildcard $(SOURCE)/*.cpp))
 
-a: $(FOLDER) $(TARGET)
+all: $(FOLDER) $(TARGET)
+	./$(TARGET)
 
 $(FOLDER):
 	mkdir $@
@@ -18,8 +19,5 @@ $(FOLDER)/%.o: $(SOURCE)/%.c
 $(FOLDER)/%.o: $(SOURCE)/%.cpp
 	g++ $< -o $@ -c -g
 
-r:
-	./$(TARGET)
-
-c:
+clean:
 	rm -rf $(FOLDER) $(TARGET)
