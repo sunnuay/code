@@ -1,1 +1,0 @@
-void counting_sort() {}

@@ -1,1 +1,0 @@
-void selection_sort() {}
