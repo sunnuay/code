@@ -1,29 +1,24 @@
 void swap(int *a, int *b);
 
-void quick_sort_recursive(int arr[], int start, int end)
+void quick(int arr[], int l, int r)
 {
-    if (start >= end)
+    if (l >= r)
         return;
-    int mid = arr[end];
-    int left = start, right = end - 1;
-    while (left < right)
+    int mid = arr[(l + r) / 2], i = l, j = r;
+    while (i <= j)
     {
-        while (arr[left] < mid && left < right)
-            left++;
-        while (arr[right] >= mid && left < right)
-            right--;
-        swap(&arr[left], &arr[right]);
+        while (arr[i] < mid)
+            i++;
+        while (arr[j] > mid)
+            j--;
+        if (i <= j)
+            swap(&arr[i], &arr[j]), i++, j--;
     }
-    if (arr[left] >= arr[end])
-        swap(&arr[left], &arr[end]);
-    else
-        left++;
-    if (left)
-        quick_sort_recursive(arr, start, left - 1);
-    quick_sort_recursive(arr, left + 1, end);
+    quick(arr, l, j);
+    quick(arr, i, r);
 }
 
 void quick_sort(int arr[], int len)
 {
-    quick_sort_recursive(arr, 0, len - 1);
+    quick(arr, 0, len - 1);
 }

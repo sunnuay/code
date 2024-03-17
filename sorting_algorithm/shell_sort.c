@@ -1,12 +1,14 @@
+void swap(int *a, int *b);
+
 void shell_sort(int arr[], int len)
 {
-    int j;
-    for (int gap = len >> 1; gap > 0; gap >>= 1)
-        for (int i = gap; i < len; i++)
-        {
-            int key = arr[i];
-            for (j = i - gap; j >= 0 && arr[j] > key; j -= gap)
-                arr[j + gap] = arr[j];
-            arr[j + gap] = key;
-        }
+    int gaps[] = {5, 3, 1};
+    int size = sizeof(gaps) / sizeof(int);
+    for (int n = 0; n < size; n++)
+    {
+        int h = gaps[n];
+        for (int i = h; i < len; i++)
+            for (int j = i; j >= h && arr[j] < arr[j - h]; j -= h)
+                swap(&arr[j], &arr[j - h]);
+    }
 }
