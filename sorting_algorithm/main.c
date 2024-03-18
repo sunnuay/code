@@ -12,7 +12,7 @@ int main()
     int arr[] = {5, 12, 15, 11, 3, 8, 13, 9, 4, 7, 10, 2, 14, 1, 6};
     int len = sizeof(arr) / sizeof(int);
 
-    bubble_sort(arr, len);
+    heap_sort(arr, len);
 
     for (int i = 0; i < len; i++)
         printf("%d ", arr[i]);

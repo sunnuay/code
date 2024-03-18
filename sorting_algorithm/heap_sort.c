@@ -1,31 +1,27 @@
 void swap(int *a, int *b);
 
-void sift_down(int arr[], int start, int end)
+void down(int arr[], int dad, int end)
 {
-    int parent = start;
-    int child = parent * 2 + 1;
-    while (child <= end)
+    int son = dad * 2 + 1;
+    while (son < end)
     {
-        if (child + 1 <= end && arr[child] < arr[child + 1])
-            child++;
-        if (arr[parent] >= arr[child])
-            return;
-        else
+        if (son + 1 < end && arr[son] < arr[son + 1])
+            son++;
+        if (arr[dad] < arr[son])
         {
-            swap(&arr[parent], &arr[child]);
-            parent = child;
-            child = parent * 2 + 1;
+            swap(&arr[dad], &arr[son]);
+            dad = son;
+            son = dad * 2 + 1;
         }
+        else
+            return;
     }
 }
 
 void heap_sort(int arr[], int len)
 {
-    for (int i = (len - 1 - 1) / 2; i >= 0; i--)
-        sift_down(arr, i, len - 1);
-    for (int i = len - 1; i > 0; i--)
-    {
-        swap(&arr[0], &arr[i]);
-        sift_down(arr, 0, i - 1);
-    }
+    for (int i = len / 2; i >= 0; i--)
+        down(arr, i, len);
+    for (int i = len - 1; i >= 1; i--)
+        swap(&arr[0], &arr[i]), down(arr, 0, i);
 }

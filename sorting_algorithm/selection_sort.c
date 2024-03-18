@@ -2,12 +2,12 @@ void swap(int *a, int *b);
 
 void selection_sort(int arr[], int len)
 {
-    for (int i = 0; i < len - 1; i++)
+    for (int i = len - 1; i > 0; i--)
     {
-        int min = i;
-        for (int j = i + 1; j < len; j++)
-            if (arr[j] < arr[min])
-                min = j;
-        swap(&arr[i], &arr[min]);
+        int max = i;
+        for (int j = 0; j < i; j++)
+            if (arr[j] > arr[max])
+                max = j;
+        swap(&arr[max], &arr[i]);
     }
 }
