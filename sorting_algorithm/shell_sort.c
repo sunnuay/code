@@ -8,7 +8,7 @@ void shell_sort(int arr[], int len)
     {
         int h = gap[--n];
         for (int i = h; i < len; i++)
-            for (int j = i; j >= h && arr[j] < arr[j - h]; j -= h)
-                swap(&arr[j], &arr[j - h]);
+            for (int j = i; j >= h && arr[j - h] > arr[j]; j -= h)
+                swap(&arr[j - h], &arr[j]);
     }
 }
