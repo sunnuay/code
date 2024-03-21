@@ -5,7 +5,7 @@ void down(int arr[], int dad, int end)
     int son = dad * 2 + 1;
     while (son <= end)
     {
-        if (son + 1 <= end && arr[son] < arr[son + 1])
+        if (son < end && arr[son] < arr[son + 1])
             son++;
         if (arr[dad] < arr[son])
         {
