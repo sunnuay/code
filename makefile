@@ -17,7 +17,7 @@ $(FOLDER)/%.o: $(SOURCE)/%.c
 	g++ $< -o $@ -c -g
 
 $(FOLDER)/%.o: $(SOURCE)/%.cpp
-	g++ $< -o $@ -c -g
+	g++ $< -o $@ -c -g -std=c++11
 
 clean:
 	rm -rf $(FOLDER) $(TARGET)
