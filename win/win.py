@@ -1,15 +1,12 @@
 # gradio==3.50.2
 # networkx
 # pymupdf
-# openai
-
 
 import gradio as gr
 import matplotlib.pyplot as plt
 import pandas as pd
 import networkx as nx
 import fitz
-import openai
 import random
 
 
@@ -27,7 +24,7 @@ def find(book, year, type, input):
     list = [pd.DataFrame(columns=columns)]
     for b in book:
         for y in year:
-            list.append(pd.read_csv(f"data/{b}/{b}_{y}.csv"))
+            list.append(pd.read_csv(f"win/data/{b}/{b}_{y}.csv"))
     df = pd.concat(list)
     df = df[df[type].str.contains(input, case=False)]
     df = df.drop(columns="abstract")
@@ -55,20 +52,7 @@ def recommend(frame):
 
 
 def translate(text, key):
-    try:
-        system = "You are a helpful assistant."
-        user = "Translate English to Chinese: " + text
-        client = openai.OpenAI(api_key=key)
-        completion = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": system},
-                {"role": "user", "content": user},
-            ],
-        )
-        return completion.choices[0].message
-    except Exception as e:
-        return e
+    return ""
 
 
 def trend(frame, key):
@@ -98,7 +82,9 @@ with gr.Blocks(title="WIN", css="footer{visibility: hidden}") as win:
             key = gr.Textbox(show_label=False, placeholder="密钥", type="password")
             with gr.Row():
                 gr.Button(value="文件读取").click(read, [file, input], text)
-                gr.Button(value="内容查找").click(find, [book, year, type, input], frame)
+                gr.Button(value="内容查找").click(
+                    find, [book, year, type, input], frame
+                )
             with gr.Row():
                 gr.Button(value="关系绘制").click(plot, frame, [text, image])
                 gr.Button(value="相似推荐").click(recommend, frame, [text, image])
