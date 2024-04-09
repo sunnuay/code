@@ -71,13 +71,19 @@ with gr.Blocks(title="WIN", css="footer{visibility: hidden}") as win:
                 image = gr.Plot(show_label=False)
         with gr.Column(scale=1):
             books = ["FOCS", "ICML", "NeurIPS", "SODA", "STOC"]
-            years = ["2013", "2014", "2015", "2016", "2017"]
-            years += ["2018", "2019", "2020", "2021", "2022"]
-            types = ["ee", "title", "author", "abstract"]
+            years = ["2022", "2021", "2020", "2019", "2018"]
+            years += ["2017", "2016", "2015", "2014", "2013"]
+            years += ["2012", "2011", "2010", "2009", "2008"]
+            years += ["2007", "2006", "2005", "2004", "2003"]
+            years += ["2002", "2001", "2000", "1999", "1998"]
+            years += ["1997", "1996", "1995", "1994", "1993"]
+            years += ["1992", "1991", "1990", "1989", "1988"]
+            years += ["1987", "1986", "1985"]
+            types = ["title", "author", "abstract"]
             file = gr.File(show_label=False, height=100, file_count="multiple")
             book = gr.Dropdown(show_label=False, multiselect=True, choices=books)
             year = gr.Dropdown(show_label=False, multiselect=True, choices=years)
-            type = gr.Dropdown(show_label=False, choices=types, value="ee")
+            type = gr.Dropdown(show_label=False, choices=types, value="title")
             input = gr.Textbox(show_label=False, placeholder="输入")
             key = gr.Textbox(show_label=False, placeholder="密钥", type="password")
             with gr.Row():
