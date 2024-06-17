@@ -5,9 +5,11 @@
 import gradio as gr
 import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
 import networkx as nx
 import fitz
 import random
+import json
 
 
 def read(file, input):
@@ -24,14 +26,14 @@ def find(book, year, type, input):
     list = [pd.DataFrame(columns=columns)]
     for b in book:
         for y in year:
-            list.append(pd.read_csv(f"win/data/{b}/{b}_{y}.csv"))
+            list.append(pd.read_csv(f".local/data/{b}/{b}_{y}.csv"))
     df = pd.concat(list)
     df = df[df[type].str.contains(input, case=False)]
     df = df.drop(columns="abstract")
     return df
 
 
-def plot(frame):
+def plot(df):
     plt.clf()
     n, m = 10, 5
     width = [random.randint(1, m) for _ in range(m)]
@@ -41,14 +43,25 @@ def plot(frame):
     return "", plt.gcf()
 
 
-def recommend(frame):
+def recommend(df, input):
     plt.clf()
-    m = 9
-    width = [random.randint(1, m) for _ in range(m)]
-    G = nx.Graph([(0, i + 1) for i in range(m)])
+    width = []
+    string = ""
+    row = df[df["title"].str.contains(input, case=False)].head(1)
+    value1 = row["vector"].values[0]
+    vector1 = np.array(json.loads(value1))
+    for i, value2 in df["vector"].items():
+        vector2 = np.array(json.loads(value2))
+        similarity = np.dot(vector1, vector2) / (
+            np.linalg.norm(vector1) * np.linalg.norm(vector2)
+        )
+        if similarity > 0.2:
+            width.append(int(similarity * 10))
+            string += "{} {}\n".format(len(width), df.loc[i, "title"])
+    G = nx.Graph([(0, i + 1) for i in range(len(width))])
     pos = nx.spring_layout(G)
     nx.draw(G, pos, with_labels=True, width=width)
-    return "", plt.gcf()
+    return string, plt.gcf()
 
 
 def translate(text, key):
@@ -93,7 +106,9 @@ with gr.Blocks(title="WIN", css="footer{visibility: hidden}") as win:
                 )
             with gr.Row():
                 gr.Button(value="关系绘制").click(plot, frame, [text, image])
-                gr.Button(value="相似推荐").click(recommend, frame, [text, image])
+                gr.Button(value="相似推荐").click(
+                    recommend, [frame, input], [text, image]
+                )
             with gr.Row():
                 gr.Button(value="总结翻译").click(translate, [text, key], text)
                 gr.Button(value="研究走向").click(trend, [frame, key], text)
