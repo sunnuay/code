@@ -1,6 +1,6 @@
-SOURCE = sorting_algorithm
+SOURCE = usb
 FOLDER = .build
-TARGET = .main
+TARGET = 666.exe
 OBJECTS := $(patsubst $(SOURCE)/%.c,$(FOLDER)/%.o,$(wildcard $(SOURCE)/*.c))
 OBJECTS += $(patsubst $(SOURCE)/%.cpp,$(FOLDER)/%.o,$(wildcard $(SOURCE)/*.cpp))
 
@@ -11,13 +11,13 @@ $(FOLDER):
 	mkdir $@
 
 $(TARGET): $(OBJECTS)
-	g++ $^ -o $@
+	g++ $^ -o $@ -mwindows
 
 $(FOLDER)/%.o: $(SOURCE)/%.c
 	g++ $< -o $@ -c -g
 
 $(FOLDER)/%.o: $(SOURCE)/%.cpp
-	g++ $< -o $@ -c -g -std=c++11
+	g++ $< -o $@ -c -g -mwindows
 
 clean:
 	rm -rf $(FOLDER) $(TARGET)
