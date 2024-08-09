@@ -1,6 +1,6 @@
-SOURCE = usb
+# SOURCE
 FOLDER = .build
-TARGET = 666.exe
+TARGET = .main
 OBJECTS := $(patsubst $(SOURCE)/%.c,$(FOLDER)/%.o,$(wildcard $(SOURCE)/*.c))
 OBJECTS += $(patsubst $(SOURCE)/%.cpp,$(FOLDER)/%.o,$(wildcard $(SOURCE)/*.cpp))
 
@@ -11,13 +11,13 @@ $(FOLDER):
 	mkdir $@
 
 $(TARGET): $(OBJECTS)
-	g++ $^ -o $@ -mwindows
+	g++ $^ -o $@
 
 $(FOLDER)/%.o: $(SOURCE)/%.c
 	g++ $< -o $@ -c -g
 
 $(FOLDER)/%.o: $(SOURCE)/%.cpp
-	g++ $< -o $@ -c -g -mwindows
+	g++ $< -o $@ -c -g
 
 clean:
 	rm -rf $(FOLDER) $(TARGET)
