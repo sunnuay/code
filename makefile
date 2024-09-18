@@ -11,10 +11,10 @@ $(FOLDER):
 	mkdir $@
 
 $(TARGET): $(OBJECTS)
-	g++ $^ -o $@
+	gcc $^ -o $@
 
 $(FOLDER)/%.o: $(SOURCE)/%.c
-	g++ $< -o $@ -c -g
+	gcc $< -o $@ -c -g
 
 $(FOLDER)/%.o: $(SOURCE)/%.cpp
 	g++ $< -o $@ -c -g
