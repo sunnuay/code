@@ -34,17 +34,17 @@ $(\operatorname{sech} x)' = -\operatorname{sech} x \tanh x$
 
 $(\operatorname{csch} x)' = -\operatorname{csch} x \coth x$
 
-$(\operatorname{arcsinh} x)' = \frac{1}{\sqrt{x^2+1}}$
+$(\operatorname{arsinh} x)' = \frac{1}{\sqrt{x^2+1}}$
 
-$(\operatorname{arccosh} x)' = \frac{1}{\sqrt{x^2-1}}$
+$(\operatorname{arcosh} x)' = \frac{1}{\sqrt{x^2-1}}$
 
-$(\operatorname{arctanh} x)' = \frac{1}{1-x^2}$
+$(\operatorname{artanh} x)' = \frac{1}{1-x^2}$
 
-$(\operatorname{arccoth} x)' = \frac{1}{1-x^2}$
+$(\operatorname{arcoth} x)' = \frac{1}{1-x^2}$
 
-$(\operatorname{arcsech} x)' = -\frac{1}{x\sqrt{1-x^2}}$
+$(\operatorname{arsech} x)' = -\frac{1}{x\sqrt{1-x^2}}$
 
-$(\operatorname{arccsch} x)' = -\frac{1}{|x|\sqrt{1+x^2}}$
+$(\operatorname{arcsch} x)' = -\frac{1}{|x|\sqrt{1+x^2}}$
 
 $\int \sin x \, dx = -\cos x + C$
 
@@ -66,9 +66,9 @@ $\int \arctan x \, dx = x \arctan x - \frac{1}{2} \ln(1+x^2) + C$
 
 $\int \operatorname{arccot} x \, dx = x \operatorname{arccot} x + \frac{1}{2} \ln(1+x^2) + C$
 
-$\int \operatorname{arcsec} x \, dx = x \operatorname{arcsec} x - \ln|x + \sqrt{x^2-1}| + C$
+$\int \operatorname{arcsec} x \, dx = x \operatorname{arcsec} x - \operatorname{arcosh} |x| + C$
 
-$\int \operatorname{arccsc} x \, dx = x \operatorname{arccsc} x + \ln|x + \sqrt{x^2-1}| + C$
+$\int \operatorname{arccsc} x \, dx = x \operatorname{arccsc} x + \operatorname{arcosh} |x| + C$
 
 $\int \sinh x \, dx = \cosh x + C$
 
@@ -80,16 +80,16 @@ $\int \coth x \, dx = \ln|\sinh x| + C$
 
 $\int \operatorname{sech} x \, dx = \arctan(\sinh x) + C$
 
-$\int \operatorname{csch} x \, dx = \ln|\tanh(x/2)| + C$
+$\int \operatorname{csch} x \, dx = -\ln|\operatorname{csch} x + \coth x| + C$
 
-$\int \operatorname{arcsinh} x \, dx = x \operatorname{arcsinh} x - \sqrt{x^2+1} + C$
+$\int \operatorname{arsinh} x \, dx = x \operatorname{arsinh} x - \sqrt{x^2+1} + C$
 
-$\int \operatorname{arccosh} x \, dx = x \operatorname{arccosh} x - \sqrt{x^2-1} + C$
+$\int \operatorname{arcosh} x \, dx = x \operatorname{arcosh} x - \sqrt{x^2-1} + C$
 
-$\int \operatorname{arctanh} x \, dx = x \operatorname{arctanh} x + \frac{1}{2} \ln(1-x^2) + C$
+$\int \operatorname{artanh} x \, dx = x \operatorname{artanh} x + \frac{1}{2} \ln(1-x^2) + C$
 
-$\int \operatorname{arccoth} x \, dx = x \operatorname{arccoth} x + \frac{1}{2} \ln(x^2-1) + C$
+$\int \operatorname{arcoth} x \, dx = x \operatorname{arcoth} x + \frac{1}{2} \ln(x^2-1) + C$
 
-$\int \operatorname{arcsech} x \, dx = x \operatorname{arcsech} x + \sqrt{1-x^2} + C$
+$\int \operatorname{arsech} x \, dx = x \operatorname{arsech} x + \arcsin x + C$
 
-$\int \operatorname{arccsch} x \, dx = x \operatorname{arccsch} x + \ln\left|\frac{1}{x} + \frac{\sqrt{1+x^2}}{|x|}\right| + C$
+$\int \operatorname{arcsch} x \, dx = x \operatorname{arcsch} x + \operatorname{arsinh} |x| + C$
