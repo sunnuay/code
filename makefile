@@ -11,7 +11,7 @@ $(FOLDER):
 	mkdir $@
 
 $(TARGET): $(OBJECTS)
-	gcc $^ -o $@
+	g++ $^ -o $@
 
 $(FOLDER)/%.o: $(SOURCE)/%.c
 	gcc $< -o $@ -c -g
