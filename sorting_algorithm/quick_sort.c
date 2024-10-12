@@ -1,6 +1,6 @@
 void swap(int *, int *);
 
-void partition(int arr[], int l, int r)
+void quick(int arr[], int l, int r)
 {
     if (l >= r)
         return;
@@ -14,11 +14,11 @@ void partition(int arr[], int l, int r)
         if (i <= j)
             swap(&arr[i], &arr[j]), i++, j--;
     }
-    partition(arr, l, j);
-    partition(arr, i, r);
+    quick(arr, l, j);
+    quick(arr, i, r);
 }
 
 void quick_sort(int arr[], int len)
 {
-    partition(arr, 0, len - 1);
+    quick(arr, 0, len - 1);
 }

@@ -1,9 +1,5 @@
 #include <stdio.h>
 
-#define ARR {5, 12, 15, 11, 3, 8, 13, 9, 4, 7, 10, 2, 14, 1, 6}
-#define LEN 15
-#define N 10
-
 void insertion_sort(int[], int);
 void selection_sort(int[], int);
 void bubble_sort(int[], int);
@@ -21,11 +17,12 @@ void (*sort[])(int[], int) = {
 
 int main()
 {
-    for (int i = 0; i < N; i++)
+    for (int i = 0; i < 10; i++)
     {
-        int arr[] = ARR;
-        sort[i](arr, LEN);
-        for (int j = 0; j < LEN; j++)
+        int arr[] = {5, 12, 15, 11, 3, 8, 13, 9, 4, 7, 10, 2, 14, 1, 6};
+        int len = sizeof(arr) / sizeof(int);
+        sort[i](arr, len);
+        for (int j = 0; j < len; j++)
             printf("%2d ", arr[j]);
         printf("\n");
     }

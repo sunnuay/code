@@ -2,12 +2,9 @@ void insertion_sort(int arr[], int len)
 {
     for (int i = 1; i < len; i++)
     {
-        int key = arr[i], j = i - 1;
-        while (j >= 0 && arr[j] > key)
-        {
+        int j, key = arr[i];
+        for (j = i - 1; j >= 0 && arr[j] > key; j--)
             arr[j + 1] = arr[j];
-            j--;
-        }
         arr[j + 1] = key;
     }
 }
