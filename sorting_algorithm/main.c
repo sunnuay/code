@@ -4,20 +4,20 @@
 #define LEN 15
 #define N 10
 
-void bubble_sort(int[], int);
-void quick_sort(int[], int);
 void insertion_sort(int[], int);
-void shell_sort(int[], int);
 void selection_sort(int[], int);
+void bubble_sort(int[], int);
+void shell_sort(int[], int);
 void heap_sort(int[], int);
+void quick_sort(int[], int);
 void merge_sort(int[], int);
 void counting_sort(int[], int);
 void radix_sort(int[], int);
 void bucket_sort(int[], int);
 
 void (*sort[])(int[], int) = {
-    bubble_sort, quick_sort, insertion_sort, shell_sort, selection_sort,
-    heap_sort, merge_sort, counting_sort, radix_sort, bucket_sort};
+    insertion_sort, selection_sort, bubble_sort, shell_sort, heap_sort,
+    quick_sort, merge_sort, counting_sort, radix_sort, bucket_sort};
 
 int main()
 {

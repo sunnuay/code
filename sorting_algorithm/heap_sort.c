@@ -1,4 +1,4 @@
-void swap(int *a, int *b);
+void swap(int *, int *);
 
 void down(int arr[], int dad, int end)
 {

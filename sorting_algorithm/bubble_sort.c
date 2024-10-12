@@ -1,4 +1,4 @@
-void swap(int *a, int *b);
+void swap(int *, int *);
 
 void bubble_sort(int arr[], int len)
 {

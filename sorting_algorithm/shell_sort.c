@@ -1,4 +1,4 @@
-void swap(int *a, int *b);
+void swap(int *, int *);
 
 void shell_sort(int arr[], int len)
 {
