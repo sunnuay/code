@@ -1,8 +1,7 @@
-# SOURCE
 FOLDER = .build
 TARGET = .main
-OBJECTS := $(patsubst $(SOURCE)/%.c,$(FOLDER)/%.o,$(wildcard $(SOURCE)/*.c))
-OBJECTS += $(patsubst $(SOURCE)/%.cpp,$(FOLDER)/%.o,$(wildcard $(SOURCE)/*.cpp))
+OBJECTS := $(patsubst $(src)/%.c,$(FOLDER)/%.o,$(wildcard $(src)/*.c))
+OBJECTS += $(patsubst $(src)/%.cpp,$(FOLDER)/%.o,$(wildcard $(src)/*.cpp))
 
 all: $(FOLDER) $(TARGET)
 	./$(TARGET)
@@ -13,10 +12,10 @@ $(FOLDER):
 $(TARGET): $(OBJECTS)
 	g++ $^ -o $@
 
-$(FOLDER)/%.o: $(SOURCE)/%.c
+$(FOLDER)/%.o: $(src)/%.c
 	gcc $< -o $@ -c -g
 
-$(FOLDER)/%.o: $(SOURCE)/%.cpp
+$(FOLDER)/%.o: $(src)/%.cpp
 	g++ $< -o $@ -c -g
 
 clean:
