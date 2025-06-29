@@ -1,22 +1,24 @@
-FOLDER = .build
-TARGET = .main
-OBJECTS := $(patsubst $(src)/%.c,$(FOLDER)/%.o,$(wildcard $(src)/*.c))
-OBJECTS += $(patsubst $(src)/%.cpp,$(FOLDER)/%.o,$(wildcard $(src)/*.cpp))
+SRC_DIR := sorting_algorithm
+OBJ_DIR := build
+TARGET := main.exe
 
-all: $(FOLDER) $(TARGET)
-	./$(TARGET)
+SRC := $(wildcard $(SRC_DIR)/*.c $(SRC_DIR)/*.cpp)
+OBJ := $(patsubst $(SRC_DIR)/%,$(OBJ_DIR)/%.o,$(SRC))
 
-$(FOLDER):
-	mkdir $@
+all: $(TARGET)
+	./$^
 
-$(TARGET): $(OBJECTS)
+$(TARGET): $(OBJ)
 	g++ $^ -o $@
 
-$(FOLDER)/%.o: $(src)/%.c
-	gcc $< -o $@ -c -g
+$(OBJ_DIR)/%.c.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+	gcc $^ -o $@ -c -g
 
-$(FOLDER)/%.o: $(src)/%.cpp
-	g++ $< -o $@ -c -g
+$(OBJ_DIR)/%.cpp.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
+	g++ $^ -o $@ -c -g
+
+$(OBJ_DIR):
+	mkdir $@
 
 clean:
-	rm -rf $(FOLDER) $(TARGET)
+	rm -rf $(OBJ_DIR) $(TARGET)
