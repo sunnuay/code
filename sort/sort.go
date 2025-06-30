@@ -2,8 +2,6 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-//go:generate go run genzfunc.go
-
 // Package sort provides primitives for sorting slices and user-defined collections.
 package sort
 
@@ -239,14 +237,6 @@ func maxDepth(n int) int {
 		depth++
 	}
 	return depth * 2
-}
-
-// lessSwap is a pair of Less and Swap function for use with the
-// auto-generated func-optimized variant of sort.go in
-// zfuncversion.go.
-type lessSwap struct {
-	Less func(i, j int) bool
-	Swap func(i, j int)
 }
 
 type reverse struct {
