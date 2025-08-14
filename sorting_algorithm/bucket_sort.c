@@ -8,15 +8,15 @@ void bucket_sort(int arr[], int len)
             max = arr[i];
         else if (arr[i] < min)
             min = arr[i];
-    #define num 10
-    int gap = (max - min) / num + 1;
-    int bkt[num][len], cnt[num] = {0};
+    #define N 10
+    int gap = (max - min) / N + 1;
+    int bkt[N][len], cnt[N] = {0};
     for (int i = 0; i < len; i++)
     {
         int n = (arr[i] - min) / gap;
         bkt[n][cnt[n]++] = arr[i];
     }
-    for (int k = 0, i = 0; i < num; i++)
+    for (int k = 0, i = 0; i < N; i++)
     {
         insertion_sort(bkt[i], cnt[i]);
         for (int j = 0; j < cnt[i]; j++)
