@@ -1,4 +1,4 @@
-void swap(int *, int *);
+#include "sorting_algorithm.h"
 
 void bubble_sort(int arr[], int len)
 {

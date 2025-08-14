@@ -1,4 +1,4 @@
-void insertion_sort(int[], int);
+#include "sorting_algorithm.h"
 
 void bucket_sort(int arr[], int len)
 {

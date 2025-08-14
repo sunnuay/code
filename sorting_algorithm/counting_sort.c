@@ -1,3 +1,5 @@
+#include "sorting_algorithm.h"
+
 void counting_sort(int arr[], int len)
 {
     int max = arr[0], min = arr[0];

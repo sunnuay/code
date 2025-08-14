@@ -1,4 +1,4 @@
-void swap(int *, int *);
+#include "sorting_algorithm.h"
 
 void shell_sort(int arr[], int len)
 {

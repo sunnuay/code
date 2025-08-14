@@ -1,4 +1,4 @@
-void swap(int *, int *);
+#include "sorting_algorithm.h"
 
 void quick(int arr[], int l, int r)
 {

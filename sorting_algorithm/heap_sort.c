@@ -1,4 +1,4 @@
-void swap(int *, int *);
+#include "sorting_algorithm.h"
 
 void heap(int arr[], int len, int i)
 {
