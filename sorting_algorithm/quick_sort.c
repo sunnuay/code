@@ -12,7 +12,7 @@ void quick(int arr[], int l, int r)
         while (arr[j] > mid)
             j--;
         if (i <= j)
-            swap(&arr[i], &arr[j]), i++, j--;
+            swap(arr, i, j), i++, j--;
     }
     quick(arr, l, j);
     quick(arr, i, r);

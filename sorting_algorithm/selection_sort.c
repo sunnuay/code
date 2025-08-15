@@ -8,6 +8,6 @@ void selection_sort(int arr[], int len)
         for (int j = 0; j < i; j++)
             if (arr[j] > arr[max])
                 max = j;
-        swap(&arr[max], &arr[i]);
+        swap(arr, max, i);
     }
 }

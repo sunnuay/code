@@ -8,7 +8,7 @@ void heap(int arr[], int len, int i)
     if (r < len && arr[max] < arr[r])
         max = r;
     if (max != i)
-        swap(&arr[i], &arr[max]), heap(arr, len, max);
+        swap(arr, i, max), heap(arr, len, max);
 }
 
 void heap_sort(int arr[], int len)
@@ -16,5 +16,5 @@ void heap_sort(int arr[], int len)
     for (int i = len / 2 - 1; i >= 0; i--)
         heap(arr, len, i);
     for (int i = len - 1; i > 0; i--)
-        swap(&arr[0], &arr[i]), heap(arr, i, 0);
+        swap(arr, 0, i), heap(arr, i, 0);
 }
