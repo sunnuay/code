@@ -1,6 +1,4 @@
 void swap(int[], int, int);
-int get_max(int[], int);
-int get_min(int[], int);
 void insertion_sort(int[], int);
 void shell_sort(int[], int);
 void selection_sort(int[], int);
