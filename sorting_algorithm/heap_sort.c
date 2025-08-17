@@ -1,4 +1,4 @@
-#include "sorting_algorithm.h"
+#include "sort.h"
 
 void heap(int arr[], int len, int i)
 {

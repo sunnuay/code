@@ -1,4 +1,4 @@
-#include "sorting_algorithm.h"
+#include "sort.h"
 
 void merge(int arr[], int tmp[], int l, int r)
 {
