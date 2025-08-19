@@ -1,7 +1,6 @@
 #include "sort.h"
 
-void merge(int arr[], int tmp[], int l, int r)
-{
+void merge(int arr[], int tmp[], int l, int r) {
     if (l >= r)
         return;
     int m = (l + r) / 2;
@@ -18,8 +17,7 @@ void merge(int arr[], int tmp[], int l, int r)
         arr[i] = tmp[i];
 }
 
-void merge_sort(int arr[], int len)
-{
+void merge_sort(int arr[], int len) {
     int tmp[len];
     merge(arr, tmp, 0, len - 1);
 }

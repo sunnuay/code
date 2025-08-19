@@ -1,7 +1,6 @@
 #include "sort.h"
 
-void bucket_sort(int arr[], int len)
-{
+void bucket_sort(int arr[], int len) {
     int MIN = 0, MAX = 99;
     int num = 10, gap = 10;
     int cnt[num], tmp[num][len];

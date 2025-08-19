@@ -1,7 +1,6 @@
 #include "sort.h"
 
-void shell_sort(int arr[], int len)
-{
+void shell_sort(int arr[], int len) {
     int n = 3, gap[] = {1, 3, 5};
     while (n--)
         for (int h = gap[n], i = h; i < len; i++)

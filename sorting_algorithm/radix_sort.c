@@ -1,12 +1,10 @@
 #include "sort.h"
 
-void radix_sort(int arr[], int len)
-{
+void radix_sort(int arr[], int len) {
     int MIN = 0, MAX = 99;
     int num = 10;
     int cnt[num], tmp[len];
-    for (int exp = 1; exp <= MAX; exp *= num)
-    {
+    for (int exp = 1; exp <= MAX; exp *= num) {
         for (int i = 0; i < num; i++)
             cnt[i] = 0;
         for (int i = 0; i < len; i++)

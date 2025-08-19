@@ -1,7 +1,6 @@
 #include "sort.h"
 
-void heap(int arr[], int len, int i)
-{
+void heap(int arr[], int len, int i) {
     int max = i, l = 2 * i + 1, r = 2 * i + 2;
     if (l < len && arr[max] < arr[l])
         max = l;
@@ -11,8 +10,7 @@ void heap(int arr[], int len, int i)
         swap(arr, i, max), heap(arr, len, max);
 }
 
-void heap_sort(int arr[], int len)
-{
+void heap_sort(int arr[], int len) {
     for (int i = len / 2 - 1; i >= 0; i--)
         heap(arr, len, i);
     for (int i = len - 1; i > 0; i--)

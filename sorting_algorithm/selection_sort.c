@@ -1,9 +1,7 @@
 #include "sort.h"
 
-void selection_sort(int arr[], int len)
-{
-    for (int i = len - 1; i > 0; i--)
-    {
+void selection_sort(int arr[], int len) {
+    for (int i = len - 1; i > 0; i--) {
         int max = i;
         for (int j = 0; j < i; j++)
             if (arr[j] > arr[max])

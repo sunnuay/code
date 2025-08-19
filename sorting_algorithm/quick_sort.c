@@ -1,12 +1,10 @@
 #include "sort.h"
 
-void quick(int arr[], int l, int r)
-{
+void quick(int arr[], int l, int r) {
     if (l >= r)
         return;
     int mid = arr[(l + r) / 2], i = l, j = r;
-    while (i <= j)
-    {
+    while (i <= j) {
         while (arr[i] < mid)
             i++;
         while (arr[j] > mid)
@@ -18,7 +16,6 @@ void quick(int arr[], int l, int r)
     quick(arr, i, r);
 }
 
-void quick_sort(int arr[], int len)
-{
+void quick_sort(int arr[], int len) {
     quick(arr, 0, len - 1);
 }

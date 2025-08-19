@@ -1,7 +1,6 @@
 #include "sort.h"
 
-void counting_sort(int arr[], int len)
-{
+void counting_sort(int arr[], int len) {
     int MIN = 0, MAX = 99;
     int num = 100;
     int cnt[num], tmp[len];
