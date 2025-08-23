@@ -1,4 +1,4 @@
-SRC_DIR := sorting_algorithm
+SRC_DIR := linear_list
 OBJ_DIR := build
 TARGET := main.exe
 
