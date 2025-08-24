@@ -1,4 +1,4 @@
-#include "sort.h"
+#include "sorting_algorithm.h"
 
 void heap(int arr[], int len, int i) {
     int max = i, l = 2 * i + 1, r = 2 * i + 2;
