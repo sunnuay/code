@@ -12,10 +12,10 @@ $(TARGET): $(OBJ)
 	g++ $^ -o $@
 
 $(OBJ_DIR)/%.c.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
-	gcc $< -o $@ -c -g
+	gcc $< -o $@ -c -g -std=c23
 
 $(OBJ_DIR)/%.cpp.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
-	g++ $< -o $@ -c -g
+	g++ $< -o $@ -c -g -std=c++23
 
 $(OBJ_DIR):
 	mkdir $@
