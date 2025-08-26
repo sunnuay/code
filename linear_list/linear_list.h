@@ -78,15 +78,21 @@ class DoublyLinkedList {
 class StaticLinkedList {
   public:
     StaticLinkedList();
+    int find(int val);
+    bool insert(int val, int idx);
+    bool insert(int val);
+    bool erase(int idx);
+    bool erase();
+    void print();
 
   private:
     struct Node {
         int data;
         int next;
     };
-    Node node[MAX_SIZE];
+    Node n[MAX_SIZE];
     int head;
     int tail;
-    int size;
     int free;
+    int size;
 };
