@@ -57,6 +57,12 @@ class CircularLinkedList {
 class DoublyLinkedList {
   public:
     DoublyLinkedList();
+    int find(int val);
+    bool insert(int val, int idx);
+    bool insert(int val);
+    bool erase(int idx);
+    bool erase();
+    void print();
 
   private:
     struct Node {

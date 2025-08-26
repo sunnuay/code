@@ -23,13 +23,13 @@ bool CircularLinkedList::insert(int val, int idx) {
         return false;
     if (idx == size)
         return insert(val);
-    Node *prev = tail->next;
+    Node *temp = tail->next;
     for (int i = 0; i < idx; i++)
-        prev = prev->next;
+        temp = temp->next;
     Node *node = new Node;
     node->data = val;
-    node->next = prev->next;
-    prev->next = node;
+    node->next = temp->next;
+    temp->next = node;
     size++;
     return true;
 }
@@ -47,13 +47,13 @@ bool CircularLinkedList::insert(int val) {
 bool CircularLinkedList::erase(int idx) {
     if (idx < 0 || idx >= size)
         return false;
-    Node *prev = tail->next;
+    Node *temp = tail->next;
     for (int i = 0; i < idx; i++)
-        prev = prev->next;
-    Node *node = prev->next;
-    prev->next = node->next;
+        temp = temp->next;
+    Node *node = temp->next;
+    temp->next = node->next;
     if (tail == node)
-        tail = prev;
+        tail = temp;
     delete node;
     size--;
     return true;
