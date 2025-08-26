@@ -1,8 +1,9 @@
 #include "linear_list.h"
 
 int main() {
-    SequentialList list;
+    SinglyLinkedList list;
     list.insert(114);
-    list.insert(514);
+    list.insert(0, 514);
+    list.erase(list.find(514));
     list.print();
 }
