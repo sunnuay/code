@@ -3,9 +3,9 @@
 
 StaticLinkedList::StaticLinkedList() {
     n[0].next = -1;
-    for (int i = 1; i < MAX_SIZE - 1; i++)
+    for (int i = 1; i < MAX - 1; i++)
         n[i].next = i + 1;
-    n[MAX_SIZE - 1].next = -1;
+    n[MAX - 1].next = -1;
     head = tail = size = 0;
     free = 1;
 }

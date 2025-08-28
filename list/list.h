@@ -1,4 +1,4 @@
-#define MAX_SIZE 100
+#define MAX 100
 
 class SequentialList {
   public:
@@ -10,7 +10,7 @@ class SequentialList {
     bool erase();
 
   private:
-    int data[MAX_SIZE];
+    int data[MAX];
     int size;
 };
 
@@ -85,7 +85,7 @@ class StaticLinkedList {
         int data;
         int next;
     };
-    Node n[MAX_SIZE];
+    Node n[MAX];
     int head;
     int tail;
     int free;

@@ -12,7 +12,7 @@ void SequentialList::print() {
 }
 
 bool SequentialList::insert(int val, int idx) {
-    if (size >= MAX_SIZE || idx < 0 || idx > size)
+    if (size >= MAX || idx < 0 || idx > size)
         return false;
     for (int i = size; i > idx; i--)
         data[i] = data[i - 1];
