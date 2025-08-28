@@ -3,12 +3,11 @@
 class SequentialList {
   public:
     SequentialList();
-    int find(int val);
+    void print();
     bool insert(int val, int idx);
     bool insert(int val);
     bool erase(int idx);
     bool erase();
-    void print();
 
   private:
     int data[MAX_SIZE];
@@ -18,12 +17,11 @@ class SequentialList {
 class SinglyLinkedList {
   public:
     SinglyLinkedList();
-    int find(int val);
+    void print();
     bool insert(int val, int idx);
     bool insert(int val);
     bool erase(int idx);
     bool erase();
-    void print();
 
   private:
     struct Node {
@@ -38,12 +36,11 @@ class SinglyLinkedList {
 class CircularLinkedList {
   public:
     CircularLinkedList();
-    int find(int val);
+    void print();
     bool insert(int val, int idx);
     bool insert(int val);
     bool erase(int idx);
     bool erase();
-    void print();
 
   private:
     struct Node {
@@ -57,12 +54,11 @@ class CircularLinkedList {
 class DoublyLinkedList {
   public:
     DoublyLinkedList();
-    int find(int val);
+    void print();
     bool insert(int val, int idx);
     bool insert(int val);
     bool erase(int idx);
     bool erase();
-    void print();
 
   private:
     struct Node {
@@ -78,12 +74,11 @@ class DoublyLinkedList {
 class StaticLinkedList {
   public:
     StaticLinkedList();
-    int find(int val);
+    void print();
     bool insert(int val, int idx);
     bool insert(int val);
     bool erase(int idx);
     bool erase();
-    void print();
 
   private:
     struct Node {

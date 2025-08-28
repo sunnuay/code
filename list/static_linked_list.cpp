@@ -10,14 +10,13 @@ StaticLinkedList::StaticLinkedList() {
     free = 1;
 }
 
-int StaticLinkedList::find(int val) {
+void StaticLinkedList::print() {
     int temp = n[head].next;
-    for (int i = 0; i < size; i++) {
-        if (n[temp].data == val)
-            return i;
+    while (temp != -1) {
+        std::print("{} ", n[temp].data);
         temp = n[temp].next;
     }
-    return -1;
+    std::println();
 }
 
 bool StaticLinkedList::insert(int val, int idx) {
@@ -68,13 +67,4 @@ bool StaticLinkedList::erase(int idx) {
 
 bool StaticLinkedList::erase() {
     return erase(size - 1);
-}
-
-void StaticLinkedList::print() {
-    int temp = n[head].next;
-    while (temp != -1) {
-        std::print("{} ", n[temp].data);
-        temp = n[temp].next;
-    }
-    std::println();
 }

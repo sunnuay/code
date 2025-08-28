@@ -9,14 +9,13 @@ DoublyLinkedList::DoublyLinkedList() {
     size = 0;
 }
 
-int DoublyLinkedList::find(int val) {
+void DoublyLinkedList::print() {
     Node *temp = head->next;
-    for (int i = 0; i < size; i++) {
-        if (temp->data == val)
-            return i;
+    while (temp) {
+        std::print("{} ", temp->data);
         temp = temp->next;
     }
-    return -1;
+    std::println();
 }
 
 bool DoublyLinkedList::insert(int val, int idx) {
@@ -73,13 +72,4 @@ bool DoublyLinkedList::erase() {
     delete node;
     size--;
     return true;
-}
-
-void DoublyLinkedList::print() {
-    Node *temp = head->next;
-    while (temp) {
-        std::print("{} ", temp->data);
-        temp = temp->next;
-    }
-    std::println();
 }

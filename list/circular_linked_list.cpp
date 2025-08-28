@@ -7,15 +7,14 @@ CircularLinkedList::CircularLinkedList() {
     size = 0;
 }
 
-int CircularLinkedList::find(int val) {
+void CircularLinkedList::print() {
     Node *head = tail->next;
     Node *temp = head->next;
-    for (int i = 0; i < size; i++) {
-        if (temp->data == val)
-            return i;
+    while (temp != head) {
+        std::print("{} ", temp->data);
         temp = temp->next;
     }
-    return -1;
+    std::println();
 }
 
 bool CircularLinkedList::insert(int val, int idx) {
@@ -61,14 +60,4 @@ bool CircularLinkedList::erase(int idx) {
 
 bool CircularLinkedList::erase() {
     return erase(size - 1);
-}
-
-void CircularLinkedList::print() {
-    Node *head = tail->next;
-    Node *temp = head->next;
-    while (temp != head) {
-        std::print("{} ", temp->data);
-        temp = temp->next;
-    }
-    std::println();
 }

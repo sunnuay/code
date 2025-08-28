@@ -8,14 +8,13 @@ SinglyLinkedList::SinglyLinkedList() {
     size = 0;
 }
 
-int SinglyLinkedList::find(int val) {
+void SinglyLinkedList::print() {
     Node *temp = head->next;
-    for (int i = 0; i < size; i++) {
-        if (temp->data == val)
-            return i;
+    while (temp) {
+        std::print("{} ", temp->data);
         temp = temp->next;
     }
-    return -1;
+    std::println();
 }
 
 bool SinglyLinkedList::insert(int val, int idx) {
@@ -61,13 +60,4 @@ bool SinglyLinkedList::erase(int idx) {
 
 bool SinglyLinkedList::erase() {
     return erase(size - 1);
-}
-
-void SinglyLinkedList::print() {
-    Node *temp = head->next;
-    while (temp) {
-        std::print("{} ", temp->data);
-        temp = temp->next;
-    }
-    std::println();
 }

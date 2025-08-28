@@ -5,11 +5,10 @@ SequentialList::SequentialList() {
     size = 0;
 }
 
-int SequentialList::find(int val) {
+void SequentialList::print() {
     for (int i = 0; i < size; i++)
-        if (data[i] == val)
-            return i;
-    return -1;
+        std::print("{} ", data[i]);
+    std::println();
 }
 
 bool SequentialList::insert(int val, int idx) {
@@ -37,10 +36,4 @@ bool SequentialList::erase(int idx) {
 
 bool SequentialList::erase() {
     return erase(size - 1);
-}
-
-void SequentialList::print() {
-    for (int i = 0; i < size; i++)
-        std::print("{} ", data[i]);
-    std::println();
 }
