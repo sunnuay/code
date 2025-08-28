@@ -1,14 +1,14 @@
-#include "linear_list.h"
+#include "list.h"
 #include <print>
 
-CircularLinkedList::CircularLinkedList() {
-    tail = new Node;
-    tail->next = tail;
+SinglyLinkedList::SinglyLinkedList() {
+    head = new Node;
+    head->next = nullptr;
+    tail = head;
     size = 0;
 }
 
-int CircularLinkedList::find(int val) {
-    Node *head = tail->next;
+int SinglyLinkedList::find(int val) {
     Node *temp = head->next;
     for (int i = 0; i < size; i++) {
         if (temp->data == val)
@@ -18,12 +18,12 @@ int CircularLinkedList::find(int val) {
     return -1;
 }
 
-bool CircularLinkedList::insert(int val, int idx) {
+bool SinglyLinkedList::insert(int val, int idx) {
     if (idx < 0 || idx > size)
         return false;
     if (idx == size)
         return insert(val);
-    Node *temp = tail->next;
+    Node *temp = head;
     for (int i = 0; i < idx; i++)
         temp = temp->next;
     Node *node = new Node;
@@ -34,7 +34,7 @@ bool CircularLinkedList::insert(int val, int idx) {
     return true;
 }
 
-bool CircularLinkedList::insert(int val) {
+bool SinglyLinkedList::insert(int val) {
     Node *node = new Node;
     node->data = val;
     node->next = tail->next;
@@ -44,10 +44,10 @@ bool CircularLinkedList::insert(int val) {
     return true;
 }
 
-bool CircularLinkedList::erase(int idx) {
+bool SinglyLinkedList::erase(int idx) {
     if (idx < 0 || idx >= size)
         return false;
-    Node *temp = tail->next;
+    Node *temp = head;
     for (int i = 0; i < idx; i++)
         temp = temp->next;
     Node *node = temp->next;
@@ -59,14 +59,13 @@ bool CircularLinkedList::erase(int idx) {
     return true;
 }
 
-bool CircularLinkedList::erase() {
+bool SinglyLinkedList::erase() {
     return erase(size - 1);
 }
 
-void CircularLinkedList::print() {
-    Node *head = tail->next;
+void SinglyLinkedList::print() {
     Node *temp = head->next;
-    while (temp != head) {
+    while (temp) {
         std::print("{} ", temp->data);
         temp = temp->next;
     }

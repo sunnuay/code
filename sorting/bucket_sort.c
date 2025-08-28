@@ -1,4 +1,4 @@
-#include "sorting_algorithm.h"
+#include "sorting.h"
 
 void bucket_sort(int arr[], int len) {
     int MIN = 0, MAX = 99;

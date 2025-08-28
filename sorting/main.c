@@ -1,4 +1,4 @@
-#include "sorting_algorithm.h"
+#include "sorting.h"
 #include <stdio.h>
 #include <string.h>
 

@@ -1,4 +1,4 @@
-#include "sorting_algorithm.h"
+#include "sorting.h"
 
 void quick(int arr[], int l, int r) {
     if (l >= r)

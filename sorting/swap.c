@@ -1,4 +1,4 @@
-#include "sorting_algorithm.h"
+#include "sorting.h"
 
 void swap(int arr[], int a, int b) {
     int tmp = arr[a];

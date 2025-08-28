@@ -1,4 +1,4 @@
-#include "sorting_algorithm.h"
+#include "sorting.h"
 
 void selection_sort(int arr[], int len) {
     for (int i = len - 1; i > 0; i--) {

@@ -1,4 +1,4 @@
-#include "sorting_algorithm.h"
+#include "sorting.h"
 
 void shell_sort(int arr[], int len) {
     int n = 3, gap[] = {1, 3, 5};
