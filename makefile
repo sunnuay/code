@@ -1,4 +1,4 @@
-SRC_DIR := list
+SRC_DIR := others
 OBJ_DIR := build
 TARGET := main.exe
 
