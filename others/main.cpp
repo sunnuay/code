@@ -8,6 +8,10 @@ void test_deque() {
     deque.pop_back();
 }
 
+void test_sparse_matrix() {
+}
+
 int main() {
     test_deque();
+    test_sparse_matrix();
 }

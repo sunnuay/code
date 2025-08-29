@@ -85,7 +85,7 @@ class StaticLinkedList {
         int data;
         int next;
     };
-    Node n[MAX];
+    Node p[MAX];
     int head;
     int tail;
     int free;
