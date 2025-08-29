@@ -1,8 +1,12 @@
-#include "others.h"
+#include "deque.h"
 #include <print>
 
 Deque::Deque() {
     head = tail = 0;
+}
+
+int Deque::size() {
+    return (tail - head + MAX) % MAX;
 }
 
 bool Deque::push_front(int val) {
@@ -35,8 +39,4 @@ bool Deque::pop_back() {
     std::println("{}", data[tail]);
     tail = (tail - 1 + MAX) % MAX;
     return true;
-}
-
-int Deque::size() {
-    return (tail - head + MAX) % MAX;
 }

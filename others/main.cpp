@@ -1,4 +1,4 @@
-#include "others.h"
+#include "deque.h"
 
 void test_deque() {
     Deque deque;
