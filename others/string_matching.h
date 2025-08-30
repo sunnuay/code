@@ -1,6 +1,6 @@
 #include <string>
 #include <vector>
 
-std::vector<int> lps(std::string &pattern);
-int kmp(std::string &text, std::string &pattern);
-int bf(std::string &text, std::string &pattern);
+std::vector<int> lps(const std::string &pattern);
+int kmp(const std::string &text, const std::string &pattern);
+int bf(const std::string &text, const std::string &pattern);

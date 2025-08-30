@@ -1,8 +1,6 @@
 #include "string_matching.h"
 
-// 1. 计算模式串的 next 数组
-// next[i] 表示 pattern[0...i] 的最长公共前后缀的长度
-std::vector<int> lps(std::string &pattern) {
+std::vector<int> lps(const std::string &pattern) {
     int n = pattern.length();
     std::vector<int> next(n, 0);
 
@@ -27,9 +25,7 @@ std::vector<int> lps(std::string &pattern) {
     return next;
 }
 
-// 2. KMP 搜索算法
-// 返回模式串在主串中首次出现的位置，未找到则返回 -1
-int kmp(std::string &text, std::string &pattern) {
+int kmp(const std::string &text, const std::string &pattern) {
     int n = text.length();
     int m = pattern.length();
 
@@ -65,4 +61,7 @@ int kmp(std::string &text, std::string &pattern) {
     }
 
     return -1; // 未找到匹配
+}
+
+int bf(const std::string &text, const std::string &pattern) {
 }
