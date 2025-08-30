@@ -1,12 +1,12 @@
-struct SparseMatrixNode {
-    int row, col, val;
-};
+#include <vector>
 
 struct SparseMatrix {
+    struct Node {
+        int row, col, val;
+    };
+    std::vector<Node> node;
     SparseMatrix();
+    SparseMatrix(std::initializer_list<Node> list);
     SparseMatrix transpose();
     void print();
-    void sort();
-    SparseMatrixNode *node;
-    int size;
 };
