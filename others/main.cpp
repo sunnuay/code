@@ -1,5 +1,6 @@
 #include "deque.h"
 #include "sparse_matrix.h"
+#include "string_matching.h"
 
 void test_deque() {
     Deque deque;
@@ -16,7 +17,15 @@ void test_sparse_matrix() {
     sm.transpose().transpose().print();
 }
 
+void test_string_matching() {
+    StringMaching sm;
+    sm.text = "ABABABC";
+    sm.pattern = "ABABC";
+    sm.print();
+}
+
 int main() {
     test_deque();
     test_sparse_matrix();
+    test_string_matching();
 }

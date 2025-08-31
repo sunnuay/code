@@ -13,8 +13,8 @@ SparseMatrix SparseMatrix::transpose() {
     int cols = 0;
     for (auto [row, col, val] : node)
         cols = std::max(cols, col + 1);
-    std::vector<int> number(cols, 0);
-    std::vector<int> position(cols, 0);
+    std::vector<int> number(cols);
+    std::vector<int> position(cols);
     for (auto [row, col, val] : node)
         number[col]++;
     for (int i = 1; i < cols; ++i)
