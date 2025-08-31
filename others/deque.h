@@ -3,7 +3,6 @@
 class Deque {
   public:
     Deque();
-    int size();
     bool push_front(int val);
     bool push_back(int val);
     bool pop_front();
@@ -13,4 +12,5 @@ class Deque {
     int data[MAX];
     int head;
     int tail;
+    int size();
 };

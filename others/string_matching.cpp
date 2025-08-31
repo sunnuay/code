@@ -2,7 +2,11 @@
 #include <print>
 #include <vector>
 
-int StringMaching::kmp() {
+int StringMaching::brute_force() {
+    return -1;
+}
+
+int StringMaching::prefix_function() {
     if (pattern.empty())
         return 0;
     if (text.size() < pattern.size())
@@ -22,6 +26,12 @@ int StringMaching::kmp() {
     return -1;
 }
 
+int StringMaching::knuth_morris_pratt() {
+    return -1;
+}
+
 void StringMaching::print() {
-    std::println("KMP: {}", kmp());
+    std::println("BF: {}", brute_force());
+    std::println("PF: {}", prefix_function());
+    std::println("KMP: {}", knuth_morris_pratt());
 }

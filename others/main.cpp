@@ -11,7 +11,8 @@ void test_deque() {
 }
 
 void test_sparse_matrix() {
-    SparseMatrix sm = {{3, 2, 1}, {1, 2, 3}, {1, 1, 4}, {5, 1, 4}};
+    SparseMatrix sm;
+    sm.data = {{3, 2, 1}, {1, 2, 3}, {1, 1, 4}, {5, 1, 4}};
     sm.print();
     sm.transpose().print();
     sm.transpose().transpose().print();

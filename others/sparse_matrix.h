@@ -1,12 +1,8 @@
 #include <vector>
+#include <tuple>
 
 struct SparseMatrix {
-    struct Node {
-        int row, col, val;
-    };
-    std::vector<Node> node;
-    SparseMatrix();
-    SparseMatrix(std::initializer_list<Node> list);
+    std::vector<std::tuple<int, int, int>> data;
     SparseMatrix transpose();
     void print();
 };
