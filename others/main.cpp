@@ -20,8 +20,8 @@ void test_sparse_matrix() {
 
 void test_string_matching() {
     StringMaching sm;
-    sm.text = "ABABABC";
-    sm.pattern = "ABABC";
+    sm.txt = "ABABABC";
+    sm.pat = "ABABC";
     sm.print();
 }
 

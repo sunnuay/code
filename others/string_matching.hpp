@@ -1,9 +1,8 @@
 #include <string>
 
 struct StringMaching {
-    std::string text, pattern;
-    int brute_force();
-    int prefix_function();
-    int knuth_morris_pratt();
+    std::string txt, pat;
+    int bf();
+    int kmp();
     void print();
 };
