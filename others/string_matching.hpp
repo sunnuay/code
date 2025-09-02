@@ -1,8 +1,10 @@
 #include <string>
+#include <vector>
 
-struct StringMaching {
+struct StringMatching {
     std::string txt, pat;
+    void print();
     int bf();
     int kmp();
-    void print();
+    std::vector<int> pf();
 };
