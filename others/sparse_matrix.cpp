@@ -19,7 +19,7 @@ SparseMatrix SparseMatrix::transpose() {
 }
 
 void SparseMatrix::print() {
-    std::println("SparseMatrix:");
+    std::println("{}:", (void *)this);
     for (auto [row, col, val] : data)
         std::println("{} {} {}", row, col, val);
 }

@@ -34,7 +34,7 @@ std::vector<int> StringMatching::pf() {
     int i = 1, j = 0;
     while (i < pat.size())
         if (pat[i] == pat[j])
-            lps[i++] = ++j;
+            lps[i] = j + 1, i++, j++;
         else if (j)
             j = lps[j - 1];
         else
