@@ -1,20 +1,15 @@
 class BST {
   public:
-    BST();
-    bool search(int data);
-    void insert(int data);
-    void remove(int data);
     void print();
+    bool insert(int data);
+    bool remove(int data);
 
   private:
     struct Node {
         int data;
-        Node *left;
-        Node *right;
+        Node *l;
+        Node *r;
     };
-    Node *root;
-    Node *search(Node *node, int data);
-    Node *insert(Node *node, int data);
-    Node *remove(Node *node, int data);
+    Node *root = nullptr;
     void print(Node *node);
 };

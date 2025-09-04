@@ -2,11 +2,11 @@
 
 int main() {
     BST tree;
-    tree.insert(0);
-    tree.insert(7);
-    tree.insert(2);
     tree.insert(1);
-    if (tree.search(0))
-        tree.remove(0);
+    tree.remove(1);
+    tree.insert(4);
+    tree.insert(5);
+    tree.insert(1);
+    tree.remove(4);
     tree.print();
 }
