@@ -1,10 +1,6 @@
 #include "deque.hpp"
 #include <print>
 
-Deque::Deque() {
-    head = tail = 0;
-}
-
 int Deque::size() {
     return (tail - head + MAX) % MAX;
 }
