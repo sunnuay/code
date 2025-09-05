@@ -21,4 +21,4 @@ $(OBJ_DIR):
 	mkdir $@
 
 clean:
-	rm -rf $(OBJ_DIR) $(TARGET)
+	rm -rf .vscode $(OBJ_DIR) $(TARGET)

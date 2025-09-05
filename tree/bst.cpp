@@ -43,6 +43,31 @@ bool BST::remove(Node *&node, int data) {
     } else if (data > node->data) {
         return remove(node->r, data);
     } else {
+        erase(node);
         return true;
+    }
+}
+
+void BST::erase(Node *&node) {
+    Node *pred, *temp;
+    if (node->l == nullptr) {
+        temp = node;
+        node = node->r;
+        delete temp;
+    } else if (node->r == nullptr) {
+        temp = node;
+        node = node->l;
+        delete temp;
+    } else {
+        pred = node;
+        temp = node->l;
+        while (temp->r != nullptr)
+            pred = temp, temp = temp->r;
+        node->data = temp->data;
+        if (pred == node)
+            pred->l = temp->l;
+        else
+            pred->r = temp->l;
+        delete temp;
     }
 }

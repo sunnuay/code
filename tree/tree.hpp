@@ -14,4 +14,5 @@ class BST {
     void print(Node *node);
     bool insert(Node *&node, int data);
     bool remove(Node *&node, int data);
+    void erase(Node *&node);
 };
