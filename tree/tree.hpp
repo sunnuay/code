@@ -12,4 +12,6 @@ class BST {
     };
     Node *root = nullptr;
     void print(Node *node);
+    bool insert(Node *&node, int data);
+    bool remove(Node *&node, int data);
 };
