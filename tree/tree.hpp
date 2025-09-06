@@ -1,3 +1,6 @@
+#include <map>
+#include <string>
+
 class BST {
   public:
     void print();
@@ -15,4 +18,27 @@ class BST {
     bool insert(Node *&node, int data);
     bool remove(Node *&node, int data);
     void erase(Node *&node);
+};
+
+class Huffman {
+  public:
+    Huffman(std::map<char, int> count);
+    std::string encode(std::string text);
+    std::string decode(std::string text);
+
+  private:
+    struct Node {
+        int weight;
+        int parent;
+        int lchild;
+        int rchild;
+    };
+    struct Code {
+        char data;
+        std::string code;
+    };
+    int num;
+    Node *tree;
+    Code *table;
+    void build_table(int i, std::string code);
 };
