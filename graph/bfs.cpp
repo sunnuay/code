@@ -2,13 +2,13 @@
 #include <print>
 #include <queue>
 
-void Graph::bfs_iterative(int start) {
+void AdjacencyList::bfs_iterative(int u) {
     visited.assign(graph.size(), false);
-    visited[start] = true;
     std::queue<int> queue;
-    queue.push(start);
+    visited[u] = true;
+    queue.push(u);
     while (!queue.empty()) {
-        int u = queue.front();
+        u = queue.front();
         queue.pop();
         std::print("{} ", u);
         for (int v : graph[u]) {

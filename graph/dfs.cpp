@@ -2,13 +2,13 @@
 #include <print>
 #include <stack>
 
-void Graph::dfs_iterative(int start) {
+void AdjacencyList::dfs_iterative(int u) {
     visited.assign(graph.size(), false);
-    visited[start] = true;
     std::stack<int> stack;
-    stack.push(start);
+    visited[u] = true;
+    stack.push(u);
     while (!stack.empty()) {
-        int u = stack.top();
+        u = stack.top();
         stack.pop();
         std::print("{} ", u);
         for (int v : graph[u]) {
@@ -21,13 +21,13 @@ void Graph::dfs_iterative(int start) {
     std::println();
 }
 
-void Graph::dfs_recursive(int start) {
+void AdjacencyList::dfs_recursive(int u) {
     visited.assign(graph.size(), false);
-    dfs_visit(start);
+    dfs_visit(u);
     std::println();
 }
 
-void Graph::dfs_visit(int u) {
+void AdjacencyList::dfs_visit(int u) {
     visited[u] = true;
     std::print("{} ", u);
     for (int v : graph[u])
