@@ -1,6 +1,6 @@
 SRC_DIR := tree
-OBJ_DIR := build
-TARGET := main.exe
+OBJ_DIR := .build
+TARGET := .main
 
 SRC := $(wildcard $(SRC_DIR)/*.c $(SRC_DIR)/*.cpp)
 OBJ := $(patsubst $(SRC_DIR)/%,$(OBJ_DIR)/%.o,$(SRC))
