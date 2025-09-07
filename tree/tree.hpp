@@ -25,13 +25,14 @@ class Huffman {
     Huffman(std::map<char, int> count);
     std::string encode(std::string text);
     std::string decode(std::string text);
+    void print();
 
   private:
     struct Node {
-        int weight;
         int parent;
         int lchild;
         int rchild;
+        int weight;
     };
     struct Code {
         char data;

@@ -1,7 +1,6 @@
 #include "tree.hpp"
-#include <print>
 
-void test_BST() {
+void test_bst() {
     BST tree;
     tree.insert(1);
     tree.remove(1);
@@ -13,18 +12,16 @@ void test_BST() {
 }
 
 void test_huffman() {
-    std::string text = "this is an example for huffman encoding";
+    std::string text = "AAAAAAAAABBBBBBZZCCC";
     std::map<char, int> count;
     for (char c : text)
         count[c]++;
     Huffman huffman(count);
-    std::string encoded = huffman.encode("example");
-    std::string decoded = huffman.decode(encoded);
-    std::println("{}", encoded);
-    std::println("{}", decoded);
+    if (text == huffman.decode(huffman.encode(text)))
+        huffman.print();
 }
 
 int main() {
-    test_BST();
+    test_bst();
     test_huffman();
 }

@@ -1,7 +1,10 @@
 #include "tree.hpp"
+#include <print>
 
 Huffman::Huffman(std::map<char, int> count) {
     num = count.size();
+    if (num < 2)
+        throw;
     tree = new Node[2 * num - 1];
     table = new Code[num];
     int i = 0;
@@ -21,10 +24,10 @@ Huffman::Huffman(std::map<char, int> count) {
             if (tree[j].parent == -1 && tree[j].weight < min && j != x)
                 min = tree[j].weight, y = j;
         tree[x].parent = tree[y].parent = i;
-        tree[i].weight = tree[x].weight + tree[y].weight;
+        tree[i].parent = -1;
         tree[i].lchild = x;
         tree[i].rchild = y;
-        tree[i].parent = -1;
+        tree[i].weight = tree[x].weight + tree[y].weight;
     }
     build_table(2 * num - 2, "");
 }
@@ -65,4 +68,27 @@ std::string Huffman::decode(std::string text) {
         }
     }
     return decoded;
+}
+
+void Huffman::print() {
+    std::println("index | parent lchild rchild weight | data code");
+    std::println("------+-----------------------------+----------");
+    for (int i = 0; i < 2 * num - 1; i++) {
+        if (i < num)
+            std::println("{:>5} | {:>6} {:>6} {:>6} {:>6} | {:^4} {}",
+                         i,
+                         tree[i].parent,
+                         tree[i].lchild,
+                         tree[i].rchild,
+                         tree[i].weight,
+                         table[i].data,
+                         table[i].code);
+        else
+            std::println("{:>5} | {:>6} {:>6} {:>6} {:>6} |",
+                         i,
+                         tree[i].parent,
+                         tree[i].lchild,
+                         tree[i].rchild,
+                         tree[i].weight);
+    }
 }
