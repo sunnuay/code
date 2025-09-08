@@ -11,7 +11,7 @@ SparseMatrix SparseMatrix::transpose() {
     std::vector<int> position(cols);
     for (auto [row, col, val] : data)
         number[col]++;
-    for (int i = 1; i < cols; ++i)
+    for (int i = 1; i < cols; i++)
         position[i] = position[i - 1] + number[i - 1];
     for (auto [row, col, val] : data)
         sm.data[position[col]++] = {col, row, val};
