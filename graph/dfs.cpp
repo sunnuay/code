@@ -3,7 +3,7 @@
 #include <stack>
 
 void AdjacencyList::dfs_iterative(int u) {
-    visited.assign(graph.size(), false);
+    visited.assign(n, false);
     std::stack<int> stack;
     visited[u] = true;
     stack.push(u);
@@ -22,7 +22,7 @@ void AdjacencyList::dfs_iterative(int u) {
 }
 
 void AdjacencyList::dfs_recursive(int u) {
-    visited.assign(graph.size(), false);
+    visited.assign(n, false);
     dfs_visit(u);
     std::println();
 }
