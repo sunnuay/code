@@ -2,6 +2,7 @@
 #include <print>
 
 void AdjacencyMatrix::dijkstra(int u) {
+    int n = graph.size();
     std::vector<int> dist = graph[u];
     std::vector<bool> visited(n, false);
     visited[u] = true;

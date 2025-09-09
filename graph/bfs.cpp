@@ -3,7 +3,7 @@
 #include <queue>
 
 void AdjacencyList::bfs_iterative(int u) {
-    visited.assign(n, false);
+    std::vector<bool> visited(graph.size());
     std::queue<int> queue;
     visited[u] = true;
     queue.push(u);

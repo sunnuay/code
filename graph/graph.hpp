@@ -1,4 +1,5 @@
 #include <vector>
+#define INF 0x3fffffff
 
 class AdjacencyList {
   public:
@@ -9,10 +10,9 @@ class AdjacencyList {
     void dfs_recursive(int u);
 
   private:
-    int n;
     std::vector<std::vector<int>> graph;
-    std::vector<bool> visited;
-    void dfs_visit(int u);
+    std::vector<bool> dfs_recursive_visited;
+    void dfs_recursive_visit(int u);
 };
 
 class AdjacencyMatrix {
@@ -25,7 +25,5 @@ class AdjacencyMatrix {
     void floyd();
 
   private:
-    int n;
-    int INF = 0x3fffffff;
     std::vector<std::vector<int>> graph;
 };
