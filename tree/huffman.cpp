@@ -73,7 +73,7 @@ std::string Huffman::decode(std::string text) {
 void Huffman::print() {
     std::println("index | parent lchild rchild weight | data code");
     std::println("------+-----------------------------+----------");
-    for (int i = 0; i < 2 * num - 1; i++) {
+    for (int i = 0; i < 2 * num - 1; i++)
         if (i < num)
             std::println("{:>5} | {:>6} {:>6} {:>6} {:>6} | {:^4} {}",
                          i,
@@ -90,5 +90,4 @@ void Huffman::print() {
                          tree[i].lchild,
                          tree[i].rchild,
                          tree[i].weight);
-    }
 }

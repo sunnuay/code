@@ -3,15 +3,15 @@
 
 void AdjacencyMatrix::dijkstra(int u) {
     int n = graph.size();
-    std::vector<int> dist = graph[u];
-    std::vector<bool> visited(n, false);
-    visited[u] = true;
-    for (int i = 0; i < n - 1; i++) {
+    std::vector<int> dist(n, INF);
+    std::vector<int> path(n, -1);
+    std::vector<bool> visited(n);
+    dist[u] = 0;
+    for (int i = 0; i < n; i++) {
         int v = -1;
-        int min_dist = INF;
-        for (int j = 0; j < n; j++) {
-            if (!visited[j] && dist[j] < min_dist) {
-                min_dist = dist[j];
+        for (int j = 0, min = INF; j < n; j++) {
+            if (!visited[j] && dist[j] < min) {
+                min = dist[j];
                 v = j;
             }
         }
@@ -19,10 +19,17 @@ void AdjacencyMatrix::dijkstra(int u) {
             break;
         visited[v] = true;
         for (int j = 0; j < n; j++) {
-            if (!visited[j] && dist[j] > dist[v] + graph[v][j]) {
+            if (dist[j] > dist[v] + graph[v][j]) {
                 dist[j] = dist[v] + graph[v][j];
+                path[j] = v;
             }
         }
     }
-    std::println("{}", dist);
+    std::println("dijkstra:");
+    for (int i = 0; i < n; i++) {
+        std::print("({},{}) {}", u, i, i);
+        for (int prev = path[i]; prev != -1; prev = path[prev])
+            std::print("<-{}", prev);
+        std::println();
+    }
 }
