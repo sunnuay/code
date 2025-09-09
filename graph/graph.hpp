@@ -21,7 +21,7 @@ class AdjacencyMatrix {
     void add(int start, int end, int weight);
     void prim();
     void kruskal();
-    void dijkstra(int u);
+    void dijkstra(int start);
     void floyd();
 
   private:

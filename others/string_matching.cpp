@@ -17,7 +17,7 @@ int StringMatching::bf() {
 }
 
 int StringMatching::kmp() {
-    auto lps = pf();
+    std::vector<int> lps = pf();
     int i = 0, j = 0;
     while (i < txt.size() && j < pat.size())
         if (txt[i] == pat[j])
