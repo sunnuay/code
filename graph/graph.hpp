@@ -19,7 +19,7 @@ class AdjacencyMatrix {
   public:
     AdjacencyMatrix(int n);
     void add(int start, int end, int weight);
-    void prim();
+    void prim(int start);
     void kruskal();
     void dijkstra(int start);
     void floyd();
