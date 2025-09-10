@@ -27,8 +27,8 @@ void AdjacencyMatrix::prim(int start) {
     }
     std::println("prim:");
     for (int i = 0; i < n; i++) {
-        std::string s = dist[i] == INF ? "∞" : std::to_string(dist[i]);
-        std::print("({},{},{}) {}", path[i], i, s, i);
+        std::string w = dist[i] == INF ? "∞" : std::to_string(dist[i]);
+        std::print("({},{},{}) {}", path[i], i, w, i);
         if (path[i] != -1) {
             std::print("<-{}", path[i]);
         } else if (i == start) {

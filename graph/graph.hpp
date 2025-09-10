@@ -5,14 +5,12 @@ class AdjacencyList {
   public:
     AdjacencyList(int n);
     void add(int start, int end);
-    void bfs_iterative(int u);
-    void dfs_iterative(int u);
-    void dfs_recursive(int u);
+    void bfs_iterative(int start);
+    void dfs_iterative(int start);
+    void dfs_recursive(int start);
 
   private:
     std::vector<std::vector<int>> graph;
-    std::vector<bool> dfs_recursive_visited;
-    void dfs_recursive_visit(int u);
 };
 
 class AdjacencyMatrix {

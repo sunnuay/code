@@ -1,12 +1,15 @@
 #include "graph.hpp"
 #include <algorithm>
+#include <numeric>
 #include <print>
-#include <tuple>
-#include <vector>
+#include <ranges>
 
 void AdjacencyMatrix::kruskal() {
     int n = graph.size();
-    std::vector<std::tuple<int, int, int>> edges;
+    struct edge {
+        int u, v, w;
+    };
+    std::vector<edge> edges;
     for (int i = 0; i < n; i++) {
         for (int j = i + 1; j < n; j++) {
             if (graph[i][j] != INF) {
@@ -14,26 +17,22 @@ void AdjacencyMatrix::kruskal() {
             }
         }
     }
-    std::ranges::sort(edges, {}, [](auto edge) { return std::get<2>(edge); });
+    std::ranges::sort(edges, {}, &edge::w);
     std::vector<int> set(n);
-    for (int i = 0; i < n; i++)
-        set[i] = i;
-    int count = 0;
-    int index = 0;
+    std::iota(set.begin(), set.end(), 0);
     std::println("kruskal:");
-    while (count < n - 1 && index < edges.size()) {
-        auto [u, v, w] = edges[index];
+    for (int cnt = 0, idx = 0; cnt < n - 1 && idx < edges.size(); idx++) {
+        auto [u, v, w] = edges[idx];
         int set_u = set[u];
         int set_v = set[v];
         if (set_u != set_v) {
             std::println("({},{},{})", u, v, w);
-            count++;
+            cnt++;
             for (int i = 0; i < n; i++) {
                 if (set[i] == set_v) {
                     set[i] = set_u;
                 }
             }
         }
-        index++;
     }
 }

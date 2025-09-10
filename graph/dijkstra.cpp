@@ -27,8 +27,8 @@ void AdjacencyMatrix::dijkstra(int start) {
     }
     std::println("dijkstra:");
     for (int i = 0; i < n; i++) {
-        std::string s = dist[i] == INF ? "∞" : std::to_string(dist[i]);
-        std::print("({},{},{}) {}", start, i, s, i);
+        std::string w = dist[i] == INF ? "∞" : std::to_string(dist[i]);
+        std::print("({},{},{}) {}", start, i, w, i);
         for (int prev = path[i]; prev != -1; prev = path[prev])
             std::print("<-{}", prev);
         std::println();
