@@ -1,4 +1,4 @@
-SRC_DIR := graph
+SRC_DIR := tree
 OBJ_DIR := .build
 TARGET := .main
 

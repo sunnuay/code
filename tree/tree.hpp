@@ -3,7 +3,10 @@
 
 class BST {
   public:
-    void print();
+    void inorder();
+    void preorder();
+    void postorder();
+    void levelorder();
     bool insert(int data);
     bool remove(int data);
 
@@ -14,10 +17,9 @@ class BST {
         Node *r;
     };
     Node *root = nullptr;
-    void print(Node *node);
     bool insert(Node *&node, int data);
     bool remove(Node *&node, int data);
-    void erase(Node *&node);
+    void remove(Node *&node);
 };
 
 class Huffman {
