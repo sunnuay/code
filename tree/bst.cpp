@@ -12,14 +12,15 @@ void BST::inorder() {
     std::stack<Node *> stack;
     Node *node = root;
     while (node || !stack.empty()) {
-        while (node) {
+        if (node) {
             stack.push(node);
             node = node->l;
+        } else {
+            node = stack.top();
+            stack.pop();
+            data.push_back(node->data);
+            node = node->r;
         }
-        node = stack.top();
-        stack.pop();
-        data.push_back(node->data);
-        node = node->r;
     }
     std::println("{}", data);
 }
@@ -29,15 +30,17 @@ void BST::preorder() {
         return;
     std::vector<int> data;
     std::stack<Node *> stack;
-    stack.push(root);
-    while (!stack.empty()) {
-        Node *node = stack.top();
-        stack.pop();
-        data.push_back(node->data);
-        if (node->r)
-            stack.push(node->r);
-        if (node->l)
-            stack.push(node->l);
+    Node *node = root;
+    while (node || !stack.empty()) {
+        if (node) {
+            data.push_back(node->data);
+            stack.push(node);
+            node = node->l;
+        } else {
+            node = stack.top();
+            stack.pop();
+            node = node->r;
+        }
     }
     std::println("{}", data);
 }
@@ -47,15 +50,17 @@ void BST::postorder() {
         return;
     std::vector<int> data;
     std::stack<Node *> stack;
-    stack.push(root);
-    while (!stack.empty()) {
-        Node *node = stack.top();
-        stack.pop();
-        data.push_back(node->data);
-        if (node->l)
-            stack.push(node->l);
-        if (node->r)
-            stack.push(node->r);
+    Node *node = root;
+    while (node || !stack.empty()) {
+        if (node) {
+            data.push_back(node->data);
+            stack.push(node);
+            node = node->r;
+        } else {
+            node = stack.top();
+            stack.pop();
+            node = node->l;
+        }
     }
     std::println("{}", data | std::views::reverse);
 }
