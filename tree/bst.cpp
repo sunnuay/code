@@ -1,79 +1,81 @@
 #include "tree.hpp"
 #include <print>
 #include <queue>
+#include <ranges>
 #include <stack>
+#include <vector>
 
 void BST::inorder() {
-    if (!root)
+    if (root == nullptr)
         return;
-    std::stack<Node *> s;
-    Node *current = root;
-    while (current || !s.empty()) {
-        while (current) {
-            s.push(current);
-            current = current->l;
+    std::vector<int> data;
+    std::stack<Node *> stack;
+    Node *node = root;
+    while (node || !stack.empty()) {
+        while (node) {
+            stack.push(node);
+            node = node->l;
         }
-        current = s.top();
-        s.pop();
-        std::print("{} ", current->data);
-        current = current->r;
+        node = stack.top();
+        stack.pop();
+        data.push_back(node->data);
+        node = node->r;
     }
-    std::println();
+    std::println("{}", data);
 }
 
 void BST::preorder() {
-    if (!root)
+    if (root == nullptr)
         return;
-    std::stack<Node *> s;
-    s.push(root);
-    while (!s.empty()) {
-        Node *current = s.top();
-        s.pop();
-        std::print("{} ", current->data);
-        if (current->r)
-            s.push(current->r);
-        if (current->l)
-            s.push(current->l);
+    std::vector<int> data;
+    std::stack<Node *> stack;
+    stack.push(root);
+    while (!stack.empty()) {
+        Node *node = stack.top();
+        stack.pop();
+        data.push_back(node->data);
+        if (node->r)
+            stack.push(node->r);
+        if (node->l)
+            stack.push(node->l);
     }
-    std::println();
+    std::println("{}", data);
 }
 
 void BST::postorder() {
-    if (!root)
+    if (root == nullptr)
         return;
-    std::stack<Node *> s1, s2;
-    s1.push(root);
-    while (!s1.empty()) {
-        Node *current = s1.top();
-        s1.pop();
-        s2.push(current);
-        if (current->l)
-            s1.push(current->l);
-        if (current->r)
-            s1.push(current->r);
+    std::vector<int> data;
+    std::stack<Node *> stack;
+    stack.push(root);
+    while (!stack.empty()) {
+        Node *node = stack.top();
+        stack.pop();
+        data.push_back(node->data);
+        if (node->l)
+            stack.push(node->l);
+        if (node->r)
+            stack.push(node->r);
     }
-    while (!s2.empty()) {
-        std::print("{} ", s2.top()->data);
-        s2.pop();
-    }
-    std::println();
+    std::println("{}", data | std::views::reverse);
 }
 
 void BST::levelorder() {
-    if (!root)
+    if (root == nullptr)
         return;
-    std::queue<Node *> q;
-    q.push(root);
-    while (!q.empty()) {
-        Node *current = q.front();
-        q.pop();
-        std::print("{} ", current->data);
-        if (current->l)
-            q.push(current->l);
-        if (current->r)
-            q.push(current->r);
+    std::vector<int> data;
+    std::queue<Node *> queue;
+    queue.push(root);
+    while (!queue.empty()) {
+        Node *node = queue.front();
+        queue.pop();
+        data.push_back(node->data);
+        if (node->l)
+            queue.push(node->l);
+        if (node->r)
+            queue.push(node->r);
     }
-    std::println();
+    std::println("{}", data);
 }
 
 bool BST::insert(int data) {
