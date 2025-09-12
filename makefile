@@ -1,4 +1,4 @@
-SRC_DIR := tree
+SRC_DIR := linear
 OBJ_DIR := .build
 TARGET := .main
 

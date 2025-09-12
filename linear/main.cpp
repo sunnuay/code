@@ -1,6 +1,4 @@
-#include "deque.hpp"
-#include "sparse_matrix.hpp"
-#include "string_matching.hpp"
+#include "linear.hpp"
 
 void test_deque() {
     Deque deque;

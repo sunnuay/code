@@ -1,4 +1,4 @@
-#include "sparse_matrix.hpp"
+#include "linear.hpp"
 #include <print>
 
 SparseMatrix SparseMatrix::transpose() {
