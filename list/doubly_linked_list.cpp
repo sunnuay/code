@@ -47,11 +47,11 @@ bool DoublyLinkedList::insert(int val) {
     return true;
 }
 
-bool DoublyLinkedList::erase(int idx) {
+bool DoublyLinkedList::remove(int idx) {
     if (idx < 0 || idx >= size)
         return false;
     if (idx == size - 1)
-        return erase();
+        return remove();
     Node *temp = head;
     for (int i = 0; i < idx; i++)
         temp = temp->next;
@@ -63,7 +63,7 @@ bool DoublyLinkedList::erase(int idx) {
     return true;
 }
 
-bool DoublyLinkedList::erase() {
+bool DoublyLinkedList::remove() {
     if (size == 0)
         return false;
     Node *node = tail;

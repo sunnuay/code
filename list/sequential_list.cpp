@@ -25,7 +25,7 @@ bool SequentialList::insert(int val) {
     return insert(val, size);
 }
 
-bool SequentialList::erase(int idx) {
+bool SequentialList::remove(int idx) {
     if (idx < 0 || idx >= size)
         return false;
     for (int i = idx; i < size - 1; i++)
@@ -34,6 +34,6 @@ bool SequentialList::erase(int idx) {
     return true;
 }
 
-bool SequentialList::erase() {
-    return erase(size - 1);
+bool SequentialList::remove() {
+    return remove(size - 1);
 }

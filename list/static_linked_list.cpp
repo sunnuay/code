@@ -49,7 +49,7 @@ bool StaticLinkedList::insert(int val) {
     return true;
 }
 
-bool StaticLinkedList::erase(int idx) {
+bool StaticLinkedList::remove(int idx) {
     if (idx < 0 || idx >= size)
         return false;
     int temp = head;
@@ -65,6 +65,6 @@ bool StaticLinkedList::erase(int idx) {
     return true;
 }
 
-bool StaticLinkedList::erase() {
-    return erase(size - 1);
+bool StaticLinkedList::remove() {
+    return remove(size - 1);
 }

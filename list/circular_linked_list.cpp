@@ -43,7 +43,7 @@ bool CircularLinkedList::insert(int val) {
     return true;
 }
 
-bool CircularLinkedList::erase(int idx) {
+bool CircularLinkedList::remove(int idx) {
     if (idx < 0 || idx >= size)
         return false;
     Node *temp = tail->next;
@@ -58,6 +58,6 @@ bool CircularLinkedList::erase(int idx) {
     return true;
 }
 
-bool CircularLinkedList::erase() {
-    return erase(size - 1);
+bool CircularLinkedList::remove() {
+    return remove(size - 1);
 }

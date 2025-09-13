@@ -43,7 +43,7 @@ bool SinglyLinkedList::insert(int val) {
     return true;
 }
 
-bool SinglyLinkedList::erase(int idx) {
+bool SinglyLinkedList::remove(int idx) {
     if (idx < 0 || idx >= size)
         return false;
     Node *temp = head;
@@ -58,6 +58,6 @@ bool SinglyLinkedList::erase(int idx) {
     return true;
 }
 
-bool SinglyLinkedList::erase() {
-    return erase(size - 1);
+bool SinglyLinkedList::remove() {
+    return remove(size - 1);
 }

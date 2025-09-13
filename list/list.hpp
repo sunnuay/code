@@ -6,8 +6,8 @@ class SequentialList {
     void print();
     bool insert(int val, int idx);
     bool insert(int val);
-    bool erase(int idx);
-    bool erase();
+    bool remove(int idx);
+    bool remove();
 
   private:
     int data[MAX];
@@ -20,8 +20,8 @@ class SinglyLinkedList {
     void print();
     bool insert(int val, int idx);
     bool insert(int val);
-    bool erase(int idx);
-    bool erase();
+    bool remove(int idx);
+    bool remove();
 
   private:
     struct Node {
@@ -39,8 +39,8 @@ class CircularLinkedList {
     void print();
     bool insert(int val, int idx);
     bool insert(int val);
-    bool erase(int idx);
-    bool erase();
+    bool remove(int idx);
+    bool remove();
 
   private:
     struct Node {
@@ -57,8 +57,8 @@ class DoublyLinkedList {
     void print();
     bool insert(int val, int idx);
     bool insert(int val);
-    bool erase(int idx);
-    bool erase();
+    bool remove(int idx);
+    bool remove();
 
   private:
     struct Node {
@@ -77,8 +77,8 @@ class StaticLinkedList {
     void print();
     bool insert(int val, int idx);
     bool insert(int val);
-    bool erase(int idx);
-    bool erase();
+    bool remove(int idx);
+    bool remove();
 
   private:
     struct Node {
