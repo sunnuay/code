@@ -25,7 +25,8 @@ void AdjacencyMatrix::prim(int start) {
                 path[v] = u;
             }
         }
-        if (i)
+        if (path[u] != -1) {
             std::println("[{}] {}-{}", dist[u], path[u], u);
+        }
     }
 }

@@ -25,11 +25,9 @@ void AdjacencyMatrix::dijkstra(int start) {
                 path[v] = u;
             }
         }
-    }
-    for (int i = 0; i < n; i++) {
-        if (path[i] != -1) {
-            std::print("[{}] {}", dist[i], i);
-            for (int prev = path[i]; prev != -1; prev = path[prev])
+        if (path[u] != -1) {
+            std::print("[{}] {}", dist[u], u);
+            for (int prev = path[u]; prev != -1; prev = path[prev])
                 std::print("<-{}", prev);
             std::println();
         }
