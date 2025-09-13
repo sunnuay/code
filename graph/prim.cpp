@@ -2,6 +2,7 @@
 #include <print>
 
 void AdjacencyMatrix::prim(int start) {
+    std::println("prim:");
     int n = graph.size();
     std::vector<int> dist(n, INF);
     std::vector<int> path(n, -1);
@@ -24,10 +25,7 @@ void AdjacencyMatrix::prim(int start) {
                 path[v] = u;
             }
         }
-    }
-    std::println("prim:");
-    for (int i = 0; i < n; i++) {
-        if (path[i] != -1)
-            std::println("({},{},{})", i, path[i], dist[i]);
+        if (i)
+            std::println("[{}] {}-{}", dist[u], path[u], u);
     }
 }

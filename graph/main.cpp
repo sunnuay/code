@@ -1,7 +1,7 @@
 #include "graph.hpp"
 
 void test_bfs_dfs() {
-    AdjacencyList g(6);
+    AdjacencyList g(6 + 1);
     g.add(0, 1), g.add(1, 0);
     g.add(0, 2), g.add(2, 0);
     g.add(0, 5), g.add(5, 0);

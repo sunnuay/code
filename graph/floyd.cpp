@@ -2,6 +2,7 @@
 #include <print>
 
 void AdjacencyMatrix::floyd() {
+    std::println("floyd:");
     int n = graph.size();
     std::vector<std::vector<int>> dist = graph;
     std::vector<std::vector<int>> path(n, std::vector<int>(n, -1));
@@ -22,14 +23,14 @@ void AdjacencyMatrix::floyd() {
             }
         }
     }
-    std::println("floyd:");
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            std::string w = dist[i][j] == INF ? "∞" : std::to_string(dist[i][j]);
-            std::print("({},{},{}) {}", i, j, w, i);
-            for (int next = path[i][j]; next != -1; next = path[next][j])
-                std::print("->{}", next);
-            std::println();
+            if (path[i][j] != -1) {
+                std::print("[{}] {}", dist[i][j], i);
+                for (int next = path[i][j]; next != -1; next = path[next][j])
+                    std::print("->{}", next);
+                std::println();
+            }
         }
     }
 }
