@@ -20,7 +20,8 @@ void test_string_matching() {
     StringMatching sm;
     sm.txt = "ABABABC";
     sm.pat = "ABABC";
-    sm.print();
+    sm.bf();
+    sm.kmp();
 }
 
 int main() {

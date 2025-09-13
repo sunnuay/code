@@ -25,8 +25,7 @@ struct SparseMatrix {
 
 struct StringMatching {
     std::string txt, pat;
-    void print();
-    int bf();
-    int kmp();
+    void bf();
+    void kmp();
     std::vector<int> pf();
 };
