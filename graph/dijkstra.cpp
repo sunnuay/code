@@ -11,7 +11,7 @@ void AdjacencyMatrix::dijkstra(int start) {
     for (int i = 0; i < n; i++) {
         int u = -1;
         for (int j = 0, min = INF; j < n; j++) {
-            if (!visited[j] && dist[j] < min) {
+            if (min > dist[j] && !visited[j]) {
                 min = dist[j];
                 u = j;
             }
