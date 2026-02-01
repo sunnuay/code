@@ -1,3 +1,16 @@
+---@diagnostic disable: undefined-global
+
+vim.g.clipboard = {
+	copy = {
+		["+"] = require("vim.ui.clipboard.osc52").copy("+"),
+		["*"] = require("vim.ui.clipboard.osc52").copy("*"),
+	},
+	paste = {
+		["+"] = require("vim.ui.clipboard.osc52").paste("+"),
+		["*"] = require("vim.ui.clipboard.osc52").paste("*"),
+	},
+}
+
 local logo = [[
 ██╗   ██╗███████╗ ██████╗ ██████╗ ██████╗ ███████╗
 ██║   ██║██╔════╝██╔════╝██╔═══██╗██╔══██╗██╔════╝
@@ -8,6 +21,6 @@ local logo = [[
 ]]
 
 return {
-  { "snacks.nvim", opts = { dashboard = { preset = { header = logo } } } },
-  { "lualine.nvim", opts = { sections = { lualine_z = {} } } },
+	{ "snacks.nvim", opts = { dashboard = { preset = { header = logo } } } },
+	{ "lualine.nvim", opts = { sections = { lualine_z = {} } } },
 }
