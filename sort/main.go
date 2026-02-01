@@ -3,8 +3,9 @@
 package main
 
 import (
-	"code/sort"
 	"fmt"
+
+	"code/sort"
 )
 
 func main() {

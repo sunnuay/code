@@ -3,35 +3,35 @@
 #include <stack>
 
 void AdjacencyList::dfs_iterative(int start) {
-    std::vector<bool> visited(graph.size());
-    std::stack<int> stack;
-    visited[start] = true;
-    stack.push(start);
-    while (!stack.empty()) {
-        int u = stack.top();
-        stack.pop();
-        std::print("{} ", u);
-        for (int v : graph[u]) {
-            if (!visited[v]) {
-                visited[v] = true;
-                stack.push(v);
-            }
-        }
+  std::vector<bool> visited(graph.size());
+  std::stack<int> stack;
+  visited[start] = true;
+  stack.push(start);
+  while (!stack.empty()) {
+    int u = stack.top();
+    stack.pop();
+    std::print("{} ", u);
+    for (int v : graph[u]) {
+      if (!visited[v]) {
+        visited[v] = true;
+        stack.push(v);
+      }
     }
-    std::println();
+  }
+  std::println();
 }
 
 void AdjacencyList::dfs_recursive(int start) {
-    std::vector<bool> visited(graph.size());
-    auto visit = [&](this auto self, int u) -> void {
-        visited[u] = true;
-        std::print("{} ", u);
-        for (int v : graph[u]) {
-            if (!visited[v]) {
-                self(v);
-            }
-        }
-    };
-    visit(start);
-    std::println();
+  std::vector<bool> visited(graph.size());
+  auto visit = [&](this auto self, int u) -> void {
+    visited[u] = true;
+    std::print("{} ", u);
+    for (int v : graph[u]) {
+      if (!visited[v]) {
+        self(v);
+      }
+    }
+  };
+  visit(start);
+  std::println();
 }
