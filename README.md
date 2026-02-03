@@ -3,18 +3,18 @@
 C/C++
 
 ```bash
-cmake -S . -B build -D dir=<directory>
+cmake -S . -B build -D dir=DIR
 cmake --build build --target run
 ```
 
 Go
 
 ```bash
-go run code/<directory>
+go run code/DIR
 ```
 
 Python
 
 ```bash
-uv run <directory>/<file>
+uv run DIR/FILE
 ```
