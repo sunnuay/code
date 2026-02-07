@@ -10,7 +10,7 @@ cmake --build build --target run
 Go
 
 ```bash
-go run code/DIR
+go run ./DIR
 ```
 
 Python
