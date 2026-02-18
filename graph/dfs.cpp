@@ -23,6 +23,7 @@ void AdjacencyList::dfs_iterative(int start) {
 
 void AdjacencyList::dfs_recursive(int start) {
   std::vector<bool> visited(graph.size());
+  auto &graph = this->graph;
   auto visit = [&](this auto self, int u) -> void {
     visited[u] = true;
     std::print("{} ", u);
