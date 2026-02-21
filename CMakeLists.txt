@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 4.2)
 project(code)
 set(CMAKE_C_STANDARD 23)
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 26)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 file(GLOB_RECURSE src CONFIGURE_DEPENDS "${dir}/*.c" "${dir}/*.cpp")
 add_executable(main ${src})
