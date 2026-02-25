@@ -1,0 +1,11 @@
+[Unit]
+Before=sleep.target
+StopWhenUnneeded=yes
+[Service]
+User=root
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/rmmod -f apple-bce
+ExecStop=/usr/bin/modprobe apple-bce
+[Install]
+WantedBy=sleep.target

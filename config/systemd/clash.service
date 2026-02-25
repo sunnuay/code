@@ -1,0 +1,7 @@
+[Unit]
+After=network.target
+[Service]
+Restart=always
+ExecStart=/usr/bin/clash -d %h/.config/clash/
+[Install]
+WantedBy=default.target
