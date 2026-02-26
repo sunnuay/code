@@ -3,8 +3,8 @@
 C/C++
 
 ```bash
-cmake -S . -B build -D dir=DIR
-cmake --build build --target run
+cmake -S . -B build
+cmake --build build
 ```
 
 Go
