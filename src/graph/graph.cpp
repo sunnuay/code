@@ -9,4 +9,6 @@ AdjacencyMatrix::AdjacencyMatrix(int n) : graph(n, std::vector<int>(n, INF)) {
 
 void AdjacencyList::add(int start, int end) { graph[start].push_back(end); }
 
-void AdjacencyMatrix::add(int start, int end, int weight) { graph[start][end] = weight; }
+void AdjacencyMatrix::add(int start, int end, int weight) {
+  graph[start][end] = weight;
+}

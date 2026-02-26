@@ -76,9 +76,10 @@ void Huffman::print() {
   std::println("------+-----------------------------+----------");
   for (int i = 0; i < 2 * num - 1; i++)
     if (i < num)
-      std::println("{:>5} | {:>6} {:>6} {:>6} {:>6} | {:^4} {}", i, tree[i].parent, tree[i].lchild, tree[i].rchild,
+      std::println("{:>5} | {:>6} {:>6} {:>6} {:>6} | {:^4} {}", i,
+                   tree[i].parent, tree[i].lchild, tree[i].rchild,
                    tree[i].weight, table[i].data, table[i].code);
     else
-      std::println("{:>5} | {:>6} {:>6} {:>6} {:>6} |", i, tree[i].parent, tree[i].lchild, tree[i].rchild,
-                   tree[i].weight);
+      std::println("{:>5} | {:>6} {:>6} {:>6} {:>6} |", i, tree[i].parent,
+                   tree[i].lchild, tree[i].rchild, tree[i].weight);
 }
