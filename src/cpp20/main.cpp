@@ -6,6 +6,8 @@
 #include <string>
 #include <vector>
 
+import math;
+
 // 1. Concepts - ★★★★★
 template <typename T>
 concept Addable = requires(T a, T b) {
@@ -27,6 +29,8 @@ struct Point {
 };
 
 int main() {
+  std::cout << add(3, 4) << std::endl;
+
   std::cout << "--- C++20 Features ---\n";
 
   // 1. Concepts 测试
