@@ -15,4 +15,3 @@ function proxy_off
 end
 
 set -gx GOPATH $HOME/.go
-set -gx GOOGLE_CLOUD_PROJECT $USER
