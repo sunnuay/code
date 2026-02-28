@@ -4,7 +4,7 @@
 #include <utility>
 #include <vector>
 
-// 5. 移动语义 - ★★★★★
+// 移动语义
 class Buffer {
   std::unique_ptr<int[]> data;
 
@@ -26,7 +26,7 @@ public:
   }
 };
 
-// 【补充】override 与 enum class - ★★★★★
+// override 与 enum class
 enum class Status { OK, Error }; // 强类型枚举，不会隐式转换为 int，防止命名冲突
 
 class Base {
@@ -42,16 +42,14 @@ public:
 };
 
 int main() {
-  std::cout << "--- C++11 Features ---\n";
-
-  // 1. auto & 3. 基于范围的for循环 - ★★★★★
+  // auto &
   std::vector<std::string> words{"hello", "world"};
   for (const auto &word : words) {
     std::cout << word << " ";
   }
   std::cout << "\n";
 
-  // 2. lambda 表达式 - ★★★★★ (勘误：修复了缺失的语法元素)
+  // lambda 表达式
   std::vector<int> nums{4, 1, 3, 2, 5};
   // 降序排序
   std::sort(nums.begin(), nums.end(), [](int a, int b) { return a > b; });
@@ -62,19 +60,17 @@ int main() {
   auto count = std::count_if(nums.begin(), nums.end(), greater_than);
   std::cout << "Count > 2: " << count << "\n";
 
-  // 4. 智能指针 - ★★★★★
+  // 智能指针
   auto shared = std::make_shared<Base>();
   std::unique_ptr<Base> unique(new Derived()); // C++11 还没有 make_unique
   unique->doWork();
 
-  // 5. 移动语义测试
+  // 移动语义
   Buffer b1;
   Buffer b2 = std::move(b1); // 触发移动构造
 
-  // 6. enum class 测试
+  // enum class
   Status s = Status::OK;
   if (s == Status::OK)
     std::cout << "Status is OK\n";
-
-  return 0;
 }
