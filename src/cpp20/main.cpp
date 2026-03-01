@@ -1,4 +1,3 @@
-#include <algorithm>
 #include <concepts>
 #include <format>
 #include <iostream>
@@ -6,9 +5,8 @@
 #include <string>
 #include <vector>
 
-import math;
-
 // Concepts
+// 提供了一种类型约束机制，在编译期检查模板类型是否满足特定条件，不满足时会给出极具可读性的编译错误提示，取代了难懂的SFINAE
 template <typename T>
 concept Addable = requires(T a, T b) {
   { a + b } -> std::same_as<T>;
@@ -17,46 +15,38 @@ concept Addable = requires(T a, T b) {
 template <Addable T> T add(T a, T b) { return a + b; }
 
 // std::span
+// 提供了一个轻量级的、无所有权的连续内存视图，统一了原生数组、std::vector和std::array的参数传递方式，包含边界信息且不发生拷贝
 void process_data(std::span<int> data) {
-  for (auto &item : data)
+  for (auto &item : data) {
     item *= 2;
+  }
 }
 
-// 三路比较
+// Three-way Comparison (<=>)
+// 也被称为“飞船运算符”，只需一行默认实现即可由编译器自动生成所有六个关系比较运算符（<,
+// <=, >, >=, ==, !=），大幅减少模板代码
 struct Point {
   int x, y;
-  auto operator<=>(const Point &) const = default; // 自动生成所有比较操作
+  auto operator<=>(const Point &) const = default;
 };
 
 int main() {
-  std::cout << add(3, 4) << std::endl;
+  auto res = add(1, 2);
+  // add("a", "b"); // 若取消注释将直接触发Concepts定义的编译错误
 
-  // Concepts
-  std::cout << "Addable: " << add(1, 2) << "\n";
-  std::cout << "Addable: " << add(std::string("a"), std::string("b")) << "\n";
-  // add("a", "b"); // 编译错误，因为 const char* 相加不返回 const char*
-
-  // std::span
   std::vector<int> vec{1, 2, 3};
   int arr[] = {4, 5, 6};
   process_data(vec);
   process_data(arr);
 
+  Point p1{1, 2}, p2{1, 3};
+  if (p1 < p2) {
+    std::cout << "p1 is strictly less than p2\n";
+  }
+
   // std::format
+  // 结合了printf的性能优势和C++流的安全性与类型检查，使用大括号作为占位符，提供了现代化的字符串格式化体验
   std::string msg =
       std::format("Hello {}! The answer is {:.2f}", "World", 3.14159);
   std::cout << msg << "\n";
-
-  // 三路比较
-  Point p1{1, 2}, p2{1, 3};
-  if (p1 < p2)
-    std::cout << "p1 is less than p2\n";
-
-  // Ranges
-  std::vector<int> nums{5, 2, 9, 1};
-  std::ranges::sort(
-      nums); // 直接传容器，代替 std::sort(nums.begin(), nums.end())
-  for (int n : nums)
-    std::cout << n << " ";
-  std::cout << "\n";
 }

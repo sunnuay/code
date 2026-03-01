@@ -2,34 +2,27 @@
 #include <memory>
 #include <string>
 
-struct MyClass {
-  int a;
-  double b;
-  MyClass(int a, double b) : a(a), b(b) {}
-  void print() { std::cout << "MyClass: " << a << ", " << b << "\n"; }
-};
-
-struct Resource {
-  void do_something() { std::cout << "Resource is doing something.\n"; }
+class Resource {
+public:
+  void do_something() { std::cout << "Resource is working." << std::endl; }
 };
 
 int main() {
-  // 泛型 lambda
+  // Generic Lambda
+  // 允许在lambda参数中使用auto关键字，使其行为类似于模板函数，可以接收不同类型的参数并自动推导
   auto adder = [](auto a, auto b) { return a + b; };
-  std::cout << "adder(1, 2): " << adder(1, 2) << "\n";
-  std::cout << "adder(1.5, 2.3): " << adder(1.5, 2.3) << "\n";
-  std::cout << "adder string: " << adder(std::string("a"), "b") << "\n";
 
-  // std::make_unique (完美对称 make_shared，避免 new 的异常风险)
-  auto ptr = std::make_unique<MyClass>(10, 3.14);
-  ptr->print();
+  auto sum_int = adder(1, 2);
+  auto sum_double = adder(1.5, 2.3);
+  auto sum_str = adder(std::string("a"), std::string("b"));
 
-  // lambda 捕获初始化 (主要用于把 unique_ptr move 进 lambda)
+  // std::make_unique
+  // 补齐了C++11中缺失的make_unique，提供了异常安全的独占智能指针创建方式
   auto p = std::make_unique<Resource>();
-  auto lambda = [res_ptr =
-                     std::move(p)]() { // 移动捕获，将 p 的所有权转移给 res_ptr
-    res_ptr->do_something();
-  };
-  lambda();
-  // 此时外面的 p 已经是 nullptr 了
+
+  // Lambda Capture Initialization
+  // 允许在lambda的捕获列表中进行变量的初始化或执行std::move，从而将仅限移动的类型（如unique_ptr）安全地传入lambda内部
+  auto worker_lambda = [ptr = std::move(p)]() { ptr->do_something(); };
+
+  worker_lambda();
 }

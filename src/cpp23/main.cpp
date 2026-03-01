@@ -1,61 +1,63 @@
 #include <expected>
-#include <iostream>
+#include <optional>
+#include <print>
 #include <ranges>
 #include <string>
-#include <string_view>
 #include <vector>
 
 // std::expected
-enum class ErrorCode { NotFound, AccessDenied, InvalidInput };
-
-std::expected<int, ErrorCode> divide(int a, int b) {
-  if (b == 0)
-    return std::unexpected(ErrorCode::InvalidInput);
-  return a / b;
+// 提供了一种无需抛出异常即可处理错误的现代化方式，它要么包含一个期望的返回值，要么包含一个错误对象，非常适合在性能敏感或禁用异常的场景下替代传统的错误码
+std::expected<int, std::string> parse_number(const std::string &str) {
+  if (str.empty())
+    return std::unexpected("String is empty");
+  try {
+    return std::stoi(str);
+  } catch (...) {
+    return std::unexpected("Invalid number format");
+  }
 }
 
 // Deducing this
-struct MyVector {
-  std::vector<int> data_{1, 2, 3};
-  // 以前需要写两个版本的 operator[] (一个 const，一个非 const)
-  // 现在只需一个模板参数 self，自动推导调用者是 const 还是非 const
-  template <typename Self> auto &&operator[](this Self &&self, size_t index) {
-    return std::forward<Self>(self).data_[index];
+// 允许将this作为显式参数传递给成员函数，从而极大简化了CRTP（奇异递归模板模式）的编写，消除了重复的const和非const重载，并且允许lambda表达式轻松实现自递归
+struct TreeNode {
+  std::vector<TreeNode> children;
+
+  template <typename Self> void traverse(this Self &&self) {
+    std::println("Visiting node...");
+    for (auto &&child : self.children) {
+      child.traverse();
+    }
   }
 };
 
 int main() {
-  // std::expected
-  auto res = divide(10, 2);
-  if (res) { // operator bool 检查是否成功
-    std::cout << "Result: " << *res << "\n";
+  // std::print / std::println
+  // 终于在标准库中引入了原生的格式化打印函数，完美替代了std::cout和std::format的组合，不仅语法更加简洁，而且编译速度和运行期性能都得到了大幅提升
+  std::println("Welcome to C++{}!", 23);
+
+  auto result = parse_number("42");
+  if (result.has_value()) {
+    std::println("Parsed successfully: {}", result.value());
   } else {
-    std::cout << "Error occurred! Code: " << static_cast<int>(res.error())
-              << "\n";
+    std::println("Error: {}", result.error());
   }
 
-  // std::string::contains
-  std::string_view text = "modern c++ is awesome";
-  if (text.contains("c++")) {
-    std::cout << "Found 'c++' in text!\n";
+  std::vector<std::string> fruits = {"Apple", "Banana", "Cherry"};
+
+  // Ranges Improvements
+  // 进一步完善了范围库，引入了类似Python的enumerate功能，可以在基于范围的for循环中同时且优雅地获取当前元素的索引和引用
+  for (auto const &[index, fruit] : fruits | std::views::enumerate) {
+    std::println("Fruit[{}] = {}", index, fruit);
   }
 
-  // std::views::enumerate
-  std::vector<std::string> words{"zero", "one", "two"};
-  for (auto const &[index, word] : std::views::enumerate(words)) {
-    std::cout << "Index: " << index << ", Word: " << word << "\n";
-  }
+  std::optional<std::string> input = "hello";
 
-  // Deducing this
-  MyVector vec;
-  vec[0] = 10; // 调用非 const 版本
+  // Monadic Operations for std::optional
+  // 为optional引入了and_then,
+  // transform和or_else等链式调用方法，使得处理可能为空的值时不再需要频繁写if判断，逻辑代码更加流畅连贯
+  auto upper_length =
+      input.transform([](const std::string &s) { return s.length(); })
+          .or_else([]() -> std::optional<size_t> { return 0; });
 
-  const MyVector cvec;
-  std::cout << "cvec[0]: " << cvec[0]
-            << "\n"; // 自动调用 const 版本（返回 const int&）
-
-  // std::ranges::to
-  auto even_nums = vec.data_ |
-                   std::views::filter([](int n) { return n % 2 == 0; }) |
-                   std::ranges::to<std::vector>(); // 流式处理完直接转 vector
+  std::println("Length: {}", upper_length.value());
 }
