@@ -2,6 +2,6 @@
 After=network.target
 [Service]
 Restart=always
-ExecStart=/usr/bin/clash -d %h/.config/clash/
+ExecStart=%h/.config/mihomo/mihomo
 [Install]
 WantedBy=default.target

@@ -3,9 +3,9 @@ source /usr/share/cachyos-fish-config/cachyos-config.fish
 functions -e fish_greeting
 
 function proxy_on
-    set -gx http_proxy http://127.0.0.1:7893
-    set -gx https_proxy http://127.0.0.1:7893
-    set -gx all_proxy socks5://127.0.0.1:7893
+    set -gx http_proxy http://127.0.0.1:7890
+    set -gx https_proxy http://127.0.0.1:7890
+    set -gx all_proxy socks5://127.0.0.1:7890
 end
 
 function proxy_off
