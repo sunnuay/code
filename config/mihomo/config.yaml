@@ -4,18 +4,15 @@ external-ui: metacubexd
 external-ui-url: https://github.com/MetaCubeX/metacubexd/archive/refs/heads/gh-pages.zip
 
 proxy-groups:
-  - {name: PROXY, type: select, proxies: [AUTO, DIRECT], include-all: true}
-  - {name: AUTO, type: url-test, use: [example], url: http://cp.cloudflare.com/generate_204, interval: 600}
+  - {name: PROXY, type: select, use: [example]}
 
 proxy-providers:
   example:
     type: http
-    url: http://example.com
-    path: ./profiles/example.yaml
-    interval: 3600
-    health-check: {enable: true, url: http://cp.cloudflare.com/generate_204, interval: 600}
+    url: https://example.com
 
 rules:
   - GEOSITE,CN,DIRECT
   - GEOIP,CN,DIRECT
+  - GEOIP,PRIVATE,DIRECT
   - MATCH,PROXY
