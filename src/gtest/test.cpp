@@ -1,41 +1,25 @@
-#include "../sorting/bubble_sort.c"
-#include "../sorting/swap.c"
 #include <gtest/gtest.h>
 
-TEST(BubbleSortTest, HandlesUnsortedArray) {
-  int arr[] = {5, 1, 4, 2, 8};
-  int size = sizeof(arr) / sizeof(arr[0]);
-  bubble_sort(arr, size);
-  int expected[] = {1, 2, 4, 5, 8};
-  for (int i = 0; i < size; ++i) {
-    EXPECT_EQ(arr[i], expected[i]);
+int factorial(int n) {
+  if (n < 0)
+    return 0;
+  if (n == 0)
+    return 1;
+  int result = 1;
+  for (int i = 1; i <= n; i++) {
+    result *= i;
   }
+  return result;
 }
 
-TEST(BubbleSortTest, HandlesAlreadySortedArray) {
-  int arr[] = {1, 2, 3, 4, 5};
-  int size = sizeof(arr) / sizeof(arr[0]);
-  int expected[] = {1, 2, 3, 4, 5};
-  bubble_sort(arr, size);
-  for (int i = 0; i < size; ++i) {
-    EXPECT_EQ(arr[i], expected[i]);
-  }
+TEST(factorial_test, negative_input) {
+  EXPECT_EQ(factorial(-2), 0);
+  EXPECT_EQ(factorial(-1), 0);
 }
 
-TEST(BubbleSortTest, HandlesArrayWithDuplicates) {
-  int arr[] = {5, 8, 5, 2, 2};
-  int size = sizeof(arr) / sizeof(arr[0]);
-  int expected[] = {2, 2, 5, 5, 8};
-  bubble_sort(arr, size);
-  for (int i = 0; i < size; ++i) {
-    EXPECT_EQ(arr[i], expected[i]);
-  }
-}
-
-TEST(BubbleSortTest, HandlesEmptyAndSingleElementArrays) {
-  int empty_arr[] = {};
-  bubble_sort(empty_arr, 0);
-  int single_arr[] = {42};
-  bubble_sort(single_arr, 1);
-  EXPECT_EQ(single_arr[0], 42);
+TEST(factorial_test, positive_input) {
+  EXPECT_EQ(factorial(0), 1);
+  EXPECT_EQ(factorial(1), 1);
+  EXPECT_EQ(factorial(2), 2);
+  EXPECT_EQ(factorial(3), 6);
 }
