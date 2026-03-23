@@ -1,0 +1,12 @@
+forward:
+  enabled: true
+  listen: :9999
+
+reverse:
+  enabled: true
+  listen: :10000
+  routes:
+    - path: /01/
+      target: http://localhost:10001
+    - path: /02/
+      target: http://localhost:10002
