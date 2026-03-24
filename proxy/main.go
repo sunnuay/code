@@ -18,5 +18,9 @@ func main() {
 		go StartReverseProxy(cfg.Reverse)
 	}
 
+	if cfg.DDNS.Enabled {
+		go StartDDNS(cfg.DDNS)
+	}
+
 	select {}
 }

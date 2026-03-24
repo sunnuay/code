@@ -10,3 +10,10 @@ reverse:
       target: http://localhost:10001
     - path: /02/
       target: http://localhost:10002
+
+ddns:
+  enabled: true
+  interval: 600
+  api_token: "cfut_crIgGh3jvWTmNhfcapCFk6yPkYiN4Svp0w7ORZrc93eec901"
+  zone_id: "791e865ebccc8be7aa849670e96fbcc9"
+  domain: "test.sunnuay.com"

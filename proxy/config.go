@@ -9,6 +9,7 @@ import (
 type Config struct {
 	Forward ForwardConfig `yaml:"forward"`
 	Reverse ReverseConfig `yaml:"reverse"`
+	DDNS    DDNSConfig    `yaml:"ddns"`
 }
 
 type ForwardConfig struct {
@@ -25,6 +26,14 @@ type ReverseConfig struct {
 type RouteConfig struct {
 	Path   string `yaml:"path"`
 	Target string `yaml:"target"`
+}
+
+type DDNSConfig struct {
+	Enabled  bool   `yaml:"enabled"`
+	Interval int    `yaml:"interval"`
+	APIToken string `yaml:"api_token"`
+	ZoneID   string `yaml:"zone_id"`
+	Domain   string `yaml:"domain"`
 }
 
 func LoadConfig(filename string) (*Config, error) {
