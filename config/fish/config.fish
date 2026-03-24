@@ -15,3 +15,4 @@ function proxy_off
 end
 
 set -gx GOPATH $HOME/.go
+set -gx PATH $GOPATH/bin $PATH
