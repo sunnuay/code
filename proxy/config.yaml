@@ -17,3 +17,11 @@ ddns:
   api_token: "cfut_crIgGh3jvWTmNhfcapCFk6yPkYiN4Svp0w7ORZrc93eec901"
   zone_id: "791e865ebccc8be7aa849670e96fbcc9"
   domain: "test.sunnuay.com"
+
+cert:
+  enabled: true
+  email: "sunnuay@outlook.com"
+  cache_dir: "./proxy"
+  api_token: "cfut_crIgGh3jvWTmNhfcapCFk6yPkYiN4Svp0w7ORZrc93eec901"
+  zone_id: "791e865ebccc8be7aa849670e96fbcc9"
+  domain: "test.sunnuay.com"

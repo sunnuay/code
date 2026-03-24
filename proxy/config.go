@@ -10,6 +10,7 @@ type Config struct {
 	Forward ForwardConfig `yaml:"forward"`
 	Reverse ReverseConfig `yaml:"reverse"`
 	DDNS    DDNSConfig    `yaml:"ddns"`
+	Cert    CertConfig    `yaml:"cert"`
 }
 
 type ForwardConfig struct {
@@ -31,6 +32,15 @@ type RouteConfig struct {
 type DDNSConfig struct {
 	Enabled  bool   `yaml:"enabled"`
 	Interval int    `yaml:"interval"`
+	APIToken string `yaml:"api_token"`
+	ZoneID   string `yaml:"zone_id"`
+	Domain   string `yaml:"domain"`
+}
+
+type CertConfig struct {
+	Enabled  bool   `yaml:"enabled"`
+	Email    string `yaml:"email"`
+	CacheDir string `yaml:"cache_dir"`
 	APIToken string `yaml:"api_token"`
 	ZoneID   string `yaml:"zone_id"`
 	Domain   string `yaml:"domain"`
