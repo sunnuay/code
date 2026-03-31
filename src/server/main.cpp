@@ -1,109 +1,46 @@
+#include "router.hpp"
+#include "server.hpp"
 #include <asio.hpp>
 #include <iostream>
-#include <llhttp.h>
-#include <memory>
-#include <string>
-
-using asio::ip::tcp;
-
-class Session : public std::enable_shared_from_this<Session> {
-public:
-  Session(tcp::socket socket) : socket_(std::move(socket)) {
-    // 1. 初始化 llhttp 设置和回调
-    llhttp_settings_init(&settings_);
-
-    // 当 HTTP 报文解析完成时触发
-    settings_.on_message_complete = [](llhttp_t *parser) -> int {
-      auto *self = static_cast<Session *>(parser->data);
-      self->request_complete_ = true;
-      return 0; // 返回 0 表示继续执行
-    };
-
-    // 2. 初始化解析器为 Request 模式
-    llhttp_init(&parser_, HTTP_REQUEST, &settings_);
-    parser_.data = this; // 绑定上下文
-  }
-
-  void start() { do_read(); }
-
-private:
-  void do_read() {
-    auto self(shared_from_this());
-    socket_.async_read_some(
-        asio::buffer(data_, max_length),
-        [this, self](std::error_code ec, std::size_t length) {
-          if (!ec) {
-            // 3. 将收到的数据喂给 llhttp
-            enum llhttp_errno err = llhttp_execute(&parser_, data_, length);
-            if (err != HPE_OK) {
-              std::cerr << "Parse error: " << llhttp_errno_name(err) << " "
-                        << parser_.reason << "\n";
-              return;
-            }
-
-            // 4. 如果请求解析完成，则发送响应
-            if (request_complete_) {
-              do_write();
-            } else {
-              do_read(); // 继续读
-            }
-          }
-        });
-  }
-
-  void do_write() {
-    auto self(shared_from_this());
-    // 构造简单的 HTTP 响应
-    response_ = "HTTP/1.1 200 OK\r\n"
-                "Content-Length: 13\r\n"
-                "Content-Type: text/plain\r\n"
-                "Connection: close\r\n\r\n"
-                "Hello, World!";
-
-    asio::async_write(socket_, asio::buffer(response_),
-                      [this, self](std::error_code ec, std::size_t /*length*/) {
-                        // 发送完成后，由于启用了 Connection: close，Asio
-                        // session 销毁时 socket 会自动断开
-                      });
-  }
-
-  tcp::socket socket_;
-  enum { max_length = 1024 };
-  char data_[max_length];
-
-  llhttp_t parser_;
-  llhttp_settings_t settings_;
-  bool request_complete_ = false;
-  std::string response_;
-};
-
-class Server {
-public:
-  Server(asio::io_context &io_context, short port)
-      : acceptor_(io_context, tcp::endpoint(tcp::v4(), port)) {
-    do_accept();
-  }
-
-private:
-  void do_accept() {
-    acceptor_.async_accept([this](std::error_code ec, tcp::socket socket) {
-      if (!ec) {
-        std::make_shared<Session>(std::move(socket))->start();
-      }
-      do_accept();
-    });
-  }
-
-  tcp::acceptor acceptor_;
-};
 
 int main() {
   try {
-    asio::io_context io_context;
-    Server server(io_context, 8080);
-    std::cout << "Server running on port 8080...\n";
+    // 1. 实例化 Router
+    auto router = std::make_shared<Router>();
+
+    // 2. 注册路由 (利用 C++20 Lambda 和 Concept 类型安全检查)
+    router->get("/", [](const HttpRequest &req) -> HttpResponse {
+      HttpResponse res;
+      res.body = "<h1>Welcome to Modern C++ Async Web Server!</h1>";
+      res.headers["Content-Type"] = "text/html";
+      return res;
+    });
+
+    router->post("/echo", [](const HttpRequest &req) -> HttpResponse {
+      HttpResponse res;
+      res.body = "You said: " + req.body;
+      res.headers["Content-Type"] = "text/plain";
+      return res;
+    });
+
+    // 3. 设置 Asio IO 上下文 (Proactor 核心)
+    // 提示: 在多核机器上可以通过运行多个 io_context.run() 线程实现更高并发
+    // (这里演示单线程异步)
+    asio::io_context io_context(1);
+
+    // 4. 启动 Server
+    short port = 8080;
+    Server server(io_context, port, router);
+    server.start();
+
+    std::cout << "Server is running on http://127.0.0.1:" << port << "\n";
+
+    // 5. 挂起主线程，事件循环接管
     io_context.run();
-  } catch (std::exception &e) {
-    std::cerr << "Exception: " << e.what() << "\n";
+
+  } catch (const std::exception &e) {
+    std::cerr << "Fatal Error: " << e.what() << "\n";
   }
+
+  return 0;
 }
