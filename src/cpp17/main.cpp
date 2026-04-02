@@ -9,9 +9,7 @@ std::optional<int> find_value(const std::vector<int> &vec, int target) {
   return std::nullopt;
 }
 
-void process_string(std::string_view str) {
-  std::cout << "Processing: " << str << "\n";
-}
+void process_string(std::string_view str) { std::cout << "Processing: " << str << "\n"; }
 
 int main() {
   process_string("hello");

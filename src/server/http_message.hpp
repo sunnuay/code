@@ -16,8 +16,7 @@ struct HttpResponse {
   std::string body;
 
   std::string to_string() const {
-    std::string res = "HTTP/1.1 " + std::to_string(status_code) + " " +
-                      status_message + "\r\n";
+    std::string res = "HTTP/1.1 " + std::to_string(status_code) + " " + status_message + "\r\n";
     for (const auto &[k, v] : headers) {
       res += k + ": " + v + "\r\n";
     }

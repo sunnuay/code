@@ -33,12 +33,10 @@ int HttpParser::on_url(llhttp_t *parser, const char *at, size_t length) {
   return 0;
 }
 
-int HttpParser::on_header_field(llhttp_t *parser, const char *at,
-                                size_t length) {
+int HttpParser::on_header_field(llhttp_t *parser, const char *at, size_t length) {
   auto *self = static_cast<HttpParser *>(parser->data);
   if (self->last_was_value_) {
-    self->request_.headers[self->current_header_field_] =
-        self->current_header_value_;
+    self->request_.headers[self->current_header_field_] = self->current_header_value_;
     self->current_header_field_.clear();
     self->current_header_value_.clear();
   }
@@ -47,8 +45,7 @@ int HttpParser::on_header_field(llhttp_t *parser, const char *at,
   return 0;
 }
 
-int HttpParser::on_header_value(llhttp_t *parser, const char *at,
-                                size_t length) {
+int HttpParser::on_header_value(llhttp_t *parser, const char *at, size_t length) {
   auto *self = static_cast<HttpParser *>(parser->data);
   self->current_header_value_.append(at, length);
   self->last_was_value_ = true;
@@ -58,11 +55,9 @@ int HttpParser::on_header_value(llhttp_t *parser, const char *at,
 int HttpParser::on_headers_complete(llhttp_t *parser) {
   auto *self = static_cast<HttpParser *>(parser->data);
   if (!self->current_header_field_.empty()) {
-    self->request_.headers[self->current_header_field_] =
-        self->current_header_value_;
+    self->request_.headers[self->current_header_field_] = self->current_header_value_;
   }
-  self->request_.method =
-      llhttp_method_name(static_cast<llhttp_method>(parser->method));
+  self->request_.method = llhttp_method_name(static_cast<llhttp_method>(parser->method));
   return 0;
 }
 

@@ -7,8 +7,7 @@ using asio::ip::tcp;
 
 class Server {
 public:
-  Server(asio::io_context &io_context, short port,
-         std::shared_ptr<Router> router);
+  Server(asio::io_context &io_context, short port, std::shared_ptr<Router> router);
   void start();
 
 private:

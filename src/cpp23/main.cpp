@@ -28,7 +28,8 @@ int main() {
 
   std::optional<std::string> input = "hello";
   auto upper_length =
-      input.transform([](const std::string &s) { return s.length(); })
-          .or_else([]() -> std::optional<size_t> { return 0; });
+      input.transform([](const std::string &s) { return s.length(); }).or_else([]() -> std::optional<size_t> {
+        return 0;
+      });
   std::println("Length: {}", upper_length.value());
 }

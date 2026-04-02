@@ -2,14 +2,10 @@
 #include "connection.hpp"
 #include <iostream>
 
-Server::Server(asio::io_context &io_context, short port,
-               std::shared_ptr<Router> router)
-    : acceptor_(io_context, tcp::endpoint(tcp::v4(), port)),
-      router_(std::move(router)) {}
+Server::Server(asio::io_context &io_context, short port, std::shared_ptr<Router> router)
+    : acceptor_(io_context, tcp::endpoint(tcp::v4(), port)), router_(std::move(router)) {}
 
-void Server::start() {
-  asio::co_spawn(acceptor_.get_executor(), accept_loop(), asio::detached);
-}
+void Server::start() { asio::co_spawn(acceptor_.get_executor(), accept_loop(), asio::detached); }
 
 asio::awaitable<void> Server::accept_loop() {
   try {

@@ -17,10 +17,9 @@ int main() {
   // lazy and `work` is just an object that statically represents the work to
   // later be executed
   auto fun = [](int i) { return i * i; };
-  auto work = stdexec::when_all(
-      stdexec::starts_on(sched, stdexec::just(0) | stdexec::then(fun)),
-      stdexec::starts_on(sched, stdexec::just(1) | stdexec::then(fun)),
-      stdexec::starts_on(sched, stdexec::just(2) | stdexec::then(fun)));
+  auto work = stdexec::when_all(stdexec::starts_on(sched, stdexec::just(0) | stdexec::then(fun)),
+                                stdexec::starts_on(sched, stdexec::just(1) | stdexec::then(fun)),
+                                stdexec::starts_on(sched, stdexec::just(2) | stdexec::then(fun)));
 
   // Launch the work and wait for the result
   auto [i, j, k] = stdexec::sync_wait(std::move(work)).value();

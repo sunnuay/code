@@ -9,13 +9,11 @@ concept HttpHandler = requires(T t, const HttpRequest &req) {
 
 class Router {
 public:
-  template <HttpHandler Handler>
-  void get(const std::string &path, Handler handler) {
+  template <HttpHandler Handler> void get(const std::string &path, Handler handler) {
     routes_["GET|" + path] = handler;
   }
 
-  template <HttpHandler Handler>
-  void post(const std::string &path, Handler handler) {
+  template <HttpHandler Handler> void post(const std::string &path, Handler handler) {
     routes_["POST|" + path] = handler;
   }
 
@@ -32,7 +30,5 @@ public:
   }
 
 private:
-  std::unordered_map<std::string,
-                     std::function<HttpResponse(const HttpRequest &)>>
-      routes_;
+  std::unordered_map<std::string, std::function<HttpResponse(const HttpRequest &)>> routes_;
 };
