@@ -1,10 +1,7 @@
 #pragma once
 #include "http_message.hpp"
-#include <concepts>
 #include <functional>
-#include <unordered_map>
 
-// C++20 Concept: 约束 Handler 必须接受 HttpRequest 并返回 HttpResponse
 template <typename T>
 concept HttpHandler = requires(T t, const HttpRequest &req) {
   { t(req) } -> std::same_as<HttpResponse>;
@@ -12,7 +9,6 @@ concept HttpHandler = requires(T t, const HttpRequest &req) {
 
 class Router {
 public:
-  // 使用 Concept 约束模板函数
   template <HttpHandler Handler>
   void get(const std::string &path, Handler handler) {
     routes_["GET|" + path] = handler;
@@ -28,7 +24,6 @@ public:
     if (auto it = routes_.find(key); it != routes_.end()) {
       return it->second(req);
     }
-
     HttpResponse res;
     res.status_code = 404;
     res.status_message = "Not Found";
