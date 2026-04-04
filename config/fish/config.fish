@@ -14,5 +14,8 @@ function proxy_off
     set -e all_proxy
 end
 
-set -gx GOPATH $HOME/.go
-set -gx PATH $GOPATH/bin $PATH
+set -gx GOPATH $HOME/.local/share/go
+set -gx NPM_CONFIG_PREFIX $HOME/.local/share/npm
+
+fish_add_path $GOPATH/bin
+fish_add_path $NPM_CONFIG_PREFIX/bin
