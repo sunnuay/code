@@ -1,5 +1,7 @@
 #include <iostream>
 #include <memory>
+#include <string>
+#include <utility>
 
 struct Resource {
   void do_something() { std::cout << "Resource is working." << std::endl; }

@@ -1,6 +1,9 @@
+#include <cstddef>
 #include <expected>
+#include <optional>
 #include <print>
 #include <ranges>
+#include <string>
 #include <vector>
 
 std::expected<int, std::string> parse_number(const std::string &str) {

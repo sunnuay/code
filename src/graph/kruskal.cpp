@@ -2,6 +2,8 @@
 #include <algorithm>
 #include <numeric>
 #include <print>
+#include <tuple>
+#include <vector>
 
 void AdjacencyMatrix::kruskal() {
   std::println("kruskal:");

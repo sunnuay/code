@@ -1,6 +1,7 @@
 #include "graph.hpp"
 #include <print>
 #include <queue>
+#include <vector>
 
 void AdjacencyList::bfs_iterative(int u) {
   std::vector<bool> visited(graph.size());

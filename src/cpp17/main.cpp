@@ -1,5 +1,9 @@
+#include <algorithm>
 #include <iostream>
 #include <map>
+#include <optional>
+#include <string>
+#include <string_view>
 #include <vector>
 
 std::optional<int> find_value(const std::vector<int> &vec, int target) {

@@ -1,5 +1,7 @@
 #include "linear.hpp"
+#include <algorithm>
 #include <print>
+#include <vector>
 
 SparseMatrix SparseMatrix::transpose() {
   SparseMatrix sm;

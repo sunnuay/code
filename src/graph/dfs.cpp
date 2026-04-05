@@ -1,6 +1,7 @@
 #include "graph.hpp"
 #include <print>
 #include <stack>
+#include <vector>
 
 void AdjacencyList::dfs_iterative(int start) {
   std::vector<bool> visited(graph.size());

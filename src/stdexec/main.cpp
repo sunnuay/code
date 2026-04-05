@@ -1,5 +1,7 @@
+#include <cstdio>
 #include <exec/static_thread_pool.hpp>
 #include <stdexec/execution.hpp>
+#include <utility>
 
 int main() {
   // Declare a pool of 3 worker threads:

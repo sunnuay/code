@@ -1,4 +1,6 @@
 #include "http_parser.hpp"
+#include <cstddef>
+#include <llhttp.h>
 
 HttpParser::HttpParser() {
   llhttp_settings_init(&settings_);

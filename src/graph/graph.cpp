@@ -1,4 +1,5 @@
 #include "graph.hpp"
+#include <vector>
 
 AdjacencyList::AdjacencyList(int n) : graph(n) {}
 

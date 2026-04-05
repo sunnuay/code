@@ -1,5 +1,6 @@
 #include "graph.hpp"
 #include <print>
+#include <vector>
 
 void AdjacencyMatrix::dijkstra(int start) {
   std::println("dijkstra:");

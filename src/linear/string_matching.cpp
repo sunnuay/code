@@ -1,5 +1,6 @@
 #include "linear.hpp"
 #include <print>
+#include <vector>
 
 void StringMatching::bf() {
   int i = 0, j = 0;

@@ -1,5 +1,6 @@
 #include "graph.hpp"
 #include <print>
+#include <vector>
 
 void AdjacencyMatrix::floyd() {
   std::println("floyd:");

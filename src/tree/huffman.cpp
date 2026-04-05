@@ -1,5 +1,6 @@
 #include "tree.hpp"
 #include <climits>
+#include <map>
 #include <print>
 
 Huffman::Huffman(std::map<char, int> count) {

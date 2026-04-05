@@ -1,4 +1,6 @@
 #include "tree.hpp"
+#include <map>
+#include <string>
 
 void test_bst() {
   BST bst;
