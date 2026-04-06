@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package api;
+option go_package = "./api";
+
+message Request {
+  string request_text = 1;
+}
+
+message Response{
+  string response_text = 1;
+}
+
+service Core {
+  rpc Handle (Request) returns (Response);
+}
