@@ -23,7 +23,7 @@ const (
 
 type Request struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	RequestText   string                 `protobuf:"bytes,1,opt,name=request_text,json=requestText,proto3" json:"request_text,omitempty"`
+	Text          string                 `protobuf:"bytes,1,opt,name=text,proto3" json:"text,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -58,16 +58,16 @@ func (*Request) Descriptor() ([]byte, []int) {
 	return file_server_api_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *Request) GetRequestText() string {
+func (x *Request) GetText() string {
 	if x != nil {
-		return x.RequestText
+		return x.Text
 	}
 	return ""
 }
 
 type Response struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	ResponseText  string                 `protobuf:"bytes,1,opt,name=response_text,json=responseText,proto3" json:"response_text,omitempty"`
+	Text          string                 `protobuf:"bytes,1,opt,name=text,proto3" json:"text,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -102,9 +102,9 @@ func (*Response) Descriptor() ([]byte, []int) {
 	return file_server_api_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *Response) GetResponseText() string {
+func (x *Response) GetText() string {
 	if x != nil {
-		return x.ResponseText
+		return x.Text
 	}
 	return ""
 }
@@ -113,11 +113,11 @@ var File_server_api_proto protoreflect.FileDescriptor
 
 const file_server_api_proto_rawDesc = "" +
 	"\n" +
-	"\x10server/api.proto\x12\x03api\",\n" +
-	"\aRequest\x12!\n" +
-	"\frequest_text\x18\x01 \x01(\tR\vrequestText\"/\n" +
-	"\bResponse\x12#\n" +
-	"\rresponse_text\x18\x01 \x01(\tR\fresponseText2-\n" +
+	"\x10server/api.proto\x12\x03api\"\x1d\n" +
+	"\aRequest\x12\x12\n" +
+	"\x04text\x18\x01 \x01(\tR\x04text\"\x1e\n" +
+	"\bResponse\x12\x12\n" +
+	"\x04text\x18\x01 \x01(\tR\x04text2-\n" +
 	"\x04Core\x12%\n" +
 	"\x06Handle\x12\f.api.Request\x1a\r.api.ResponseB\aZ\x05./apib\x06proto3"
 

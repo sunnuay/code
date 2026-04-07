@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/base64"
 	"log"
 	"net"
 
@@ -12,12 +13,16 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-type grpcServer struct {
+type coreServer struct {
 	api.UnimplementedCoreServer
 }
 
-func (s *grpcServer) Handle(_ context.Context, req *api.Request) (*api.Response, error) {
-	return &api.Response{ResponseText: req.RequestText + "..."}, nil
+func (s *coreServer) Handle(_ context.Context, req *api.Request) (*api.Response, error) {
+	data, err := base64.StdEncoding.DecodeString(req.Text)
+	if err != nil {
+		return nil, err
+	}
+	return &api.Response{Text: string(data)}, nil
 }
 
 func startGRPCServer() {
@@ -27,7 +32,7 @@ func startGRPCServer() {
 	}
 
 	s := grpc.NewServer()
-	api.RegisterCoreServer(s, &grpcServer{})
+	api.RegisterCoreServer(s, &coreServer{})
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("Failed to run gRPC: %v", err)
 	}
@@ -39,17 +44,17 @@ func startGinServer() {
 		log.Fatalf("Failed to connect to gRPC: %v", err)
 	}
 
-	grpcClient := api.NewCoreClient(conn)
+	coreClient := api.NewCoreClient(conn)
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
 
-	r.GET("/:name", func(c *gin.Context) {
-		resp, err := grpcClient.Handle(c.Request.Context(), &api.Request{RequestText: c.Param("name")})
+	r.GET("/api", func(c *gin.Context) {
+		resp, err := coreClient.Handle(c.Request.Context(), &api.Request{Text: c.Query("base64")})
 		if err != nil {
-			c.JSON(500, gin.H{"error": err.Error()})
+			c.JSON(500, gin.H{"error": "invalid base64"})
 			return
 		}
-		c.JSON(200, gin.H{"code": 200, "data": resp.ResponseText})
+		c.JSON(200, gin.H{"data": resp.Text})
 	})
 
 	if err := r.Run(":10002"); err != nil {
