@@ -1,9 +1,9 @@
 #include <concepts>
+#include <iostream>
 #include <span>
 #include <vector>
-#include <iostream>
 
-import test;
+import cpp20;
 
 namespace cpp20 {
 template <typename T>
@@ -32,11 +32,6 @@ void run() {
   int arr[] = {4, 5, 6};
   process_data(vec);
   process_data(arr);
-  std::cout << "Span demo (vector): ";
-  for(auto v : vec) std::cout << v << " ";
-  std::cout << "\nSpan demo (array): ";
-  for(auto v : arr) std::cout << v << " ";
-  std::cout << std::endl;
 
   Point p1{1, 2}, p2{1, 3};
   if (p1 < p2) {
