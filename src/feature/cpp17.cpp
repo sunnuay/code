@@ -6,6 +6,7 @@
 #include <string_view>
 #include <vector>
 
+namespace cpp17 {
 std::optional<int> find_value(const std::vector<int> &vec, int target) {
   auto it = std::find(vec.begin(), vec.end(), target);
   if (it != vec.end())
@@ -15,7 +16,8 @@ std::optional<int> find_value(const std::vector<int> &vec, int target) {
 
 void process_string(std::string_view str) { std::cout << "Processing: " << str << "\n"; }
 
-int main() {
+void run() {
+  std::cout << "--- C++17 Demo ---" << std::endl;
   process_string("hello");
   process_string(std::string("world"));
 
@@ -28,4 +30,6 @@ int main() {
   if (auto val = find_value(numbers, 3); val.has_value()) {
     std::cout << "Found value: " << *val << "\n";
   }
+  std::cout << std::endl;
 }
+} // namespace cpp17

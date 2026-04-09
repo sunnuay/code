@@ -5,6 +5,7 @@
 #include <utility>
 #include <vector>
 
+namespace cpp11 {
 struct Buffer {
   std::unique_ptr<int[]> data;
   Buffer() = default;
@@ -15,7 +16,8 @@ struct Buffer {
   }
 };
 
-int main() {
+void run() {
+  std::cout << "--- C++11 Demo ---" << std::endl;
   auto shared_buffer = std::make_shared<Buffer>();
 
   std::vector<int> nums{4, 1, 3, 2, 5, 7, 6};
@@ -28,4 +30,6 @@ int main() {
   for (const auto &word : words) {
     std::cout << word << " ";
   }
+  std::cout << "\nGreater than 5 count: " << count << std::endl << std::endl;
 }
+} // namespace cpp11

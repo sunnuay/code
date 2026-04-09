@@ -1,11 +1,13 @@
 #include <cstddef>
 #include <expected>
+#include <iostream>
 #include <optional>
 #include <print>
 #include <ranges>
 #include <string>
 #include <vector>
 
+namespace cpp23 {
 std::expected<int, std::string> parse_number(const std::string &str) {
   if (str.empty())
     return std::unexpected("String is empty");
@@ -16,7 +18,8 @@ std::expected<int, std::string> parse_number(const std::string &str) {
   }
 }
 
-int main() {
+void run() {
+  std::cout << "--- C++23 Demo ---" << std::endl;
   auto result = parse_number("42");
   if (result.has_value()) {
     std::println("Parsed successfully: {}", result.value());
@@ -35,4 +38,6 @@ int main() {
         return 0;
       });
   std::println("Length: {}", upper_length.value());
+  std::cout << std::endl;
 }
+} // namespace cpp23

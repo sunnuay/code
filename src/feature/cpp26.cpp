@@ -1,5 +1,7 @@
+#include <iostream>
 #include <print>
 
+namespace cpp26 {
 #if __has_include(<meta>)
 #include <meta>
 using namespace std::meta;
@@ -15,9 +17,12 @@ template <typename T> void print_all(T const &t) {
 }
 #endif
 
-int main() {
+void run() {
+  std::cout << "--- C++26 Demo ---" << std::endl;
   struct S {
     int a, b;
   } s{97, 98};
   print_all(s);
+  std::cout << std::endl;
 }
+} // namespace cpp26
