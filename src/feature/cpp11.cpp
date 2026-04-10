@@ -31,6 +31,7 @@ void cpp11() {
   for (const auto &word : words) {
     std::cout << word << " ";
   }
+
   std::cout << "\nGreater than 5 count: " << count << std::endl << std::endl;
 }
 

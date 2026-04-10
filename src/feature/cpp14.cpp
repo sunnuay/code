@@ -21,6 +21,7 @@ void cpp14() {
   auto p = std::make_unique<Resource>();
   auto worker_lambda = [ptr = std::move(p)]() { ptr->do_something(); };
   worker_lambda();
+
   std::cout << std::endl;
 }
 

@@ -1,22 +1,7 @@
 #include "feature.hpp"
-#include <concepts>
 #include <iostream>
-#include <span>
-#include <vector>
 
 import cpp20;
-
-template <typename T>
-concept Addable = requires(T a, T b) {
-  { a + b } -> std::same_as<T>;
-};
-template <Addable T> T add(T a, T b) { return a + b; }
-
-void process_data(std::span<int> data) {
-  for (auto &item : data) {
-    item *= 2;
-  }
-}
 
 struct Point {
   int x, y;
@@ -26,18 +11,14 @@ struct Point {
 void cpp20() {
   std::cout << "--- cpp20 ---" << std::endl;
 
-  auto res = add(1, 2);
-  std::cout << "Addable concept demo: 1 + 2 = " << res << std::endl;
-
-  std::vector<int> vec{1, 2, 3};
-  int arr[] = {4, 5, 6};
-  process_data(vec);
-  process_data(arr);
+  auto res = add(1, 1.1);
+  std::cout << "1 + 1.1 = " << res << std::endl;
 
   Point p1{1, 2}, p2{1, 3};
   if (p1 < p2) {
-    print("p1 is strictly less than p2\n");
+    std::cout << "p1 is strictly less than p2" << std::endl;
   }
+
   std::cout << std::endl;
 }
 

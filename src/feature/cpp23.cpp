@@ -1,7 +1,6 @@
 #include "feature.hpp"
 #include <cstddef>
 #include <expected>
-#include <iostream>
 #include <optional>
 #include <print>
 #include <ranges>
@@ -19,7 +18,8 @@ std::expected<int, std::string> parse_number(const std::string &str) {
 }
 
 void cpp23() {
-  std::cout << "--- cpp23 ---" << std::endl;
+  std::println("--- cpp23 ---");
+
   auto result = parse_number("42");
   if (result.has_value()) {
     std::println("Parsed successfully: {}", result.value());
@@ -38,7 +38,8 @@ void cpp23() {
         return 0;
       });
   std::println("Length: {}", upper_length.value());
-  std::cout << std::endl;
+
+  std::println();
 }
 
 static Register r(cpp23);

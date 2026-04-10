@@ -1,5 +1,4 @@
 #include "feature.hpp"
-#include <iostream>
 #include <print>
 
 #if __has_include(<meta>)
@@ -18,12 +17,14 @@ template <typename T> void print_all(T const &t) {
 #endif
 
 void cpp26() {
-  std::cout << "--- cpp26 ---" << std::endl;
+  std::println("--- cpp26 ---");
+
   struct S {
     int a, b;
   } s{97, 98};
   print_all(s);
-  std::cout << std::endl;
+
+  std::println();
 }
 
 static Register r(cpp26);

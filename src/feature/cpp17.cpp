@@ -31,6 +31,7 @@ void cpp17() {
   if (auto val = find_value(numbers, 3); val.has_value()) {
     std::cout << "Found value: " << *val << "\n";
   }
+
   std::cout << std::endl;
 }
 
