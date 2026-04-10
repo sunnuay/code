@@ -24,12 +24,12 @@ void cpp17() {
 
   std::map<std::string, int> scores{{"Alice", 95}, {"Bob", 87}};
   for (const auto &[name, score] : scores) {
-    std::cout << name << ": " << score << "\n";
+    std::cout << name << ": " << score << std::endl;
   }
 
   std::vector<int> numbers = {1, 2, 3, 4, 5};
   if (auto val = find_value(numbers, 3); val.has_value()) {
-    std::cout << "Found value: " << *val << "\n";
+    std::cout << "Found value: " << *val << std::endl;
   }
 
   std::cout << std::endl;

@@ -27,12 +27,12 @@ void cpp11() {
   auto greater_than = [threshold](int x) { return x > threshold; };
   auto count = std::count_if(nums.begin(), nums.end(), greater_than);
 
-  std::vector<std::string> words{"C++11", "is", "awesome"};
+  std::vector<std::string> words{"C++", "is", "awesome"};
   for (const auto &word : words) {
-    std::cout << word << " ";
+    std::cout << word << std::endl;
   }
 
-  std::cout << "\nGreater than 5 count: " << count << std::endl << std::endl;
+  std::cout << std::endl;
 }
 
 static Register r(cpp11);
