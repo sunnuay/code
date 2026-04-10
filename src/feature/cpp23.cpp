@@ -1,3 +1,4 @@
+#include "feature.hpp"
 #include <cstddef>
 #include <expected>
 #include <iostream>
@@ -7,7 +8,6 @@
 #include <string>
 #include <vector>
 
-namespace cpp23 {
 std::expected<int, std::string> parse_number(const std::string &str) {
   if (str.empty())
     return std::unexpected("String is empty");
@@ -18,8 +18,8 @@ std::expected<int, std::string> parse_number(const std::string &str) {
   }
 }
 
-void run() {
-  std::cout << "--- C++23 Demo ---" << std::endl;
+void cpp23() {
+  std::cout << "--- cpp23 ---" << std::endl;
   auto result = parse_number("42");
   if (result.has_value()) {
     std::println("Parsed successfully: {}", result.value());
@@ -40,4 +40,5 @@ void run() {
   std::println("Length: {}", upper_length.value());
   std::cout << std::endl;
 }
-} // namespace cpp23
+
+static Register r(cpp23);

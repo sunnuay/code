@@ -1,3 +1,4 @@
+#include "feature.hpp"
 #include <concepts>
 #include <iostream>
 #include <span>
@@ -5,7 +6,6 @@
 
 import cpp20;
 
-namespace cpp20 {
 template <typename T>
 concept Addable = requires(T a, T b) {
   { a + b } -> std::same_as<T>;
@@ -23,8 +23,9 @@ struct Point {
   auto operator<=>(const Point &) const = default;
 };
 
-void run() {
-  std::cout << "--- C++20 Demo ---" << std::endl;
+void cpp20() {
+  std::cout << "--- cpp20 ---" << std::endl;
+
   auto res = add(1, 2);
   std::cout << "Addable concept demo: 1 + 2 = " << res << std::endl;
 
@@ -39,4 +40,5 @@ void run() {
   }
   std::cout << std::endl;
 }
-} // namespace cpp20
+
+static Register r(cpp20);

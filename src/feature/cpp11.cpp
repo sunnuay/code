@@ -1,3 +1,4 @@
+#include "feature.hpp"
 #include <algorithm>
 #include <iostream>
 #include <memory>
@@ -5,7 +6,6 @@
 #include <utility>
 #include <vector>
 
-namespace cpp11 {
 struct Buffer {
   std::unique_ptr<int[]> data;
   Buffer() = default;
@@ -16,8 +16,9 @@ struct Buffer {
   }
 };
 
-void run() {
-  std::cout << "--- C++11 Demo ---" << std::endl;
+void cpp11() {
+  std::cout << "--- cpp11 ---" << std::endl;
+
   auto shared_buffer = std::make_shared<Buffer>();
 
   std::vector<int> nums{4, 1, 3, 2, 5, 7, 6};
@@ -32,4 +33,5 @@ void run() {
   }
   std::cout << "\nGreater than 5 count: " << count << std::endl << std::endl;
 }
-} // namespace cpp11
+
+static Register r(cpp11);

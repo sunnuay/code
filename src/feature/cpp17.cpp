@@ -1,3 +1,4 @@
+#include "feature.hpp"
 #include <algorithm>
 #include <iostream>
 #include <map>
@@ -6,7 +7,6 @@
 #include <string_view>
 #include <vector>
 
-namespace cpp17 {
 std::optional<int> find_value(const std::vector<int> &vec, int target) {
   auto it = std::find(vec.begin(), vec.end(), target);
   if (it != vec.end())
@@ -16,8 +16,9 @@ std::optional<int> find_value(const std::vector<int> &vec, int target) {
 
 void process_string(std::string_view str) { std::cout << "Processing: " << str << "\n"; }
 
-void run() {
-  std::cout << "--- C++17 Demo ---" << std::endl;
+void cpp17() {
+  std::cout << "--- cpp17 ---" << std::endl;
+
   process_string("hello");
   process_string(std::string("world"));
 
@@ -32,4 +33,5 @@ void run() {
   }
   std::cout << std::endl;
 }
-} // namespace cpp17
+
+static Register r(cpp17);

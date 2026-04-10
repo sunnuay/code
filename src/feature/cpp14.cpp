@@ -1,15 +1,16 @@
+#include "feature.hpp"
 #include <iostream>
 #include <memory>
 #include <string>
 #include <utility>
 
-namespace cpp14 {
 struct Resource {
   void do_something() { std::cout << "Resource is working." << std::endl; }
 };
 
-void run() {
-  std::cout << "--- C++14 Demo ---" << std::endl;
+void cpp14() {
+  std::cout << "--- cpp14 ---" << std::endl;
+
   auto adder = [](auto a, auto b) { return a + b; };
   auto sum_int = adder(1, 2);
   auto sum_double = adder(1.5, 2.3);
@@ -22,4 +23,5 @@ void run() {
   worker_lambda();
   std::cout << std::endl;
 }
-} // namespace cpp14
+
+static Register r(cpp14);
