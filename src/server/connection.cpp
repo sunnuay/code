@@ -1,12 +1,7 @@
 #include "connection.hpp"
 #include "http_message.hpp"
 #include "router.hpp"
-#include <asio/awaitable.hpp>
-#include <asio/buffer.hpp>
-#include <asio/detached.hpp>
-#include <asio/impl/co_spawn.hpp>
-#include <asio/use_awaitable.hpp>
-#include <asio/write.hpp>
+#include <asio.hpp>
 #include <cstddef>
 #include <exception>
 #include <memory>

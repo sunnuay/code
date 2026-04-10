@@ -1,6 +1,8 @@
 #pragma once
 #include "http_message.hpp"
+#include <cstddef>
 #include <llhttp.h>
+#include <string>
 
 class HttpParser {
 public:

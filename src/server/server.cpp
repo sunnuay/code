@@ -1,11 +1,7 @@
 #include "server.hpp"
 #include "connection.hpp"
 #include "router.hpp"
-#include <asio/awaitable.hpp>
-#include <asio/detached.hpp>
-#include <asio/impl/co_spawn.hpp>
-#include <asio/io_context.hpp>
-#include <asio/use_awaitable.hpp>
+#include <asio.hpp>
 #include <exception>
 #include <iostream>
 #include <memory>

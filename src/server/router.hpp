@@ -1,6 +1,9 @@
 #pragma once
 #include "http_message.hpp"
+#include <concepts>
 #include <functional>
+#include <string>
+#include <unordered_map>
 
 template <typename T>
 concept HttpHandler = requires(T t, const HttpRequest &req) {
