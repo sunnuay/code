@@ -1,3 +1,4 @@
+# # find src -type f | xargs clang-tidy -p build -fix
 Checks: misc-include-cleaner
 CheckOptions:
-  misc-include-cleaner.IgnoreHeaders: '(asio\.hpp|asio/.*|.*\.cppm)'
+  misc-include-cleaner.IgnoreHeaders: .*\.cppm|asio\.hpp|asio/.*
