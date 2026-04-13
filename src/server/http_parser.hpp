@@ -7,7 +7,6 @@
 class HttpParser {
 public:
   HttpParser();
-  ~HttpParser() = default;
 
   bool parse(const char *data, size_t len);
   bool is_complete() const { return complete_; }
@@ -24,7 +23,6 @@ private:
   std::string current_header_value_;
   bool last_was_value_ = false;
 
-  // llhttp C callbacks
   static int on_url(llhttp_t *parser, const char *at, size_t length);
   static int on_header_field(llhttp_t *parser, const char *at, size_t length);
   static int on_header_value(llhttp_t *parser, const char *at, size_t length);
