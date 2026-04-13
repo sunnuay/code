@@ -3,8 +3,8 @@
 #include "router.hpp"
 #include <asio.hpp>
 #include <exception>
-#include <iostream>
 #include <memory>
+#include <print>
 #include <utility>
 
 Server::Server(asio::io_context &io_context, short port, std::shared_ptr<Router> router)
@@ -19,6 +19,6 @@ asio::awaitable<void> Server::accept_loop() {
       std::make_shared<Connection>(std::move(socket), router_)->start();
     }
   } catch (const std::exception &e) {
-    std::cerr << "Server accept error: " << e.what() << "\n";
+    std::println("Error: {}", e.what());
   }
 }
