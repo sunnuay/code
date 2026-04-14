@@ -10,7 +10,6 @@ HttpParser::HttpParser() {
   settings_.on_headers_complete = on_headers_complete;
   settings_.on_body = on_body;
   settings_.on_message_complete = on_message_complete;
-
   llhttp_init(&parser_, HTTP_REQUEST, &settings_);
   parser_.data = this;
 }

@@ -7,7 +7,6 @@
 class HttpParser {
 public:
   HttpParser();
-
   bool parse(const char *data, size_t len);
   bool is_complete() const { return complete_; }
   void reset();
