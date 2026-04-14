@@ -1,5 +1,5 @@
 customCommands:
-  - key: "E"
-    context: "files"
-    command: "git commit --allow-empty-message -m ''"
-    description: "Commit empty message"
+  - key: E
+    context: files
+    command: git commit --allow-empty-message -m ''
+    description: Commit empty message
