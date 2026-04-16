@@ -3,7 +3,7 @@
 C/C++
 
 ```bash
-cmake -S . -B build
+cmake --preset preset
 cmake --build build
 ```
 
