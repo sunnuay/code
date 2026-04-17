@@ -1,9 +1,10 @@
 #include "linear.hpp"
+#include <cstddef>
 #include <print>
 #include <vector>
 
 void StringMatching::bf() {
-  int i = 0, j = 0;
+  size_t i = 0, j = 0;
   while (i < txt.size() && j < pat.size())
     if (txt[i] == pat[j])
       i++, j++;
@@ -14,7 +15,7 @@ void StringMatching::bf() {
 
 void StringMatching::kmp() {
   std::vector<int> lps = pf();
-  int i = 0, j = 0;
+  size_t i = 0, j = 0;
   while (i < txt.size() && j < pat.size())
     if (txt[i] == pat[j])
       i++, j++;
@@ -27,7 +28,7 @@ void StringMatching::kmp() {
 
 std::vector<int> StringMatching::pf() {
   std::vector<int> lps(pat.size());
-  int i = 1, j = 0;
+  size_t i = 1, j = 0;
   while (i < pat.size())
     if (pat[i] == pat[j])
       lps[i] = j + 1, i++, j++;

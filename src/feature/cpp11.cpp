@@ -26,6 +26,7 @@ void cpp11() {
   int threshold = 5;
   auto greater_than = [threshold](int x) { return x > threshold; };
   auto count = std::count_if(nums.begin(), nums.end(), greater_than);
+  std::cout << count << std::endl;
 
   std::vector<std::string> words{"C++", "is", "awesome"};
   for (const auto &word : words) {

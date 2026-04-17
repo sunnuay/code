@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 4.3)
 project(code)
 set(CMAKE_CXX_STANDARD 26)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 file(GLOB paths CONFIGURE_DEPENDS "src/*")
 foreach(path ${paths})
   if(IS_DIRECTORY "${path}")

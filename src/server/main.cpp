@@ -10,7 +10,7 @@ int main() {
   try {
     auto router = std::make_shared<Router>();
 
-    router->get("/", [](const HttpRequest &req) -> HttpResponse {
+    router->get("/", [](const HttpRequest &) -> HttpResponse {
       HttpResponse res;
       res.body = "<h1>Welcome to MCPP Web Server!</h1>";
       res.headers["Content-Type"] = "text/html";
