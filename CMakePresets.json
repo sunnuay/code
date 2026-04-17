@@ -3,8 +3,8 @@
   "configurePresets": [
     {
       "name": "preset",
-      "generator": "Ninja",
       "binaryDir": "build",
+      "generator": "Ninja",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_CXX_COMPILER": "clang++",
