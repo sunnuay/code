@@ -12,6 +12,8 @@ Server::Server(asio::io_context &io_context, short port, std::shared_ptr<Router>
 
 void Server::start() { asio::co_spawn(acceptor_.get_executor(), accept_loop(), asio::detached); }
 
+void Server::stop() { acceptor_.close(); }
+
 asio::awaitable<void> Server::accept_loop() {
   try {
     while (true) {
@@ -19,6 +21,6 @@ asio::awaitable<void> Server::accept_loop() {
       std::make_shared<Connection>(std::move(socket), router_)->start();
     }
   } catch (const std::exception &e) {
-    std::println("Error: {}", e.what());
+    std::println("Server: {}", e.what());
   }
 }

@@ -9,6 +9,7 @@ class Server {
 public:
   Server(asio::io_context &io_context, short port, std::shared_ptr<Router> router);
   void start();
+  void stop();
 
 private:
   asio::awaitable<void> accept_loop();
