@@ -26,10 +26,8 @@ asio::awaitable<void> async_main(asio::io_context &io_context) {
     router->get("/users", [pg_pool](const HttpRequest &req) -> asio::awaitable<HttpResponse> {
       HttpResponse res;
       try {
-        auto raw_conn = co_await pg_pool->acquire();
-        PgConnectionGuard conn(pg_pool, raw_conn);
+        auto conn = co_await pg_pool->acquire();
         auto rows = co_await conn->query("SELECT id, name FROM users LIMIT 10");
-
         res.body = "Users:\n";
         for (const auto &row : rows) {
           res.body += "ID: " + row[0] + ", Name: " + row[1] + "\n";
