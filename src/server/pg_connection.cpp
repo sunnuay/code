@@ -11,9 +11,7 @@ PgConnection::~PgConnection() {
   if (socket_desc_.is_open()) {
     socket_desc_.release();
   }
-  if (conn_) {
-    PQfinish(conn_);
-  }
+  PQfinish(conn_);
 }
 
 asio::awaitable<void> PgConnection::wait_read() {
