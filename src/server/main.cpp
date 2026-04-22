@@ -18,8 +18,8 @@ asio::awaitable<void> async_main(asio::io_context &io_context) {
 
     router->get("/", [](const HttpRequest &req) -> asio::awaitable<HttpResponse> {
       HttpResponse res;
-      res.body = "<h1>Welcome to MCPP Web Server!</h1>";
-      res.headers["Content-Type"] = "text/html";
+      res.headers["Content-Type"] = "text/plain";
+      res.body = "MCPP Web Server";
       co_return res;
     });
 
