@@ -52,7 +52,7 @@ asio::awaitable<void> async_main(asio::io_context &io_context) {
     server.stop();
 
   } catch (const std::exception &e) {
-    std::println("main: {}", e.what());
+    std::println(stderr, "main: {}", e.what());
   }
 }
 
