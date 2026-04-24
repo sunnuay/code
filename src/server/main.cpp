@@ -27,7 +27,9 @@ asio::awaitable<void> async_main(asio::io_context &io_context) {
       HttpResponse res;
       try {
         auto conn = co_await pg_pool->acquire();
-        auto rows = co_await conn->query("SELECT id, name FROM users LIMIT 10");
+        std::string name = "Bob";
+        std::string sql = "SELECT id, name FROM users WHERE name = $1";
+        auto rows = co_await conn->query(sql, {name});
         res.body = "Users:\n";
         for (const auto &row : rows) {
           res.body += "ID: " + row[0] + ", Name: " + row[1] + "\n";

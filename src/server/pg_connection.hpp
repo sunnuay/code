@@ -10,7 +10,8 @@ public:
   ~PgConnection();
 
   asio::awaitable<void> connect(const std::string &conninfo);
-  asio::awaitable<std::vector<std::vector<std::string>>> query(const std::string &sql);
+  asio::awaitable<std::vector<std::vector<std::string>>> query(const std::string &sql,
+                                                               const std::vector<std::string> &params = {});
 
 private:
   asio::awaitable<void> wait_read();
