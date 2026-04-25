@@ -1,5 +1,5 @@
 [Service]
 Restart=always
-ExecStart=%h/.config/mihomo/mihomo
+ExecStart=%h/.config/mihomo/main
 [Install]
 WantedBy=default.target
