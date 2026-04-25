@@ -1,5 +1,3 @@
----@diagnostic disable: undefined-global
-
 vim.g.clipboard = {
 	copy = {
 		["+"] = require("vim.ui.clipboard.osc52").copy("+"),
