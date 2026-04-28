@@ -1,0 +1,13 @@
+# C++
+.cache
+build
+# Go
+go.sum
+# Python
+.venv
+uv.lock
+# TypeScript
+.parcel-cache
+dist
+node_modules
+package-lock.json

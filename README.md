@@ -1,6 +1,6 @@
 # code
 
-C/C++
+C++
 
 ```bash
 cmake --preset preset
@@ -16,5 +16,11 @@ go run ./DIR/
 Python
 
 ```bash
-uv run ./DIR/
+uv run ./DIR/FILE
+```
+
+TypeScript
+
+```bash
+npm start
 ```
