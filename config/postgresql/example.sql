@@ -1,7 +1,3 @@
--- initdb -D ~/.pgdata
--- pg_ctl -D ~/.pgdata -o "-k /tmp" start
--- psql -h /tmp -d postgres -f config/postgresql/example.sql
-
 DROP SCHEMA IF EXISTS example CASCADE;
 CREATE SCHEMA example;
 
@@ -9,11 +5,11 @@ CREATE TABLE example.users (
   id UUID PRIMARY KEY DEFAULT uuidv7(),
   username TEXT NOT NULL UNIQUE,
   password TEXT NOT NULL,
-  settings JSONB NOT NULL DEFAULT '{}'
+  settings JSONB NOT NULL
 );
 
-INSERT INTO example.users (username, password) VALUES
-('alice', 'aaaaa'),
-('bob', 'bbbbb');
+INSERT INTO example.users (username, password, settings) VALUES
+('alice', 'YWxpY2U=', '{}'),
+('bob', 'Ym9i', '{"theme": "dark"}');
 
 SELECT * FROM example.users;
