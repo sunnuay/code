@@ -1,13 +1,15 @@
 # C++
-.cache
-build
+/.cache
+/build
 # Go
-go.work.sum
+/cert
+/config.yaml
+/go.work.sum
 # Python
-.venv
-uv.lock
+/.venv
+/uv.lock
 # TypeScript
-.parcel-cache
-dist
-node_modules
-package-lock.json
+/.parcel-cache
+/dist
+/node_modules
+/package-lock.json

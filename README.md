@@ -10,13 +10,13 @@ cmake --build build
 Go
 
 ```bash
-go run ./DIR/
+go run DIR
 ```
 
 Python
 
 ```bash
-uv run ./DIR/FILE
+uv run FILE
 ```
 
 TypeScript
