@@ -5,7 +5,7 @@ import (
 )
 
 func main() {
-	cfg, err := LoadConfig("config.yaml")
+	cfg, err := LoadConfig("proxy/config.yaml")
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}

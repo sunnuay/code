@@ -2,7 +2,7 @@
 .cache
 build
 # Go
-go.sum
+go.work.sum
 # Python
 .venv
 uv.lock
