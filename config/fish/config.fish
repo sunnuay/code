@@ -15,7 +15,9 @@ function proxy_off
 end
 
 set -gx GOPATH $HOME/.local/share/go
-set -gx NPM_CONFIG_PREFIX $HOME/.local/share/npm
-
 fish_add_path $GOPATH/bin
+
+set -gx NPM_CONFIG_PREFIX $HOME/.local/share/npm
 fish_add_path $NPM_CONFIG_PREFIX/bin
+
+set -gx CLAUDE_CONFIG_DIR $HOME/.claude
