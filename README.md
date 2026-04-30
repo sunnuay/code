@@ -10,17 +10,17 @@ cmake --build build
 Go
 
 ```bash
-go run DIR
+go run NAME
 ```
 
 Python
 
 ```bash
-uv run FILE
+uv run NAME
 ```
 
 TypeScript
 
 ```bash
-npm start
+npm run NAME
 ```

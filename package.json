@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "parcel web/index.html"
+    "web": "parcel web/index.html"
   },
   "devDependencies": {
     "parcel": "^2.16.4"
