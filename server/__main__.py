@@ -1,8 +1,8 @@
 import grpc
 from concurrent import futures
 
-import api_pb2
-import api_pb2_grpc
+from api import api_pb2
+from api import api_pb2_grpc
 
 
 class CoreServicer(api_pb2_grpc.CoreServicer):

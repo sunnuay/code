@@ -8,6 +8,7 @@
 # Python
 /.venv
 /server/__pycache__
+/server/api/__pycache__
 /uv.lock
 # TypeScript
 /.parcel-cache

@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v7.34.1
-// source: api.proto
+// source: api/api.proto
 
 package api
 
@@ -30,7 +30,7 @@ type Request struct {
 
 func (x *Request) Reset() {
 	*x = Request{}
-	mi := &file_api_proto_msgTypes[0]
+	mi := &file_api_api_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -42,7 +42,7 @@ func (x *Request) String() string {
 func (*Request) ProtoMessage() {}
 
 func (x *Request) ProtoReflect() protoreflect.Message {
-	mi := &file_api_proto_msgTypes[0]
+	mi := &file_api_api_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -55,7 +55,7 @@ func (x *Request) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Request.ProtoReflect.Descriptor instead.
 func (*Request) Descriptor() ([]byte, []int) {
-	return file_api_proto_rawDescGZIP(), []int{0}
+	return file_api_api_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *Request) GetText() string {
@@ -74,7 +74,7 @@ type Response struct {
 
 func (x *Response) Reset() {
 	*x = Response{}
-	mi := &file_api_proto_msgTypes[1]
+	mi := &file_api_api_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -86,7 +86,7 @@ func (x *Response) String() string {
 func (*Response) ProtoMessage() {}
 
 func (x *Response) ProtoReflect() protoreflect.Message {
-	mi := &file_api_proto_msgTypes[1]
+	mi := &file_api_api_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -99,7 +99,7 @@ func (x *Response) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Response.ProtoReflect.Descriptor instead.
 func (*Response) Descriptor() ([]byte, []int) {
-	return file_api_proto_rawDescGZIP(), []int{1}
+	return file_api_api_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *Response) GetText() string {
@@ -109,11 +109,11 @@ func (x *Response) GetText() string {
 	return ""
 }
 
-var File_api_proto protoreflect.FileDescriptor
+var File_api_api_proto protoreflect.FileDescriptor
 
-const file_api_proto_rawDesc = "" +
+const file_api_api_proto_rawDesc = "" +
 	"\n" +
-	"\tapi.proto\x12\x03api\"\x1d\n" +
+	"\rapi/api.proto\x12\x03api\"\x1d\n" +
 	"\aRequest\x12\x12\n" +
 	"\x04text\x18\x01 \x01(\tR\x04text\"\x1e\n" +
 	"\bResponse\x12\x12\n" +
@@ -122,23 +122,23 @@ const file_api_proto_rawDesc = "" +
 	"\x06Handle\x12\f.api.Request\x1a\r.api.ResponseB\aZ\x05./apib\x06proto3"
 
 var (
-	file_api_proto_rawDescOnce sync.Once
-	file_api_proto_rawDescData []byte
+	file_api_api_proto_rawDescOnce sync.Once
+	file_api_api_proto_rawDescData []byte
 )
 
-func file_api_proto_rawDescGZIP() []byte {
-	file_api_proto_rawDescOnce.Do(func() {
-		file_api_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_api_proto_rawDesc), len(file_api_proto_rawDesc)))
+func file_api_api_proto_rawDescGZIP() []byte {
+	file_api_api_proto_rawDescOnce.Do(func() {
+		file_api_api_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_api_api_proto_rawDesc), len(file_api_api_proto_rawDesc)))
 	})
-	return file_api_proto_rawDescData
+	return file_api_api_proto_rawDescData
 }
 
-var file_api_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
-var file_api_proto_goTypes = []any{
+var file_api_api_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_api_api_proto_goTypes = []any{
 	(*Request)(nil),  // 0: api.Request
 	(*Response)(nil), // 1: api.Response
 }
-var file_api_proto_depIdxs = []int32{
+var file_api_api_proto_depIdxs = []int32{
 	0, // 0: api.Core.Handle:input_type -> api.Request
 	1, // 1: api.Core.Handle:output_type -> api.Response
 	1, // [1:2] is the sub-list for method output_type
@@ -148,26 +148,26 @@ var file_api_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for field type_name
 }
 
-func init() { file_api_proto_init() }
-func file_api_proto_init() {
-	if File_api_proto != nil {
+func init() { file_api_api_proto_init() }
+func file_api_api_proto_init() {
+	if File_api_api_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_proto_rawDesc), len(file_api_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_api_proto_rawDesc), len(file_api_api_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_api_proto_goTypes,
-		DependencyIndexes: file_api_proto_depIdxs,
-		MessageInfos:      file_api_proto_msgTypes,
+		GoTypes:           file_api_api_proto_goTypes,
+		DependencyIndexes: file_api_api_proto_depIdxs,
+		MessageInfos:      file_api_api_proto_msgTypes,
 	}.Build()
-	File_api_proto = out.File
-	file_api_proto_goTypes = nil
-	file_api_proto_depIdxs = nil
+	File_api_api_proto = out.File
+	file_api_api_proto_goTypes = nil
+	file_api_api_proto_depIdxs = nil
 }

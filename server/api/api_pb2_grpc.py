@@ -3,7 +3,7 @@
 import grpc
 import warnings
 
-import api_pb2 as api__pb2
+from api import api_pb2 as api_dot_api__pb2
 
 GRPC_GENERATED_VERSION = '1.76.0'
 GRPC_VERSION = grpc.__version__
@@ -18,7 +18,7 @@ except ImportError:
 if _version_not_supported:
     raise RuntimeError(
         f'The grpc package installed is at version {GRPC_VERSION},'
-        + ' but the generated code in api_pb2_grpc.py depends on'
+        + ' but the generated code in api/api_pb2_grpc.py depends on'
         + f' grpcio>={GRPC_GENERATED_VERSION}.'
         + f' Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}'
         + f' or downgrade your generated code using grpcio-tools<={GRPC_VERSION}.'
@@ -36,8 +36,8 @@ class CoreStub(object):
         """
         self.Handle = channel.unary_unary(
                 '/api.Core/Handle',
-                request_serializer=api__pb2.Request.SerializeToString,
-                response_deserializer=api__pb2.Response.FromString,
+                request_serializer=api_dot_api__pb2.Request.SerializeToString,
+                response_deserializer=api_dot_api__pb2.Response.FromString,
                 _registered_method=True)
 
 
@@ -55,8 +55,8 @@ def add_CoreServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'Handle': grpc.unary_unary_rpc_method_handler(
                     servicer.Handle,
-                    request_deserializer=api__pb2.Request.FromString,
-                    response_serializer=api__pb2.Response.SerializeToString,
+                    request_deserializer=api_dot_api__pb2.Request.FromString,
+                    response_serializer=api_dot_api__pb2.Response.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -84,8 +84,8 @@ class Core(object):
             request,
             target,
             '/api.Core/Handle',
-            api__pb2.Request.SerializeToString,
-            api__pb2.Response.FromString,
+            api_dot_api__pb2.Request.SerializeToString,
+            api_dot_api__pb2.Response.FromString,
             options,
             channel_credentials,
             insecure,
