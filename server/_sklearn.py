@@ -14,7 +14,8 @@ def run():
     X_train = scaler.fit_transform(X_train)
     X_test = scaler.transform(X_test)
 
-    mlp = MLPClassifier(hidden_layer_sizes=10, max_iter=2000)
+    mlp = MLPClassifier(hidden_layer_sizes=10, max_iter=1000)
+
     mlp.fit(X_train, y_train)
 
-    return f"{mlp.score(X_test, y_test):.4f}"
+    return mlp.score(X_test, y_test)

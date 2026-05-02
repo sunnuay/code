@@ -1,7 +1,7 @@
-import torch
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
+import torch
 
 
 def run():
@@ -21,18 +21,15 @@ def run():
         torch.nn.ReLU(),
         torch.nn.Linear(10, 3),
     )
-
     criterion = torch.nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
+    optimizer = torch.optim.Adam(model.parameters())
 
-    for _ in range(100):
+    for _ in range(1000):
         optimizer.zero_grad()
         output = model(X_train)
         loss = criterion(output, y_train)
         loss.backward()
         optimizer.step()
 
-    with torch.no_grad():
-        preds = model(X_test).argmax(dim=1)
-        acc = (preds == y_test).float().mean().item()
-        return f"{acc:.4f}"
+    preds = model(X_test).argmax(dim=1)
+    return (preds == y_test).float().mean().item()

@@ -1,34 +1,28 @@
 import grpc
 from concurrent import futures
 
-from api import api_pb2
-from api import api_pb2_grpc
-
 import _sklearn
 import _torch
+from api import api_pb2
+from api import api_pb2_grpc
 
 
 class CoreServicer(api_pb2_grpc.CoreServicer):
     def Handle(self, request, context):
         print(context.peer())
-        method = request.text
-        if method == "sklearn":
-            result = _sklearn.run()
-        elif method == "torch":
-            result = _torch.run()
+        if request.text == "sklearn":
+            res = _sklearn.run()
+        elif request.text == "torch":
+            res = _torch.run()
         else:
-            result = "unknown method"
-        return api_pb2.Response(text=result)  # type: ignore
-
-
-def serve():
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    api_pb2_grpc.add_CoreServicer_to_server(CoreServicer(), server)
-    server.add_insecure_port("[::]:50051")
-    server.start()
-    print("gRPC server listening on [::]:50051")
-    server.wait_for_termination()
+            res = "unknown"
+        return api_pb2.Response(text=str(res))  # type: ignore
 
 
 if __name__ == "__main__":
-    serve()
+    server = grpc.server(futures.ThreadPoolExecutor(10))
+    api_pb2_grpc.add_CoreServicer_to_server(CoreServicer(), server)
+    server.add_insecure_port("127.0.0.1:50051")
+    server.start()
+    print("lisening")
+    server.wait_for_termination()
