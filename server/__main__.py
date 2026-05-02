@@ -4,14 +4,20 @@ from concurrent import futures
 from api import api_pb2
 from api import api_pb2_grpc
 
-import mlp
+import _sklearn
+import _torch
 
 
 class CoreServicer(api_pb2_grpc.CoreServicer):
     def Handle(self, request, context):
         print(context.peer())
-        print(f"received: {request.text}")
-        result = mlp.run(request.text)
+        method = request.text
+        if method == "sklearn":
+            result = _sklearn.run()
+        elif method == "torch":
+            result = _torch.run()
+        else:
+            result = "unknown method"
         return api_pb2.Response(text=result)  # type: ignore
 
 
