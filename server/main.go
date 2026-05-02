@@ -3,5 +3,9 @@ package main
 import "fmt"
 
 func main() {
-	fmt.Println(python("sklearn"))
+	var word string
+	for {
+		_, _ = fmt.Scan(&word)
+		fmt.Println(client(word))
+	}
 }

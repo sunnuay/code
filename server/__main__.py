@@ -15,14 +15,18 @@ class CoreServicer(api_pb2_grpc.CoreServicer):
         elif request.text == "torch":
             res = _torch.run()
         else:
-            res = "unknown"
+            res = ""
         return api_pb2.Response(text=str(res))  # type: ignore
 
 
-if __name__ == "__main__":
+def server():
     server = grpc.server(futures.ThreadPoolExecutor(10))
     api_pb2_grpc.add_CoreServicer_to_server(CoreServicer(), server)
     server.add_insecure_port("127.0.0.1:50051")
     server.start()
     print("lisening")
     server.wait_for_termination()
+
+
+if __name__ == "__main__":
+    server()
