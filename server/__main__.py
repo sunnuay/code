@@ -4,11 +4,15 @@ from concurrent import futures
 from api import api_pb2
 from api import api_pb2_grpc
 
+import mlp
+
 
 class CoreServicer(api_pb2_grpc.CoreServicer):
     def Handle(self, request, context):
+        print(context.peer())
         print(f"received: {request.text}")
-        return api_pb2.Response(text=f"echo: {request.text}")
+        result = mlp.run(request.text)
+        return api_pb2.Response(text=result)  # type: ignore
 
 
 def serve():

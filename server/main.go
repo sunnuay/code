@@ -21,7 +21,7 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	resp, err := client.Handle(ctx, &api.Request{Text: "hello from go"})
+	resp, err := client.Handle(ctx, &api.Request{Text: "torch"})
 	if err != nil {
 		panic(err)
 	}
