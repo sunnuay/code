@@ -9,14 +9,13 @@ from api import api_pb2_grpc
 
 class CoreServicer(api_pb2_grpc.CoreServicer):
     def Handle(self, request, context):
-        print(context.peer())
         if request.text == "sklearn":
-            res = _sklearn.run()
+            result = _sklearn.run()
         elif request.text == "torch":
-            res = _torch.run()
+            result = _torch.run()
         else:
-            res = ""
-        return api_pb2.Response(text=str(res))  # type: ignore
+            context.abort(grpc.StatusCode.INVALID_ARGUMENT, request.text)
+        return api_pb2.Response(text=str(result))  # type: ignore
 
 
 def server():

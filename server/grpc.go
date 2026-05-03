@@ -9,8 +9,8 @@ import (
 )
 
 func client(text string) (string, error) {
-	conn, err := grpc.NewClient(
-		"127.0.0.1:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	opts := grpc.WithTransportCredentials(insecure.NewCredentials())
+	conn, err := grpc.NewClient("127.0.0.1:50051", opts)
 	if err != nil {
 		return "", err
 	}
