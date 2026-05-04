@@ -11,6 +11,7 @@ func SetupRouter() *gin.Engine {
 
 	r.GET("/users", getUsers)
 	r.POST("/users", createUser)
+	r.POST("/grpc", handleGrpcCall)
 
 	return r
 }
@@ -37,4 +38,25 @@ func createUser(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, user)
+}
+
+func handleGrpcCall(c *gin.Context) {
+	var request struct {
+		Text string `json:"text" binding:"required"`
+	}
+	if err := c.ShouldBindJSON(&request); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "text field is required"})
+		return
+	}
+
+	result, err := client(request.Text)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"data":    result,
+	})
 }
