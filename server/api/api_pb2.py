@@ -24,14 +24,14 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rapi/api.proto\x12\x03\x61pi\"\x17\n\x07Request\x12\x0c\n\x04text\x18\x01 \x01(\t\"\x18\n\x08Response\x12\x0c\n\x04text\x18\x01 \x01(\t2-\n\x04\x43ore\x12%\n\x06Handle\x12\x0c.api.Request\x1a\r.api.ResponseB\x07Z\x05./apib\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rapi/api.proto\x12\x03\x61pi\"\x17\n\x07Request\x12\x0c\n\x04text\x18\x01 \x01(\t\"\x18\n\x08Response\x12\x0c\n\x04text\x18\x01 \x01(\t2-\n\x04\x43ore\x12%\n\x06Handle\x12\x0c.api.Request\x1a\r.api.ResponseB\x06Z\x04/apib\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'api.api_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
-  _globals['DESCRIPTOR']._serialized_options = b'Z\005./api'
+  _globals['DESCRIPTOR']._serialized_options = b'Z\004/api'
   _globals['_REQUEST']._serialized_start=22
   _globals['_REQUEST']._serialized_end=45
   _globals['_RESPONSE']._serialized_start=47

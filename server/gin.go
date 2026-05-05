@@ -8,10 +8,20 @@ import (
 
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
+	r.GET("/grpc", testGrpc)
 	r.GET("/users", getUsers)
 	r.POST("/users", createUser)
-	r.POST("/grpc", handleGrpc)
 	return r
+}
+
+func testGrpc(c *gin.Context) {
+	result, err := GrpcClient(c.Query("text"))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": result})
 }
 
 func getUsers(c *gin.Context) {
@@ -37,22 +47,4 @@ func createUser(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"data": user})
-}
-
-func handleGrpc(c *gin.Context) {
-	var request struct {
-		Text string `json:"text" binding:"required"`
-	}
-	if err := c.ShouldBindJSON(&request); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	result, err := GrpcClient(request.Text)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{"data": result})
 }

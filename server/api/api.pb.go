@@ -119,7 +119,7 @@ const file_api_api_proto_rawDesc = "" +
 	"\bResponse\x12\x12\n" +
 	"\x04text\x18\x01 \x01(\tR\x04text2-\n" +
 	"\x04Core\x12%\n" +
-	"\x06Handle\x12\f.api.Request\x1a\r.api.ResponseB\aZ\x05./apib\x06proto3"
+	"\x06Handle\x12\f.api.Request\x1a\r.api.ResponseB\x06Z\x04/apib\x06proto3"
 
 var (
 	file_api_api_proto_rawDescOnce sync.Once
