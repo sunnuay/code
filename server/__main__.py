@@ -18,14 +18,17 @@ class CoreServicer(api_pb2_grpc.CoreServicer):
         return api_pb2.Response(text=str(result))  # type: ignore
 
 
-def server():
+def grpc_server():
     server = grpc.server(futures.ThreadPoolExecutor(10))
     api_pb2_grpc.add_CoreServicer_to_server(CoreServicer(), server)
     server.add_insecure_port("127.0.0.1:50051")
     server.start()
     print("lisening")
-    server.wait_for_termination()
+    try:
+        server.wait_for_termination()
+    except KeyboardInterrupt:
+        server.stop(0)
 
 
 if __name__ == "__main__":
-    server()
+    grpc_server()

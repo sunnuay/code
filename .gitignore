@@ -1,6 +1,7 @@
 # C++
 /.cache
 /build
+/.clangd
 # Go
 /cert
 /config.yaml

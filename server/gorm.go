@@ -9,9 +9,9 @@ import (
 var DB *gorm.DB
 
 type User struct {
-	ID       uint           `gorm:"primaryKey" json:"id"`
-	Username string         `gorm:"unique;not null" json:"username"`
-	Settings datatypes.JSON `gorm:"type:jsonb;not null" json:"settings"`
+	ID       int            `gorm:"primaryKey" json:"id"`
+	Username string         `gorm:"not null;unique" json:"username"`
+	Settings datatypes.JSON `gorm:"not null" json:"settings"`
 }
 
 func InitDB(dsn string) error {
