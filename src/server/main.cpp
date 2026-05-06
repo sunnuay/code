@@ -8,6 +8,8 @@
 #include <format>
 #include <memory>
 #include <print>
+#include <thread>
+#include <vector>
 
 asio::awaitable<void> async_main(asio::io_context &io_context) {
   try {
@@ -49,8 +51,14 @@ asio::awaitable<void> async_main(asio::io_context &io_context) {
 }
 
 int main() {
-  asio::io_context io_context(1);
+  asio::io_context io_context;
   asio::co_spawn(io_context, async_main(io_context), asio::detached);
+
+  int num_threads = 8;
+  std::vector<std::jthread> threads;
+  while (--num_threads) {
+    threads.emplace_back([&io_context]() { io_context.run(); });
+  }
   io_context.run();
   std::println("Event loop exited");
 }
