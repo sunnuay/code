@@ -21,6 +21,6 @@ asio::awaitable<void> Server::accept_loop() {
       std::make_shared<Connection>(std::move(socket), router_)->start();
     }
   } catch (const std::exception &e) {
-    std::println("Server: {}", e.what());
+    std::println("accept_loop: {}", e.what());
   }
 }

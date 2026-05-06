@@ -27,7 +27,6 @@ asio::awaitable<void> Connection::process_request() {
 
       if (parser_.is_complete()) {
         HttpResponse response = co_await router_->dispatch(parser_.get_request());
-        response.headers["Server"] = "MCPP Web Server";
         std::string res_str = response.to_string();
 
         co_await asio::async_write(socket_, asio::buffer(res_str), asio::use_awaitable);

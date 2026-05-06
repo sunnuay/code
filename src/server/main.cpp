@@ -5,54 +5,46 @@
 #include <asio.hpp>
 #include <csignal>
 #include <exception>
+#include <format>
 #include <memory>
 #include <print>
 
 asio::awaitable<void> async_main(asio::io_context &io_context) {
   try {
-    auto pg_pool = std::make_shared<PgPool>(io_context, "host=/tmp port=5432 user=sunnuay dbname=postgres", 10);
+    auto pg_pool = std::make_shared<PgPool>(io_context, "host=127.0.0.1 port=5432 dbname=postgres", 10);
     co_await pg_pool->init();
-    std::println("PostgreSQL poll initialized");
 
     auto router = std::make_shared<Router>();
 
     router->get("/", [](const HttpRequest &req) -> asio::awaitable<HttpResponse> {
       HttpResponse res;
       res.headers["Content-Type"] = "text/plain";
-      res.body = "MCPP Web Server";
+      res.body = "hello";
       co_return res;
     });
 
     router->get("/users", [pg_pool](const HttpRequest &req) -> asio::awaitable<HttpResponse> {
       HttpResponse res;
-      try {
-        auto conn = co_await pg_pool->acquire();
-        std::string name = "Bob";
-        std::string sql = "SELECT id, name FROM users WHERE name = $1";
-        auto rows = co_await conn->query(sql, {name});
-        res.body = "Users:\n";
-        for (const auto &row : rows) {
-          res.body += "ID: " + row[0] + ", Name: " + row[1] + "\n";
-        }
-      } catch (const std::exception &e) {
-        res.status_code = 500;
-        res.body = std::string("DB Error: ") + e.what();
-      }
       res.headers["Content-Type"] = "text/plain";
+      auto conn = co_await pg_pool->acquire();
+      auto rows = co_await conn->query("SELECT * FROM users");
+      for (const auto &row : rows) {
+        res.body += std::format("{}, {}, {}\n", row[0], row[1], row[2]);
+      }
       co_return res;
     });
 
     short port = 10001;
     Server server(io_context, port, router);
     server.start();
-    std::println("Web Server is running");
+    std::println("Serving on {}", port);
 
     asio::signal_set signals(io_context, SIGINT, SIGTERM);
     co_await signals.async_wait(asio::use_awaitable);
     server.stop();
 
   } catch (const std::exception &e) {
-    std::println(stderr, "main: {}", e.what());
+    std::println("async_main: {}", e.what());
   }
 }
 

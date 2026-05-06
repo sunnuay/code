@@ -45,16 +45,8 @@ asio::awaitable<void> PgConnection::connect(const std::string &conninfo) {
   }
 }
 
-asio::awaitable<std::vector<std::vector<std::string>>> PgConnection::query(const std::string &sql,
-                                                                           const std::vector<std::string> &params) {
-  std::vector<const char *> param_values;
-  param_values.reserve(params.size());
-  for (const auto &p : params) {
-    param_values.push_back(p.c_str());
-  }
-  int send_status = PQsendQueryParams(conn_, sql.c_str(), params.size(), nullptr, //
-                                      param_values.data(), nullptr, nullptr, 0);
-  if (send_status == 0) {
+asio::awaitable<std::vector<std::vector<std::string>>> PgConnection::query(const std::string &sql) {
+  if (!PQsendQuery(conn_, sql.c_str())) {
     throw std::runtime_error(PQerrorMessage(conn_));
   }
 
