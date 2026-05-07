@@ -13,7 +13,7 @@
 
 asio::awaitable<void> async_main(asio::io_context &io_context) {
   try {
-    auto pg_pool = std::make_shared<PgPool>(io_context, "host=127.0.0.1 port=5432 dbname=postgres", 10);
+    auto pg_pool = std::make_shared<PgPool>(io_context, "host=127.0.0.1 port=5432 dbname=postgres", 20);
     co_await pg_pool->init();
 
     auto router = std::make_shared<Router>();
@@ -54,7 +54,7 @@ int main() {
   asio::io_context io_context;
   asio::co_spawn(io_context, async_main(io_context), asio::detached);
 
-  int num_threads = 8;
+  int num_threads = 4;
   std::vector<std::jthread> threads;
   while (--num_threads) {
     threads.emplace_back([&io_context]() { io_context.run(); });

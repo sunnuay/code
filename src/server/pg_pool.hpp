@@ -1,7 +1,7 @@
 #pragma once
 #include "pg_connection.hpp"
 #include <asio.hpp>
-#include <asio/experimental/channel.hpp>
+#include <asio/experimental/concurrent_channel.hpp>
 #include <cstddef>
 #include <functional>
 #include <memory>
@@ -37,5 +37,5 @@ private:
   std::string conninfo_;
   size_t pool_size_;
   std::vector<std::unique_ptr<PgConnection>> connections_;
-  asio::experimental::channel<void(asio::error_code, PgConnection *)> channel_;
+  asio::experimental::concurrent_channel<void(asio::error_code, PgConnection *)> channel_;
 };
