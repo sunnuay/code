@@ -12,7 +12,5 @@
 /server/api/__pycache__
 /uv.lock
 # TypeScript
-/.parcel-cache
-/dist
 /node_modules
 /package-lock.json
