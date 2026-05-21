@@ -1,4 +1,3 @@
-#include <algorithm>
 #include <gtest/gtest.h>
 #include <vector>
 
@@ -13,7 +12,9 @@ void move_zeroes(vector<int> &nums) {
       count++;
     }
   }
-  fill(nums.begin() + count, nums.end(), 0);
+  for (int i = count; i < n; i++) {
+    nums[i] = 0;
+  }
 }
 
 TEST(move_zeros, basic) {
