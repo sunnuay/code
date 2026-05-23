@@ -1,5 +1,6 @@
 #include "list_node.hpp"
 #include <gtest/gtest.h>
+#include <vector>
 
 using namespace std;
 
@@ -18,10 +19,10 @@ ListNode *reverse_list(ListNode *head) {
 
 TEST(reverse_linked_list, basic) {
   ListNode n5(5), n4(4, &n5), n3(3, &n4), n2(2, &n3), n1(1, &n2);
-  EXPECT_EQ(reverse_list(&n1), &n5);
-  EXPECT_EQ(n5.next, &n4);
-  EXPECT_EQ(n4.next, &n3);
-  EXPECT_EQ(n3.next, &n2);
-  EXPECT_EQ(n2.next, &n1);
-  EXPECT_EQ(n1.next, nullptr);
+  vector<int> vals;
+  for (ListNode *n = reverse_list(&n1); n; n = n->next) {
+    vals.push_back(n->val);
+  }
+  vector<int> want = {5, 4, 3, 2, 1};
+  EXPECT_EQ(vals, want);
 }

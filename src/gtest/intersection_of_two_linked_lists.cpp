@@ -1,8 +1,6 @@
 #include "list_node.hpp"
 #include <gtest/gtest.h>
 
-using namespace std;
-
 ListNode *get_intersection_node(ListNode *head_a, ListNode *head_b) {
   ListNode *x = head_a;
   ListNode *y = head_b;
