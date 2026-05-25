@@ -28,7 +28,8 @@ TreeNode *invert_tree(TreeNode *root) {
 
 TEST(invert_binary_tree, basic) {
   TreeNode n7(9), n6(6), n5(3), n4(1);
-  TreeNode n3(7, &n6, &n7), n2(2, &n4, &n5), n1(4, &n2, &n3);
+  TreeNode n3(7, &n6, &n7), n2(2, &n4, &n5);
+  TreeNode n1(4, &n2, &n3);
   vector<int> inorder_traversal(TreeNode * node);
   vector<int> vals = inorder_traversal(invert_tree(&n1));
   vector<int> want = {9, 7, 6, 4, 3, 2, 1};
