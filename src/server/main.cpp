@@ -18,14 +18,14 @@ asio::awaitable<void> async_main(asio::io_context &io_context) {
 
     auto router = std::make_shared<Router>();
 
-    router->get("/", [](const HttpRequest &req) -> asio::awaitable<HttpResponse> {
+    router->get("/", [](const HttpRequest &) -> asio::awaitable<HttpResponse> {
       HttpResponse res;
       res.headers["Content-Type"] = "text/plain";
       res.body = "hello";
       co_return res;
     });
 
-    router->get("/users", [pg_pool](const HttpRequest &req) -> asio::awaitable<HttpResponse> {
+    router->get("/users", [pg_pool](const HttpRequest &) -> asio::awaitable<HttpResponse> {
       HttpResponse res;
       res.headers["Content-Type"] = "text/plain";
       auto conn = co_await pg_pool->acquire();
