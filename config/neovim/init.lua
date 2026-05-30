@@ -12,24 +12,25 @@ vim.pack.add({
   "https://github.com/nvim-mini/mini.nvim",
   "https://github.com/akinsho/toggleterm.nvim",
   "https://github.com/neovim/nvim-lspconfig",
+  "https://github.com/saghen/blink.lib",
+  "https://github.com/saghen/blink.cmp",
 })
 
 vim.cmd.colorscheme("catppuccin")
 
 require("toggleterm").setup()
-require("mini.completion").setup()
 require("mini.diff").setup()
 require("mini.icons").setup()
 require("mini.move").setup()
 require("mini.pairs").setup()
 require("mini.pick").setup()
-require("mini.snippets").setup()
 require("mini.statusline").setup()
-require("mini.files").setup({
-  windows = {
-    preview = true,
-  },
+require("mini.files").setup({ windows = { preview = true } })
+require("blink.cmp").setup({
+  keymap = { preset = "enter" },
+  fuzzy = { implementation = "lua" },
 })
+
 vim.keymap.set("n", "q", "<Nop>")
 vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]])
 
