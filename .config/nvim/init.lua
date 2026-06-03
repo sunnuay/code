@@ -6,7 +6,6 @@ vim.o.list = true
 vim.o.number = true
 vim.o.relativenumber = true
 vim.o.shiftwidth = 2
-vim.o.undofile = true
 vim.keymap.set("n", "<C-s>", vim.cmd.update)
 vim.keymap.set("n", "<leader>q", vim.cmd.quit)
 vim.keymap.set("n", "<leader>h", vim.cmd.nohlsearch)
@@ -17,6 +16,7 @@ vim.api.nvim_create_autocmd("TextYankPost", { callback = function() vim.highligh
 vim.pack.add({
   { src = "https://github.com/catppuccin/nvim" },
   { src = "https://github.com/nvim-mini/mini.nvim" },
+  { src = "https://github.com/folke/flash.nvim" },
   { src = "https://github.com/akinsho/toggleterm.nvim" },
   { src = "https://github.com/saghen/blink.cmp", version = "v1" },
   { src = "https://github.com/neovim/nvim-lspconfig" },
@@ -37,6 +37,11 @@ require("mini.statusline").setup()
 vim.keymap.set("n", "<leader>e", MiniFiles.open)
 vim.keymap.set("n", "<leader>f", MiniPick.builtin.files)
 vim.keymap.set("n", "<leader>b", MiniPick.builtin.buffers)
+vim.keymap.set("n", "<leader>s", MiniPick.builtin.grep_live)
+
+-- folke/flash.nvim
+require("flash").setup()
+vim.keymap.set({ "n", "x", "o" }, "s", function() require("flash").jump() end)
 
 -- akinsho/toggleterm.nvim
 require("toggleterm").setup({ open_mapping = "<C-/>" })
