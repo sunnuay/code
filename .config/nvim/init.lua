@@ -51,7 +51,7 @@ require("blink.cmp").setup({ keymap = { preset = "enter" } })
 
 -- neovim/nvim-lspconfig
 vim.pack.add({ { src = "https://github.com/neovim/nvim-lspconfig" } })
-vim.lsp.enable({ "clangd" })
+vim.lsp.enable({ "clangd", "gopls", "ty", "ruff" })
 vim.lsp.inlay_hint.enable(true)
 vim.diagnostic.config({ virtual_lines = { current_line = true } })
 vim.keymap.set("n", "gd", vim.lsp.buf.definition)
