@@ -2,7 +2,7 @@ vim.g.mapleader = " "
 vim.opt.cmdheight = 0
 vim.opt.laststatus = 3
 vim.opt.shiftwidth = 2
-vim.opt.list = true
+vim.opt.tabstop = 2
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.ignorecase = true
@@ -51,7 +51,7 @@ require("blink.cmp").setup({ keymap = { preset = "enter" } })
 
 -- neovim/nvim-lspconfig
 vim.pack.add({ { src = "https://github.com/neovim/nvim-lspconfig" } })
-vim.lsp.enable({ "clangd", "gopls", "ty", "ruff" })
+vim.lsp.enable({ "clangd", "gopls", "ty", "ruff", "vtsls" })
 vim.lsp.inlay_hint.enable(true)
 vim.diagnostic.config({ virtual_lines = { current_line = true } })
 vim.keymap.set("n", "gd", vim.lsp.buf.definition)
