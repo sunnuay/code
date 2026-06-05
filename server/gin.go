@@ -14,6 +14,7 @@ func SetupRouter() *gin.Engine {
 	return r
 }
 
+// curl 127.0.0.1:8080/grpc?text=torch
 func testGrpc(c *gin.Context) {
 	result, err := GrpcClient(c.Query("text"))
 	if err != nil {
@@ -24,6 +25,7 @@ func testGrpc(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": result})
 }
 
+// curl 127.0.0.1:8080/users
 func getUsers(c *gin.Context) {
 	users, err := GetAllUsers()
 	if err != nil {
@@ -34,6 +36,7 @@ func getUsers(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": users})
 }
 
+// curl -X POST 127.0.0.1:8080/users -d '{"username": "test", "settings": {}}'
 func createUser(c *gin.Context) {
 	var user User
 	if err := c.ShouldBindJSON(&user); err != nil {
