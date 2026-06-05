@@ -1,17 +1,6 @@
 package main
 
-import (
-	"log"
-)
-
 func main() {
-	dsn := "dbname=postgres"
-	if err := InitDB(dsn); err != nil {
-		log.Fatal(err)
-	}
-
-	r := SetupRouter()
-	if err := r.Run(":8080"); err != nil {
-		log.Fatal(err)
-	}
+	InitDB("dbname=postgres")
+	SetupRouter().Run("127.0.0.1:8080")
 }

@@ -1,10 +1,9 @@
-import grpc
 from concurrent import futures
 
 import _sklearn
 import _torch
-from api import api_pb2
-from api import api_pb2_grpc
+import grpc
+from api import api_pb2, api_pb2_grpc
 
 
 class CoreServicer(api_pb2_grpc.CoreServicer):

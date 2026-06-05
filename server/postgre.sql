@@ -2,7 +2,9 @@
 -- pg_ctl -D ~/.pgdata start -o "-k /tmp"
 -- psql -h /tmp -d postgres -f server/postgre.sql
 
-CREATE TABLE IF NOT EXISTS users (
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE users (
   id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   username TEXT NOT NULL UNIQUE,
   settings JSONB NOT NULL
@@ -10,7 +12,6 @@ CREATE TABLE IF NOT EXISTS users (
 
 INSERT INTO users (username, settings) VALUES
 ('alice', '{}'),
-('bob', '{"theme": "dark"}')
-ON CONFLICT (username) DO NOTHING;
+('bob', '{"theme": "dark"}');
 
 SELECT * FROM users;

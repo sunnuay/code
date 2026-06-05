@@ -9,13 +9,12 @@ import (
 )
 
 func GrpcClient(text string) (string, error) {
-	opts := grpc.WithTransportCredentials(insecure.NewCredentials())
-	conn, err := grpc.NewClient("127.0.0.1:50051", opts)
+	conn, err := grpc.NewClient("127.0.0.1:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return "", err
 	}
 
-	defer func() { _ = conn.Close() }()
+	defer conn.Close()
 
 	resp, err := api.NewCoreClient(conn).Handle(context.Background(), &api.Request{Text: text})
 	if err != nil {
