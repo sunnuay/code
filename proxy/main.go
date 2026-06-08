@@ -10,6 +10,9 @@ func main() {
 		log.Fatalf("Failed to load config: %v", err)
 	}
 
+	apiHandler := NewAPIHandler(cfg, "config.yaml")
+	go StartWebAPI(&cfg.WebAPI, apiHandler)
+
 	if cfg.DDNS.Enabled {
 		go StartDDNS(cfg.DDNS)
 	}
