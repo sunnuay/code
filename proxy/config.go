@@ -12,11 +12,11 @@ type WebAPIConfig struct {
 }
 
 type Config struct {
-	WebAPI  WebAPIConfig   `yaml:"webapi" json:"webapi"`
-	Forward ForwardConfig  `yaml:"forward" json:"forward"`
-	Reverse ReverseConfig  `yaml:"reverse" json:"reverse"`
-	DDNS    DDNSConfig     `yaml:"ddns" json:"ddns"`
-	Cert    CertConfig     `yaml:"cert" json:"cert"`
+	WebAPI  WebAPIConfig  `yaml:"webapi" json:"webapi"`
+	Forward ForwardConfig `yaml:"forward" json:"forward"`
+	Reverse ReverseConfig `yaml:"reverse" json:"reverse"`
+	DDNS    DDNSConfig    `yaml:"ddns" json:"ddns"`
+	Cert    CertConfig    `yaml:"cert" json:"cert"`
 }
 
 type ForwardConfig struct {
@@ -55,24 +55,26 @@ type CertConfig struct {
 func DefaultConfig() *Config {
 	return &Config{
 		WebAPI: WebAPIConfig{
-			Listen: ":8080",
+			Listen: ":9999",
 		},
 		Forward: ForwardConfig{
 			Enabled: false,
-			Listen:  ":9999",
+			Listen:  ":10000",
 		},
 		Reverse: ReverseConfig{
 			Enabled: false,
-			Listen:  ":443",
-			Routes:  []RouteConfig{},
+			Listen:  ":10001",
+			Routes: []RouteConfig{
+				{Path: "/api/", Target: "http://127.0.0.1:8080"},
+			},
 		},
 		DDNS: DDNSConfig{
 			Enabled:  false,
-			Interval: 300,
+			Interval: 600,
 		},
 		Cert: CertConfig{
 			Enabled:  false,
-			CacheDir: "./certs",
+			CacheDir: "./cert",
 		},
 	}
 }
