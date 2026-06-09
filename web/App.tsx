@@ -92,6 +92,7 @@ const App = () => {
 	const [saving, setSaving] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [message, setMessage] = useState<string | null>(null);
+	const [restarting, setRestarting] = useState(false);
 
 	const fetchConfig = useCallback(async () => {
 		setLoading(true);
@@ -138,6 +139,20 @@ const App = () => {
 		},
 		[],
 	);
+
+	const handleRestart = async () => {
+		setRestarting(true);
+		setMessage("正在重启服务...");
+		try {
+			await fetch(`${API_BASE}/api/restart`, { method: "POST" });
+		} catch {
+		}
+		setTimeout(() => {
+			setRestarting(false);
+			setMessage(null);
+			fetchConfig();
+		}, 1000);
+	};
 
 	// per-section update helpers
 	const updateForward = (f: ForwardConfig) =>
@@ -198,8 +213,8 @@ const App = () => {
 						config={config.webapi}
 						onSave={updateWebAPI}
 						saving={saving}
-						error={error}
-						message={message}
+						restarting={restarting}
+						onRestart={handleRestart}
 					/>
 				);
 			default:

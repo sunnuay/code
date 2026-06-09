@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
+import { RefreshCw } from "lucide-react";
 import type { WebAPIConfig } from "../App";
 
 interface Props {
 	config: WebAPIConfig;
 	onSave: (c: WebAPIConfig) => void;
 	saving: boolean;
-	error: string | null;
-	message: string | null;
+	restarting: boolean;
+	onRestart: () => void;
 }
 
-const WebApiSettings = ({ config, onSave, saving, error, message }: Props) => {
+const WebApiSettings = ({ config, onSave, saving, restarting, onRestart }: Props) => {
 	const [local, setLocal] = useState<WebAPIConfig>(config);
 
 	useEffect(() => {
@@ -46,16 +47,25 @@ const WebApiSettings = ({ config, onSave, saving, error, message }: Props) => {
 					</button>
 				</div>
 			</div>
-			{error && (
-				<div className="mt-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">
-					{error}
-				</div>
-			)}
-			{message && (
-				<div className="mt-4 p-3 bg-green-50 text-green-700 rounded-lg text-sm">
-					{message}
-				</div>
-			)}
+
+			<hr className="mt-6 border-gray-200" />
+
+			<div className="mt-6">
+				<h3 className="text-base font-medium text-gray-700 mb-3">
+					服务管理
+				</h3>
+				<button
+					onClick={onRestart}
+					disabled={restarting}
+					className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 disabled:bg-red-300 text-white text-sm font-medium transition-all duration-200"
+				>
+					<RefreshCw
+						size={16}
+						className={restarting ? "animate-spin" : ""}
+					/>
+					{restarting ? "重启中..." : "重启服务"}
+				</button>
+			</div>
 		</div>
 	);
 };

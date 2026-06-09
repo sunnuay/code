@@ -2,9 +2,13 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"sync"
+	"syscall"
+	"time"
 )
 
 type APIHandler struct {
@@ -32,7 +36,7 @@ func writeJSONError(w http.ResponseWriter, code int, msg string) {
 func corsMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Access-Control-Allow-Methods", "GET, PUT, PATCH, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, PUT, PATCH, POST, OPTIONS")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 		if r.Method == http.MethodOptions {
 			w.WriteHeader(http.StatusOK)
@@ -50,6 +54,8 @@ func (h *APIHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		h.handlePutConfig(w, r)
 	case r.URL.Path == "/api/status" && r.Method == http.MethodGet:
 		h.handleGetStatus(w, r)
+	case r.URL.Path == "/api/restart" && r.Method == http.MethodPost:
+		h.handlePostRestart(w, r)
 	default:
 		writeJSONError(w, http.StatusNotFound, "not found")
 	}
@@ -112,6 +118,29 @@ func (h *APIHandler) handleGetStatus(w http.ResponseWriter, r *http.Request) {
 	if err := json.NewEncoder(w).Encode(status); err != nil {
 		log.Printf("API: Failed to encode status: %v", err)
 	}
+}
+
+func (h *APIHandler) handlePostRestart(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]string{"status": "restarting"})
+
+	go func() {
+		time.Sleep(200 * time.Millisecond)
+		log.Printf("API: Restarting process...")
+		if err := RestartProcess(); err != nil {
+			log.Printf("API: Restart failed: %v", err)
+			os.Exit(1)
+		}
+	}()
+}
+
+func RestartProcess() error {
+	execPath, err := os.Executable()
+	if err != nil {
+		return fmt.Errorf("get executable: %w", err)
+	}
+	return syscall.Exec(execPath, os.Args, os.Environ())
 }
 
 func StartWebAPI(cfg *WebAPIConfig, handler *APIHandler) {
