@@ -23,6 +23,12 @@ func (h *APIHandler) GetConfig() *Config {
 	return h.config
 }
 
+func writeJSONError(w http.ResponseWriter, code int, msg string) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(code)
+	json.NewEncoder(w).Encode(map[string]string{"error": msg})
+}
+
 func corsMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -45,9 +51,7 @@ func (h *APIHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case r.URL.Path == "/api/status" && r.Method == http.MethodGet:
 		h.handleGetStatus(w, r)
 	default:
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusNotFound)
-		json.NewEncoder(w).Encode(map[string]string{"error": "not found"})
+		writeJSONError(w, http.StatusNotFound, "not found")
 	}
 }
 
@@ -64,9 +68,7 @@ func (h *APIHandler) handleGetConfig(w http.ResponseWriter, r *http.Request) {
 func (h *APIHandler) handlePutConfig(w http.ResponseWriter, r *http.Request) {
 	var newCfg Config
 	if err := json.NewDecoder(r.Body).Decode(&newCfg); err != nil {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]string{"error": "invalid JSON: " + err.Error()})
+		writeJSONError(w, http.StatusBadRequest, "invalid JSON: "+err.Error())
 		return
 	}
 
@@ -75,9 +77,7 @@ func (h *APIHandler) handlePutConfig(w http.ResponseWriter, r *http.Request) {
 	h.mu.Unlock()
 
 	if err := h.config.Save(h.configPath); err != nil {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(map[string]string{"error": "failed to save config: " + err.Error()})
+		writeJSONError(w, http.StatusInternalServerError, "failed to save config: "+err.Error())
 		return
 	}
 
@@ -123,8 +123,8 @@ func StartWebAPI(cfg *WebAPIConfig, handler *APIHandler) {
 		Handler: corsMiddleware(mux),
 	}
 
-	log.Printf("Web API listening on %s", cfg.Listen)
+	log.Printf("API: Listening on %s", cfg.Listen)
 	if err := server.ListenAndServe(); err != nil {
-		log.Fatalf("Web API error: %v", err)
+		log.Fatalf("API: Listen error: %v", err)
 	}
 }

@@ -44,12 +44,10 @@ func (p *ForwardProxy) handleTunneling(w http.ResponseWriter, r *http.Request) {
 	go func() {
 		_, _ = io.Copy(destConn, clientConn)
 		_ = destConn.Close()
-		_ = clientConn.Close()
 	}()
 
 	go func() {
 		_, _ = io.Copy(clientConn, destConn)
-		_ = destConn.Close()
 		_ = clientConn.Close()
 	}()
 }
@@ -75,7 +73,7 @@ func (p *ForwardProxy) handleHTTP(w http.ResponseWriter, req *http.Request) {
 	w.WriteHeader(resp.StatusCode)
 
 	if _, err := io.Copy(w, resp.Body); err != nil {
-		log.Printf("Forward HTTP copy error: %v", err)
+		log.Printf("Forward: HTTP copy error: %v", err)
 	}
 }
 
@@ -84,8 +82,8 @@ func StartForwardProxy(cfg ForwardConfig) {
 		Addr:    cfg.Listen,
 		Handler: &ForwardProxy{},
 	}
-	log.Printf("Starting Forward Proxy on %s", cfg.Listen)
+	log.Printf("Forward: Starting on %s", cfg.Listen)
 	if err := server.ListenAndServe(); err != nil {
-		log.Fatalf("Forward proxy error: %v", err)
+		log.Fatalf("Forward: Listen error: %v", err)
 	}
 }
