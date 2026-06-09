@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"os"
 
 	"gopkg.in/yaml.v3"
@@ -79,24 +79,24 @@ func DefaultConfig() *Config {
 	}
 }
 
-func LoadConfig(filename string) (*Config, error) {
+func LoadConfig(filename string) *Config {
 	data, err := os.ReadFile(filename)
 	if err != nil {
 		if os.IsNotExist(err) {
 			cfg := DefaultConfig()
 			if err := cfg.Save(filename); err != nil {
-				return nil, fmt.Errorf("failed to save default config: %w", err)
+				log.Fatalf("Failed to save default config: %v", err)
 			}
-			return cfg, nil
+			return cfg
 		}
-		return nil, err
+		log.Fatalf("Failed to read config: %v", err)
 	}
 
 	cfg := DefaultConfig()
 	if err := yaml.Unmarshal(data, cfg); err != nil {
-		return nil, err
+		log.Fatalf("Failed to parse config: %v", err)
 	}
-	return cfg, nil
+	return cfg
 }
 
 func (c *Config) Save(filename string) error {

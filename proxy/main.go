@@ -1,33 +1,29 @@
 package main
 
-import (
-	"log"
-)
+import "flag"
 
 func main() {
-	cfg, err := LoadConfig("config.yaml")
-	if err != nil {
-		log.Fatalf("Failed to load config: %v", err)
-	}
+	configPath := flag.String("f", "config.yaml", "config path")
+	flag.Parse()
 
-	apiHandler := NewAPIHandler(cfg, "config.yaml")
-	go StartWebAPI(&cfg.WebAPI, apiHandler)
-
-	if cfg.DDNS.Enabled {
-		go StartDDNS(cfg.DDNS)
-	}
+	cfg := LoadConfig(*configPath)
+	go StartWebAPI(cfg, *configPath)
 
 	var certManager *CertManager
 	if cfg.Cert.Enabled {
 		certManager = StartCertManager(cfg.Cert)
 	}
 
-	if cfg.Forward.Enabled {
-		go StartForwardProxy(cfg.Forward)
+	if cfg.DDNS.Enabled {
+		go StartDDNS(cfg.DDNS)
 	}
 
 	if cfg.Reverse.Enabled {
 		go StartReverseProxy(cfg.Reverse, certManager)
+	}
+
+	if cfg.Forward.Enabled {
+		go StartForwardProxy(cfg.Forward)
 	}
 
 	select {}
