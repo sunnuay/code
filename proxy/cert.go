@@ -14,7 +14,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go"
@@ -23,8 +23,7 @@ import (
 
 type CertManager struct {
 	cfg  CertConfig
-	cert *tls.Certificate
-	mu   sync.RWMutex
+	cert atomic.Pointer[tls.Certificate]
 }
 
 func StartCertManager(cfg CertConfig) *CertManager {
@@ -48,10 +47,8 @@ func StartCertManager(cfg CertConfig) *CertManager {
 }
 
 func (cm *CertManager) GetCertificate(hello *tls.ClientHelloInfo) (*tls.Certificate, error) {
-	cm.mu.RLock()
-	defer cm.mu.RUnlock()
-	if cm.cert != nil {
-		return cm.cert, nil
+	if cert := cm.cert.Load(); cert != nil {
+		return cert, nil
 	}
 	return nil, fmt.Errorf("certificate not ready")
 }
@@ -63,9 +60,7 @@ func (cm *CertManager) renew() {
 	if cert, err := tls.LoadX509KeyPair(certPath, keyPath); err == nil {
 		if x509Cert, err := x509.ParseCertificate(cert.Certificate[0]); err == nil {
 			if time.Until(x509Cert.NotAfter) > 30*24*time.Hour {
-				cm.mu.Lock()
-				cm.cert = &cert
-				cm.mu.Unlock()
+				cm.cert.Store(&cert)
 				log.Printf("Cert: Valid certificate loaded from cache for %s (expires: %s)", cm.cfg.Domain, x509Cert.NotAfter.Format(time.RFC3339))
 				return
 			}
@@ -80,9 +75,7 @@ func (cm *CertManager) renew() {
 		return
 	}
 
-	cm.mu.Lock()
-	cm.cert = cert
-	cm.mu.Unlock()
+	cm.cert.Store(cert)
 	log.Printf("Cert: Successfully applied and loaded new certificate for %s", cm.cfg.Domain)
 }
 
@@ -110,17 +103,17 @@ func (cm *CertManager) obtainCertificate() (*tls.Certificate, error) {
 	}
 
 	var dnsChallenge *acme.Challenge
-	var authzURL string
+	var authURL string
 
-	for _, authzURI := range order.AuthzURLs {
-		authz, err := client.GetAuthorization(ctx, authzURI)
+	for _, authURI := range order.AuthzURLs {
+		auth, err := client.GetAuthorization(ctx, authURI)
 		if err != nil {
 			continue
 		}
-		for _, chal := range authz.Challenges {
+		for _, chal := range auth.Challenges {
 			if chal.Type == "dns-01" {
 				dnsChallenge = chal
-				authzURL = authzURI
+				authURL = authURI
 				break
 			}
 		}
@@ -148,7 +141,7 @@ func (cm *CertManager) obtainCertificate() (*tls.Certificate, error) {
 		return nil, fmt.Errorf("challenge accept failed: %v", err)
 	}
 
-	if _, err := client.WaitAuthorization(ctx, authzURL); err != nil {
+	if _, err := client.WaitAuthorization(ctx, authURL); err != nil {
 		return nil, fmt.Errorf("wait authorization failed: %v", err)
 	}
 

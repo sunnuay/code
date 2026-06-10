@@ -7,6 +7,7 @@ func main() {
 	flag.Parse()
 
 	cfg := LoadConfig(*configPath)
+
 	go StartWebAPI(cfg, *configPath)
 
 	var certManager *CertManager

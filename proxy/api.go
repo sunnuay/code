@@ -9,10 +9,10 @@ import (
 	"time"
 )
 
-func writeJSON(w http.ResponseWriter, code int, v any) {
+func writeJSON(w http.ResponseWriter, code int, data any) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
-	json.NewEncoder(w).Encode(v)
+	json.NewEncoder(w).Encode(data)
 }
 
 func corsMiddleware(next http.Handler) http.Handler {
