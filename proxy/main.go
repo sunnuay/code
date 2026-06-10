@@ -6,25 +6,25 @@ func main() {
 	configPath := flag.String("f", "config.yaml", "config path")
 	flag.Parse()
 
-	cfg := LoadConfig(*configPath)
+	config := LoadConfig(*configPath)
 
-	go StartAPI(cfg, *configPath)
+	go StartAPI(config, *configPath)
 
 	var certManager *CertManager
-	if cfg.Cert.Enabled {
-		certManager = StartCertManager(cfg.Cert)
+	if config.Cert.Enabled {
+		certManager = StartCert(config.Cert)
 	}
 
-	if cfg.DDNS.Enabled {
-		go StartDDNS(cfg.DDNS)
+	if config.DDNS.Enabled {
+		go StartDDNS(config.DDNS)
 	}
 
-	if cfg.Reverse.Enabled {
-		go StartReverseProxy(cfg.Reverse, certManager)
+	if config.Reverse.Enabled {
+		go StartReverse(config.Reverse, certManager)
 	}
 
-	if cfg.Forward.Enabled {
-		go StartForwardProxy(cfg.Forward)
+	if config.Forward.Enabled {
+		go StartForward(config.Forward)
 	}
 
 	select {}

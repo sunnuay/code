@@ -8,9 +8,9 @@ import (
 	"time"
 )
 
-type ForwardProxy struct{}
+type Forward struct{}
 
-func (p *ForwardProxy) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+func (p *Forward) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	if req.Method == http.MethodConnect {
 		p.handleTunneling(w, req)
 	} else {
@@ -18,7 +18,7 @@ func (p *ForwardProxy) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func (p *ForwardProxy) handleTunneling(w http.ResponseWriter, req *http.Request) {
+func (p *Forward) handleTunneling(w http.ResponseWriter, req *http.Request) {
 	destConn, err := net.DialTimeout("tcp", req.Host, 10*time.Second)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusServiceUnavailable)
@@ -52,7 +52,7 @@ func (p *ForwardProxy) handleTunneling(w http.ResponseWriter, req *http.Request)
 	}()
 }
 
-func (p *ForwardProxy) handleHTTP(w http.ResponseWriter, req *http.Request) {
+func (p *Forward) handleHTTP(w http.ResponseWriter, req *http.Request) {
 	req.RequestURI = ""
 
 	resp, err := http.DefaultTransport.RoundTrip(req)
@@ -77,10 +77,10 @@ func (p *ForwardProxy) handleHTTP(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func StartForwardProxy(cfg ForwardConfig) {
+func StartForward(cfg ForwardConfig) {
 	server := &http.Server{
 		Addr:    cfg.Listen,
-		Handler: &ForwardProxy{},
+		Handler: &Forward{},
 	}
 	log.Printf("Forward: Starting on %s", cfg.Listen)
 	if err := server.ListenAndServe(); err != nil {

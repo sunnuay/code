@@ -26,7 +26,7 @@ type CertManager struct {
 	cert atomic.Pointer[tls.Certificate]
 }
 
-func StartCertManager(cfg CertConfig) *CertManager {
+func StartCert(cfg CertConfig) *CertManager {
 	if err := os.MkdirAll(cfg.CacheDir, 0o755); err != nil {
 		log.Fatalf("Cert: Failed to create cache dir: %v", err)
 	}

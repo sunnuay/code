@@ -8,7 +8,7 @@ import (
 	"net/url"
 )
 
-func StartReverseProxy(cfg ReverseConfig, cm *CertManager) {
+func StartReverse(cfg ReverseConfig, cm *CertManager) {
 	mux := http.NewServeMux()
 
 	for _, route := range cfg.Routes {
