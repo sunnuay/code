@@ -7,12 +7,12 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-type WebAPIConfig struct {
+type APIConfig struct {
 	Listen string `yaml:"listen" json:"listen"`
 }
 
 type Config struct {
-	WebAPI  WebAPIConfig  `yaml:"webapi" json:"webapi"`
+	API     APIConfig     `yaml:"api" json:"api"`
 	Forward ForwardConfig `yaml:"forward" json:"forward"`
 	Reverse ReverseConfig `yaml:"reverse" json:"reverse"`
 	DDNS    DDNSConfig    `yaml:"ddns" json:"ddns"`
@@ -54,7 +54,7 @@ type CertConfig struct {
 
 func DefaultConfig() *Config {
 	return &Config{
-		WebAPI: WebAPIConfig{
+		API: APIConfig{
 			Listen: ":9999",
 		},
 		Forward: ForwardConfig{

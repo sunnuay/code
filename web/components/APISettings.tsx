@@ -1,17 +1,17 @@
 import { useState, useEffect } from "react";
 import { RefreshCw } from "lucide-react";
-import type { WebAPIConfig } from "../App";
+import type { APIConfig } from "../App";
 
 interface Props {
-	config: WebAPIConfig;
-	onSave: (c: WebAPIConfig) => void;
+	config: APIConfig;
+	onSave: (c: APIConfig) => void;
 	saving: boolean;
 	restarting: boolean;
 	onRestart: () => void;
 }
 
-const WebApiSettings = ({ config, onSave, saving, restarting, onRestart }: Props) => {
-	const [local, setLocal] = useState<WebAPIConfig>(config);
+const APISettings = ({ config, onSave, saving, restarting, onRestart }: Props) => {
+	const [local, setLocal] = useState<APIConfig>(config);
 
 	useEffect(() => {
 		setLocal(config);
@@ -70,4 +70,4 @@ const WebApiSettings = ({ config, onSave, saving, restarting, onRestart }: Props
 	);
 };
 
-export default WebApiSettings;
+export default APISettings;

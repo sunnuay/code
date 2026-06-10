@@ -12,11 +12,11 @@ import ForwardProxy from "./components/ForwardProxy";
 import ReverseProxy from "./components/ReverseProxy";
 import DDNS from "./components/DDNS";
 import CertManagement from "./components/CertManagement";
-import WebApiSettings from "./components/WebApiSettings";
+import APISettings from "./components/APISettings";
 
 // ---- shared config types (match Go structs) ----
 
-export interface WebAPIConfig {
+export interface APIConfig {
 	listen: string;
 }
 
@@ -54,7 +54,7 @@ export interface CertConfig {
 }
 
 export interface Config {
-	webapi: WebAPIConfig;
+	api: APIConfig;
 	forward: ForwardConfig;
 	reverse: ReverseConfig;
 	ddns: DDNSConfig;
@@ -64,7 +64,7 @@ export interface Config {
 // ---- defaults (used before first fetch) ----
 
 const defaultConfig: Config = {
-	webapi: { listen: ":9999" },
+	api: { listen: ":9999" },
 	forward: { enabled: false, listen: ":10000" },
 	reverse: { enabled: false, listen: ":10001", routes: [{ path: "/api/", target: "http://127.0.0.1:8080" }] },
 	ddns: { enabled: false, interval: 600, api_token: "", zone_id: "", domain: "" },
@@ -163,8 +163,8 @@ const App = () => {
 		saveConfig({ ...config, ddns: d });
 	const updateCert = (c: CertConfig) =>
 		saveConfig({ ...config, cert: c });
-	const updateWebAPI = (w: WebAPIConfig) =>
-		saveConfig({ ...config, webapi: w });
+	const updateAPI = (w: APIConfig) =>
+		saveConfig({ ...config, api: w });
 
 	const renderContent = () => {
 		if (loading) {
@@ -209,9 +209,9 @@ const App = () => {
 				);
 			case "settings":
 				return (
-					<WebApiSettings
-						config={config.webapi}
-						onSave={updateWebAPI}
+					<APISettings
+						config={config.api}
+						onSave={updateAPI}
 						saving={saving}
 						restarting={restarting}
 						onRestart={handleRestart}

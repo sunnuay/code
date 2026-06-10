@@ -8,7 +8,7 @@ func main() {
 
 	cfg := LoadConfig(*configPath)
 
-	go StartWebAPI(cfg, *configPath)
+	go StartAPI(cfg, *configPath)
 
 	var certManager *CertManager
 	if cfg.Cert.Enabled {

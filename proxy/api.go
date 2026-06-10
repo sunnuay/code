@@ -28,7 +28,7 @@ func corsMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-func StartWebAPI(cfg *Config, configPath string) {
+func StartAPI(cfg *Config, configPath string) {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/api/config", func(w http.ResponseWriter, r *http.Request) {
@@ -81,10 +81,10 @@ func StartWebAPI(cfg *Config, configPath string) {
 	})
 
 	server := &http.Server{
-		Addr:    cfg.WebAPI.Listen,
+		Addr:    cfg.API.Listen,
 		Handler: corsMiddleware(mux),
 	}
 
-	log.Printf("API: Listening on %s", cfg.WebAPI.Listen)
+	log.Printf("API: Listening on %s", cfg.API.Listen)
 	log.Fatal(server.ListenAndServe())
 }
