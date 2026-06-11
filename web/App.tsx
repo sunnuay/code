@@ -40,7 +40,6 @@ export interface DDNSConfig {
 	enabled: boolean;
 	interval: number;
 	api_token: string;
-	zone_id: string;
 	domain: string;
 }
 
@@ -49,7 +48,6 @@ export interface CertConfig {
 	email: string;
 	cache_dir: string;
 	api_token: string;
-	zone_id: string;
 	domain: string;
 }
 
@@ -67,8 +65,8 @@ const defaultConfig: Config = {
 	api: { listen: ":9999" },
 	forward: { enabled: false, listen: ":10000" },
 	reverse: { enabled: false, listen: ":10001", routes: [{ path: "/api/", target: "http://127.0.0.1:8080" }] },
-	ddns: { enabled: false, interval: 600, api_token: "", zone_id: "", domain: "" },
-	cert: { enabled: false, email: "", cache_dir: "./cert", api_token: "", zone_id: "", domain: "" },
+	ddns: { enabled: false, interval: 600, api_token: "", domain: "" },
+	cert: { enabled: false, email: "", cache_dir: "./cert", api_token: "", domain: "" },
 };
 
 const API_BASE = "http://localhost:9999";

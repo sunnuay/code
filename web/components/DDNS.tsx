@@ -59,20 +59,6 @@ const DDNS = ({ config, onSave, saving }: Props) => {
 
 				<div>
 					<label className="block text-sm font-medium text-gray-700 mb-2">
-						Zone ID
-					</label>
-					<input
-						type="text"
-						value={local.zone_id}
-						onChange={(e) => setLocal({ ...local, zone_id: e.target.value })}
-						disabled={saving}
-						placeholder="Cloudflare Zone ID"
-						className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none disabled:bg-gray-50"
-					/>
-				</div>
-
-				<div>
-					<label className="block text-sm font-medium text-gray-700 mb-2">
 						API Token
 					</label>
 					<input

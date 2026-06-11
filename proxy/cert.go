@@ -14,6 +14,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync/atomic"
 	"time"
 
@@ -22,8 +23,9 @@ import (
 )
 
 type CertManager struct {
-	cfg  CertConfig
-	cert atomic.Pointer[tls.Certificate]
+	cfg    CertConfig
+	zoneID string
+	cert   atomic.Pointer[tls.Certificate]
 }
 
 func StartCert(cfg CertConfig) *CertManager {
@@ -31,7 +33,15 @@ func StartCert(cfg CertConfig) *CertManager {
 		log.Fatalf("Cert: Failed to create cache dir: %v", err)
 	}
 
-	cm := &CertManager{cfg: cfg}
+	api, err := cloudflare.NewWithAPIToken(cfg.APIToken)
+	if err != nil {
+		log.Fatalf("Cert: Failed to initialize Cloudflare client: %v", err)
+	}
+
+	cm := &CertManager{
+		cfg:    cfg,
+		zoneID: getCertZoneID(api, cfg.Domain),
+	}
 
 	cm.renew()
 
@@ -44,6 +54,19 @@ func StartCert(cfg CertConfig) *CertManager {
 	}()
 
 	return cm
+}
+
+func getCertZoneID(api *cloudflare.API, domain string) string {
+	parts := strings.Split(domain, ".")
+	for i := 0; i < len(parts)-1; i++ {
+		zoneName := strings.Join(parts[i:], ".")
+		id, err := api.ZoneIDByName(zoneName)
+		if err == nil && id != "" {
+			return id
+		}
+	}
+	log.Fatalf("Cert: Failed to automatically find ZoneID for domain %s", domain)
+	return ""
 }
 
 func (cm *CertManager) GetCertificate(hello *tls.ClientHelloInfo) (*tls.Certificate, error) {
@@ -197,7 +220,7 @@ func (cm *CertManager) setupCloudflareTXT(txtValue string) (string, error) {
 		return "", err
 	}
 	ctx := context.Background()
-	zoneID := cloudflare.ZoneIdentifier(cm.cfg.ZoneID)
+	zoneID := cloudflare.ZoneIdentifier(cm.zoneID)
 	recordName := "_acme-challenge." + cm.cfg.Domain
 
 	rec, err := api.CreateDNSRecord(ctx, zoneID, cloudflare.CreateDNSRecordParams{
@@ -219,7 +242,7 @@ func (cm *CertManager) cleanupCloudflareTXT(recordID string) {
 	}
 	api, err := cloudflare.NewWithAPIToken(cm.cfg.APIToken)
 	if err == nil {
-		err := api.DeleteDNSRecord(context.Background(), cloudflare.ZoneIdentifier(cm.cfg.ZoneID), recordID)
+		err := api.DeleteDNSRecord(context.Background(), cloudflare.ZoneIdentifier(cm.zoneID), recordID)
 		if err != nil {
 			log.Printf("Cert: Failed to clean up Cloudflare TXT record: %v", err)
 		} else {

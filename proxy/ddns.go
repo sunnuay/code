@@ -16,20 +16,35 @@ func StartDDNS(cfg DDNSConfig) {
 		log.Fatalf("DDNS: Failed to initialize Cloudflare client: %v", err)
 	}
 
+	zoneIDStr := getDDNSZoneID(api, cfg.Domain)
+	zoneID := cloudflare.ZoneIdentifier(zoneIDStr)
 	var lastKnownIPv6 string
 
 	log.Printf("DDNS: Starting service for domain: %s", cfg.Domain)
-	updateIPv6Record(api, cfg, &lastKnownIPv6)
+	updateIPv6Record(api, zoneID, cfg, &lastKnownIPv6)
 
 	ticker := time.NewTicker(time.Duration(cfg.Interval) * time.Second)
 	defer ticker.Stop()
 
 	for range ticker.C {
-		updateIPv6Record(api, cfg, &lastKnownIPv6)
+		updateIPv6Record(api, zoneID, cfg, &lastKnownIPv6)
 	}
 }
 
-func updateIPv6Record(api *cloudflare.API, cfg DDNSConfig, lastKnownIPv6 *string) {
+func getDDNSZoneID(api *cloudflare.API, domain string) string {
+	parts := strings.Split(domain, ".")
+	for i := 0; i < len(parts)-1; i++ {
+		zoneName := strings.Join(parts[i:], ".")
+		id, err := api.ZoneIDByName(zoneName)
+		if err == nil && id != "" {
+			return id
+		}
+	}
+	log.Fatalf("DDNS: Failed to automatically find ZoneID for domain %s", domain)
+	return ""
+}
+
+func updateIPv6Record(api *cloudflare.API, zoneID *cloudflare.ResourceContainer, cfg DDNSConfig, lastKnownIPv6 *string) {
 	currentIPv6, err := getPublicIPv6()
 	if err != nil {
 		log.Printf("DDNS: Failed to get local IPv6: %v", err)
@@ -45,8 +60,6 @@ func updateIPv6Record(api *cloudflare.API, cfg DDNSConfig, lastKnownIPv6 *string
 	}
 
 	ctx := context.Background()
-	zoneID := cloudflare.ZoneIdentifier(cfg.ZoneID)
-
 	records, _, err := api.ListDNSRecords(ctx, zoneID, cloudflare.ListDNSRecordsParams{
 		Type: "AAAA",
 		Name: cfg.Domain,

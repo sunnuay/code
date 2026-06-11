@@ -7,16 +7,12 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-type APIConfig struct {
-	Listen string `yaml:"listen" json:"listen"`
-}
-
 type Config struct {
-	API     APIConfig     `yaml:"api" json:"api"`
 	Forward ForwardConfig `yaml:"forward" json:"forward"`
 	Reverse ReverseConfig `yaml:"reverse" json:"reverse"`
 	DDNS    DDNSConfig    `yaml:"ddns" json:"ddns"`
 	Cert    CertConfig    `yaml:"cert" json:"cert"`
+	API     APIConfig     `yaml:"api" json:"api"`
 }
 
 type ForwardConfig struct {
@@ -38,18 +34,20 @@ type RouteConfig struct {
 type DDNSConfig struct {
 	Enabled  bool   `yaml:"enabled" json:"enabled"`
 	Interval int    `yaml:"interval" json:"interval"`
-	APIToken string `yaml:"api_token" json:"api_token"`
-	ZoneID   string `yaml:"zone_id" json:"zone_id"`
 	Domain   string `yaml:"domain" json:"domain"`
+	APIToken string `yaml:"api_token" json:"api_token"`
 }
 
 type CertConfig struct {
 	Enabled  bool   `yaml:"enabled" json:"enabled"`
 	Email    string `yaml:"email" json:"email"`
 	CacheDir string `yaml:"cache_dir" json:"cache_dir"`
-	APIToken string `yaml:"api_token" json:"api_token"`
-	ZoneID   string `yaml:"zone_id" json:"zone_id"`
 	Domain   string `yaml:"domain" json:"domain"`
+	APIToken string `yaml:"api_token" json:"api_token"`
+}
+
+type APIConfig struct {
+	Listen string `yaml:"listen" json:"listen"`
 }
 
 func DefaultConfig() *Config {
