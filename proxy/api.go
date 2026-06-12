@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"os"
 	"syscall"
-	"time"
 )
 
 func writeJSON(w http.ResponseWriter, code int, data any) {
@@ -25,15 +24,11 @@ func StartAPI(config *Config, configPath string) {
 	mux.HandleFunc("POST /api/config", func(w http.ResponseWriter, r *http.Request) {
 		var newConfig Config
 		if err := json.NewDecoder(r.Body).Decode(&newConfig); err != nil {
-			writeJSON(w, http.StatusBadRequest, map[string]string{
-				"error": "invalid JSON: " + err.Error(),
-			})
+			writeJSON(w, http.StatusBadRequest, "invalid json")
 			return
 		}
 		if err := newConfig.Save(configPath); err != nil {
-			writeJSON(w, http.StatusInternalServerError, map[string]string{
-				"error": "failed to save: " + err.Error(),
-			})
+			writeJSON(w, http.StatusInternalServerError, "failed to save")
 			return
 		}
 		*config = newConfig
@@ -42,20 +37,16 @@ func StartAPI(config *Config, configPath string) {
 	})
 
 	mux.HandleFunc("POST /api/restart", func(w http.ResponseWriter, r *http.Request) {
-		writeJSON(w, http.StatusOK, map[string]string{
-			"status": "restarting",
-		})
-		go func() {
-			time.Sleep(200 * time.Millisecond)
-			log.Print("API: Restarting process...")
-			execPath, err := os.Executable()
-			if err != nil {
-				log.Fatalf("API: Restart failed: %v", err)
-			}
-			if err := syscall.Exec(execPath, os.Args, os.Environ()); err != nil {
-				log.Fatalf("API: Restart failed: %v", err)
-			}
-		}()
+		writeJSON(w, http.StatusOK, "restarting")
+		http.NewResponseController(w).Flush()
+		log.Print("API: Restarting process...")
+		execPath, err := os.Executable()
+		if err != nil {
+			log.Fatalf("API: Restart failed: %v", err)
+		}
+		if err := syscall.Exec(execPath, os.Args, os.Environ()); err != nil {
+			log.Fatalf("API: Restart failed: %v", err)
+		}
 	})
 
 	server := &http.Server{Addr: config.API.Listen, Handler: corsMiddleware(mux)}
@@ -63,7 +54,7 @@ func StartAPI(config *Config, configPath string) {
 	log.Fatal(server.ListenAndServe())
 }
 
-func corsMiddleware(next http.Handler) http.Handler {
+func corsMiddleware(mux http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST")
@@ -72,6 +63,6 @@ func corsMiddleware(next http.Handler) http.Handler {
 			w.WriteHeader(http.StatusOK)
 			return
 		}
-		next.ServeHTTP(w, r)
+		mux.ServeHTTP(w, r)
 	})
 }
