@@ -119,7 +119,7 @@ const App = () => {
 			setMessage(null);
 			try {
 				const res = await fetch(`${API_BASE}/api/config`, {
-					method: "PUT",
+					method: "POST",
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify(updated),
 				});
