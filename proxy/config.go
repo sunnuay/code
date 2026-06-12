@@ -40,8 +40,8 @@ type DDNSConfig struct {
 
 type CertConfig struct {
 	Enabled  bool   `yaml:"enabled" json:"enabled"`
-	Email    string `yaml:"email" json:"email"`
 	CacheDir string `yaml:"cache_dir" json:"cache_dir"`
+	Email    string `yaml:"email" json:"email"`
 	Domain   string `yaml:"domain" json:"domain"`
 	APIToken string `yaml:"api_token" json:"api_token"`
 }
@@ -52,18 +52,15 @@ type APIConfig struct {
 
 func DefaultConfig() *Config {
 	return &Config{
-		API: APIConfig{
-			Listen: ":9999",
-		},
 		Forward: ForwardConfig{
-			Enabled: false,
+			Enabled: true,
 			Listen:  ":10000",
 		},
 		Reverse: ReverseConfig{
-			Enabled: false,
+			Enabled: true,
 			Listen:  ":10001",
 			Routes: []RouteConfig{
-				{Path: "/api/", Target: "http://127.0.0.1:8080"},
+				{Path: "/server", Target: "http://127.0.0.1:8080"},
 			},
 		},
 		DDNS: DDNSConfig{
@@ -74,33 +71,37 @@ func DefaultConfig() *Config {
 			Enabled:  false,
 			CacheDir: "./cert",
 		},
+		API: APIConfig{
+			Listen: ":9999",
+		},
 	}
 }
 
+func (config *Config) Save(filename string) error {
+	data, err := yaml.Marshal(config)
+	if err != nil {
+		return err
+	}
+
+	return os.WriteFile(filename, data, 0o644)
+}
+
 func LoadConfig(filename string) *Config {
+	config := DefaultConfig()
+
 	data, err := os.ReadFile(filename)
 	if err != nil {
 		if os.IsNotExist(err) {
-			cfg := DefaultConfig()
-			if err := cfg.Save(filename); err != nil {
-				log.Fatalf("Failed to save default config: %v", err)
+			if err := config.Save(filename); err != nil {
+				log.Fatalf("Failed to save config: %v", err)
 			}
-			return cfg
+			return config
 		}
 		log.Fatalf("Failed to read config: %v", err)
 	}
 
-	cfg := DefaultConfig()
-	if err := yaml.Unmarshal(data, cfg); err != nil {
+	if err := yaml.Unmarshal(data, config); err != nil {
 		log.Fatalf("Failed to parse config: %v", err)
 	}
-	return cfg
-}
-
-func (c *Config) Save(filename string) error {
-	data, err := yaml.Marshal(c)
-	if err != nil {
-		return err
-	}
-	return os.WriteFile(filename, data, 0o644)
+	return config
 }
