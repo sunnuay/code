@@ -16,17 +16,24 @@ func StartDDNS(config DDNSConfig) {
 		log.Fatalf("DDNS: Failed to initialize API: %v", err)
 	}
 
-	zoneID, err := getDDNSZoneID(api, config.Domain)
-	if err != nil {
-		log.Fatalf("DDNS: Failed to find ZoneID: %v", err)
+	parts := strings.Split(config.Domain, ".")
+	var zoneID *cloudflare.ResourceContainer
+	for i := range parts {
+		candidate := strings.Join(parts[i:], ".")
+		id, err := api.ZoneIDByName(candidate)
+		if err == nil && id != "" {
+			zoneID = cloudflare.ZoneIdentifier(id)
+			break
+		}
+	}
+	if zoneID == nil {
+		log.Fatalf("DDNS: Failed to find ZoneID for domain: %s", config.Domain)
 	}
 
 	log.Printf("DDNS: Starting service for domain: %s", config.Domain)
 
-	var lastIP string
 	ticker := time.NewTicker(time.Duration(config.Interval) * time.Second)
-	defer ticker.Stop()
-
+	var lastIP string
 	for {
 		if ip := getPublicIPv6(); ip != "" && ip != lastIP {
 			if upsertDNSRecord(api, zoneID, config.Domain, ip) {
@@ -37,54 +44,12 @@ func StartDDNS(config DDNSConfig) {
 	}
 }
 
-func getDDNSZoneID(api *cloudflare.API, domain string) (*cloudflare.ResourceContainer, error) {
-	parts := strings.Split(domain, ".")
-	var lastErr error
-	for i := range parts {
-		candidate := strings.Join(parts[i:], ".")
-		id, err := api.ZoneIDByName(candidate)
-		if err == nil && id != "" {
-			return cloudflare.ZoneIdentifier(id), nil
-		}
-		lastErr = err
-	}
-	return nil, lastErr
-}
-
 func getPublicIPv6() string {
-	ifaces, err := net.Interfaces()
+	addrs, err := net.InterfaceAddrs()
 	if err != nil {
 		return ""
 	}
-	for _, iface := range ifaces {
-		if !isUp(iface) || isSkipped(iface.Name) {
-			continue
-		}
-		if ip := findGlobalIPv6(iface); ip != "" {
-			log.Printf("DDNS: Found IPv6 %s on interface %s", ip, iface.Name)
-			return ip
-		}
-	}
-	return ""
-}
 
-func isUp(iface net.Interface) bool {
-	return iface.Flags&net.FlagUp != 0 && iface.Flags&net.FlagLoopback == 0
-}
-
-var skippedPrefixes = []string{"docker", "br-", "veth", "virbr", "wg", "tailscale"}
-
-func isSkipped(name string) bool {
-	for _, prefix := range skippedPrefixes {
-		if strings.HasPrefix(name, prefix) {
-			return true
-		}
-	}
-	return false
-}
-
-func findGlobalIPv6(iface net.Interface) string {
-	addrs, _ := iface.Addrs()
 	for _, addr := range addrs {
 		ipnet, ok := addr.(*net.IPNet)
 		if !ok {
@@ -108,24 +73,22 @@ func upsertDNSRecord(api *cloudflare.API, zoneID *cloudflare.ResourceContainer, 
 	}
 
 	if len(records) > 0 && records[0].Content == ip {
-		log.Printf("DDNS: Record already exists for %s -> %s", domain, ip)
+		log.Printf("DDNS: No update needed: %s -> %s", domain, ip)
 		return true
 	}
 
 	proxied := false
-	var actionErr error
 	if len(records) == 0 {
-		_, actionErr = api.CreateDNSRecord(ctx, zoneID, cloudflare.CreateDNSRecordParams{
+		_, err = api.CreateDNSRecord(ctx, zoneID, cloudflare.CreateDNSRecordParams{
 			Type: "AAAA", Name: domain, Content: ip, Proxied: &proxied, TTL: 1,
 		})
 	} else {
-		_, actionErr = api.UpdateDNSRecord(ctx, zoneID, cloudflare.UpdateDNSRecordParams{
+		_, err = api.UpdateDNSRecord(ctx, zoneID, cloudflare.UpdateDNSRecordParams{
 			ID: records[0].ID, Type: "AAAA", Name: domain, Content: ip, Proxied: &proxied, TTL: 1,
 		})
 	}
-
-	if actionErr != nil {
-		log.Printf("DDNS: Update failed: %v", actionErr)
+	if err != nil {
+		log.Printf("DDNS: Update failed: %v", err)
 		return false
 	}
 	log.Printf("DDNS: Success %s -> %s", domain, ip)
