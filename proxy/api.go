@@ -8,12 +8,6 @@ import (
 	"syscall"
 )
 
-func writeJSON(w http.ResponseWriter, code int, data any) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(code)
-	json.NewEncoder(w).Encode(data)
-}
-
 func StartAPI(config *Config, configPath string) {
 	mux := http.NewServeMux()
 
@@ -52,6 +46,12 @@ func StartAPI(config *Config, configPath string) {
 	server := &http.Server{Addr: config.API.Listen, Handler: corsMiddleware(mux)}
 	log.Printf("API: Listening on %s", config.API.Listen)
 	log.Fatal(server.ListenAndServe())
+}
+
+func writeJSON(w http.ResponseWriter, code int, data any) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(code)
+	json.NewEncoder(w).Encode(data)
 }
 
 func corsMiddleware(mux http.Handler) http.Handler {
