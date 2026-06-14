@@ -3,28 +3,27 @@ package main
 import "flag"
 
 func main() {
-	configPath := flag.String("f", "config.yaml", "config path")
+	var filename string
+	flag.StringVar(&filename, "f", "config.yaml", "")
 	flag.Parse()
 
-	config := LoadConfig(*configPath)
+	config := LoadConfig(filename)
 
-	go StartAPI(config, *configPath)
-
-	if config.Cert.Enabled {
-		go StartCert(config.Cert)
-	}
-
-	if config.DDNS.Enabled {
-		go StartDDNS(config.DDNS)
+	if config.Forward.Enabled {
+		go StartForward(config.Forward)
 	}
 
 	if config.Reverse.Enabled {
 		go StartReverse(config.Reverse)
 	}
 
-	if config.Forward.Enabled {
-		go StartForward(config.Forward)
+	if config.DDNS.Enabled {
+		go StartDDNS(config.DDNS)
 	}
 
-	select {}
+	if config.Cert.Enabled {
+		go StartCert(config.Cert)
+	}
+
+	StartAPI(config, filename)
 }
