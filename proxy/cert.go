@@ -22,87 +22,77 @@ import (
 	"golang.org/x/crypto/acme"
 )
 
-type CertManager struct {
-	cfg    CertConfig
-	zoneID string
-	cert   atomic.Pointer[tls.Certificate]
-}
+var certCache atomic.Pointer[tls.Certificate]
 
-func StartCert(cfg CertConfig) *CertManager {
-	if err := os.MkdirAll(cfg.CacheDir, 0o755); err != nil {
+func StartCert(config CertConfig) {
+	if err := os.MkdirAll(config.CacheDir, 0o755); err != nil {
 		log.Fatalf("Cert: Failed to create cache dir: %v", err)
 	}
 
-	api, err := cloudflare.NewWithAPIToken(cfg.APIToken)
+	api, err := cloudflare.NewWithAPIToken(config.APIToken)
 	if err != nil {
-		log.Fatalf("Cert: Failed to initialize Cloudflare client: %v", err)
+		log.Fatalf("Cert: Failed to initialize API: %v", err)
 	}
 
-	cm := &CertManager{
-		cfg:    cfg,
-		zoneID: getCertZoneID(api, cfg.Domain),
+	zoneID := lookupCertZone(api, config.Domain)
+
+	log.Printf("Cert: Starting service for domain: %s", config.Domain)
+
+	renewCert(api, config, zoneID)
+
+	ticker := time.NewTicker(24 * time.Hour)
+	for range ticker.C {
+		renewCert(api, config, zoneID)
 	}
-
-	cm.renew()
-
-	go func() {
-		ticker := time.NewTicker(24 * time.Hour)
-		defer ticker.Stop()
-		for range ticker.C {
-			cm.renew()
-		}
-	}()
-
-	return cm
 }
 
-func getCertZoneID(api *cloudflare.API, domain string) string {
-	parts := strings.Split(domain, ".")
-	for i := 0; i < len(parts)-1; i++ {
-		zoneName := strings.Join(parts[i:], ".")
-		id, err := api.ZoneIDByName(zoneName)
-		if err == nil && id != "" {
-			return id
-		}
-	}
-	log.Fatalf("Cert: Failed to automatically find ZoneID for domain %s", domain)
-	return ""
-}
-
-func (cm *CertManager) GetCertificate(hello *tls.ClientHelloInfo) (*tls.Certificate, error) {
-	if cert := cm.cert.Load(); cert != nil {
-		return cert, nil
+func GetCertificate(hello *tls.ClientHelloInfo) (*tls.Certificate, error) {
+	if c := certCache.Load(); c != nil {
+		return c, nil
 	}
 	return nil, fmt.Errorf("certificate not ready")
 }
 
-func (cm *CertManager) renew() {
-	certPath := filepath.Join(cm.cfg.CacheDir, "cert.pem")
-	keyPath := filepath.Join(cm.cfg.CacheDir, "key.pem")
+func lookupCertZone(api *cloudflare.API, domain string) *cloudflare.ResourceContainer {
+	parts := strings.Split(domain, ".")
+	for i := range parts {
+		candidate := strings.Join(parts[i:], ".")
+		id, err := api.ZoneIDByName(candidate)
+		if err == nil && id != "" {
+			return cloudflare.ZoneIdentifier(id)
+		}
+	}
+	log.Fatalf("Cert: Failed to find ZoneID for domain: %s", domain)
+	return nil
+}
 
-	if cert, err := tls.LoadX509KeyPair(certPath, keyPath); err == nil {
-		if x509Cert, err := x509.ParseCertificate(cert.Certificate[0]); err == nil {
+func renewCert(api *cloudflare.API, config CertConfig, zoneID *cloudflare.ResourceContainer) {
+	certPath := filepath.Join(config.CacheDir, "cert.pem")
+	keyPath := filepath.Join(config.CacheDir, "key.pem")
+
+	if c, err := tls.LoadX509KeyPair(certPath, keyPath); err == nil {
+		if x509Cert, err := x509.ParseCertificate(c.Certificate[0]); err == nil {
 			if time.Until(x509Cert.NotAfter) > 30*24*time.Hour {
-				cm.cert.Store(&cert)
-				log.Printf("Cert: Valid certificate loaded from cache for %s (expires: %s)", cm.cfg.Domain, x509Cert.NotAfter.Format(time.RFC3339))
+				certCache.Store(&c)
+				log.Printf("Cert: Loaded from cache, expires: %s", x509Cert.NotAfter.Format(time.RFC3339))
 				return
 			}
 		}
 	}
 
-	log.Printf("Cert: Obtaining/Renewing certificate for %s via DNS-01...", cm.cfg.Domain)
+	log.Printf("Cert: Obtaining certificate for %s...", config.Domain)
 
-	cert, err := cm.obtainCertificate()
+	c, err := obtainCert(api, config, zoneID)
 	if err != nil {
-		log.Printf("Cert: Failed to obtain certificate: %v", err)
+		log.Printf("Cert: Obtain failed: %v", err)
 		return
 	}
 
-	cm.cert.Store(cert)
-	log.Printf("Cert: Successfully applied and loaded new certificate for %s", cm.cfg.Domain)
+	certCache.Store(c)
+	log.Printf("Cert: Successfully obtained for %s", config.Domain)
 }
 
-func (cm *CertManager) obtainCertificate() (*tls.Certificate, error) {
+func obtainCert(api *cloudflare.API, config CertConfig, zoneID *cloudflare.ResourceContainer) (*tls.Certificate, error) {
 	ctx := context.Background()
 
 	accountKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
@@ -115,33 +105,17 @@ func (cm *CertManager) obtainCertificate() (*tls.Certificate, error) {
 		DirectoryURL: acme.LetsEncryptURL,
 	}
 
-	_, err = client.Register(ctx, &acme.Account{Contact: []string{"mailto:" + cm.cfg.Email}}, acme.AcceptTOS)
+	_, err = client.Register(ctx, &acme.Account{Contact: []string{"mailto:" + config.Email}}, acme.AcceptTOS)
 	if err != nil && err != acme.ErrAccountAlreadyExists {
-		return nil, fmt.Errorf("account registration failed: %v", err)
+		return nil, err
 	}
 
-	order, err := client.AuthorizeOrder(ctx, acme.DomainIDs(cm.cfg.Domain))
+	order, err := client.AuthorizeOrder(ctx, acme.DomainIDs(config.Domain))
 	if err != nil {
-		return nil, fmt.Errorf("authorize order failed: %v", err)
+		return nil, err
 	}
 
-	var dnsChallenge *acme.Challenge
-	var authURL string
-
-	for _, authURI := range order.AuthzURLs {
-		auth, err := client.GetAuthorization(ctx, authURI)
-		if err != nil {
-			continue
-		}
-		for _, chal := range auth.Challenges {
-			if chal.Type == "dns-01" {
-				dnsChallenge = chal
-				authURL = authURI
-				break
-			}
-		}
-	}
-
+	dnsChallenge, authURL := findDNSChallenge(client, ctx, order)
 	if dnsChallenge == nil {
 		return nil, fmt.Errorf("no dns-01 challenge found")
 	}
@@ -151,102 +125,97 @@ func (cm *CertManager) obtainCertificate() (*tls.Certificate, error) {
 		return nil, err
 	}
 
-	recordID, err := cm.setupCloudflareTXT(txtValue)
+	recordID, err := upsertCertTXT(api, zoneID, config.Domain, txtValue)
 	if err != nil {
-		return nil, fmt.Errorf("cloudflare setup failed: %v", err)
+		return nil, err
 	}
-	defer cm.cleanupCloudflareTXT(recordID)
+	defer deleteCertTXT(api, zoneID, recordID)
 
-	log.Printf("Cert: Waiting 30 seconds for DNS propagation...")
+	log.Printf("Cert: Waiting 30s for DNS propagation...")
 	time.Sleep(30 * time.Second)
 
 	if _, err := client.Accept(ctx, dnsChallenge); err != nil {
-		return nil, fmt.Errorf("challenge accept failed: %v", err)
+		return nil, err
 	}
-
 	if _, err := client.WaitAuthorization(ctx, authURL); err != nil {
-		return nil, fmt.Errorf("wait authorization failed: %v", err)
+		return nil, err
 	}
 
+	return generateCert(client, ctx, config, order)
+}
+
+func findDNSChallenge(client *acme.Client, ctx context.Context, order *acme.Order) (*acme.Challenge, string) {
+	for _, uri := range order.AuthzURLs {
+		auth, err := client.GetAuthorization(ctx, uri)
+		if err != nil {
+			continue
+		}
+		for _, chal := range auth.Challenges {
+			if chal.Type == "dns-01" {
+				return chal, uri
+			}
+		}
+	}
+	return nil, ""
+}
+
+func generateCert(client *acme.Client, ctx context.Context, config CertConfig, order *acme.Order) (*tls.Certificate, error) {
 	certKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	if err != nil {
 		return nil, err
 	}
-	csrReq := &x509.CertificateRequest{
-		Subject:  pkix.Name{CommonName: cm.cfg.Domain},
-		DNSNames: []string{cm.cfg.Domain},
-	}
-	csr, err := x509.CreateCertificateRequest(rand.Reader, csrReq, certKey)
+	csr, err := x509.CreateCertificateRequest(rand.Reader, &x509.CertificateRequest{
+		Subject: pkix.Name{CommonName: config.Domain}, DNSNames: []string{config.Domain},
+	}, certKey)
 	if err != nil {
 		return nil, err
 	}
 
 	derCerts, _, err := client.CreateOrderCert(ctx, order.FinalizeURL, csr, true)
 	if err != nil {
-		return nil, fmt.Errorf("create order cert failed: %v", err)
+		return nil, err
 	}
 
 	var certPEM bytes.Buffer
 	for _, b := range derCerts {
-		if err := pem.Encode(&certPEM, &pem.Block{Type: "CERTIFICATE", Bytes: b}); err != nil {
-			return nil, fmt.Errorf("failed to encode certificate: %v", err)
-		}
+		pem.Encode(&certPEM, &pem.Block{Type: "CERTIFICATE", Bytes: b})
 	}
 
 	keyBytes, err := x509.MarshalECPrivateKey(certKey)
 	if err != nil {
 		return nil, err
 	}
-
 	var keyPEM bytes.Buffer
-	if err := pem.Encode(&keyPEM, &pem.Block{Type: "EC PRIVATE KEY", Bytes: keyBytes}); err != nil {
-		return nil, fmt.Errorf("failed to encode private key: %v", err)
-	}
+	pem.Encode(&keyPEM, &pem.Block{Type: "EC PRIVATE KEY", Bytes: keyBytes})
 
-	if err := os.WriteFile(filepath.Join(cm.cfg.CacheDir, "cert.pem"), certPEM.Bytes(), 0o644); err != nil {
-		return nil, fmt.Errorf("failed to write cert.pem to cache: %v", err)
-	}
-	if err := os.WriteFile(filepath.Join(cm.cfg.CacheDir, "key.pem"), keyPEM.Bytes(), 0o600); err != nil {
-		return nil, fmt.Errorf("failed to write key.pem to cache: %v", err)
-	}
+	os.WriteFile(filepath.Join(config.CacheDir, "cert.pem"), certPEM.Bytes(), 0o644)
+	os.WriteFile(filepath.Join(config.CacheDir, "key.pem"), keyPEM.Bytes(), 0o600)
 
 	tlsCert, err := tls.X509KeyPair(certPEM.Bytes(), keyPEM.Bytes())
 	return &tlsCert, err
 }
 
-func (cm *CertManager) setupCloudflareTXT(txtValue string) (string, error) {
-	api, err := cloudflare.NewWithAPIToken(cm.cfg.APIToken)
-	if err != nil {
-		return "", err
-	}
+func upsertCertTXT(api *cloudflare.API, zoneID *cloudflare.ResourceContainer, domain, txtValue string) (string, error) {
 	ctx := context.Background()
-	zoneID := cloudflare.ZoneIdentifier(cm.zoneID)
-	recordName := "_acme-challenge." + cm.cfg.Domain
+	name := "_acme-challenge." + domain
 
 	rec, err := api.CreateDNSRecord(ctx, zoneID, cloudflare.CreateDNSRecordParams{
-		Type:    "TXT",
-		Name:    recordName,
-		Content: txtValue,
-		TTL:     60,
+		Type: "TXT", Name: name, Content: txtValue, TTL: 60,
 	})
 	if err != nil {
 		return "", err
 	}
-	log.Printf("Cert: Created Cloudflare TXT record for %s", recordName)
+	log.Printf("Cert: Created TXT record: %s", name)
 	return rec.ID, nil
 }
 
-func (cm *CertManager) cleanupCloudflareTXT(recordID string) {
+func deleteCertTXT(api *cloudflare.API, zoneID *cloudflare.ResourceContainer, recordID string) {
 	if recordID == "" {
 		return
 	}
-	api, err := cloudflare.NewWithAPIToken(cm.cfg.APIToken)
-	if err == nil {
-		err := api.DeleteDNSRecord(context.Background(), cloudflare.ZoneIdentifier(cm.zoneID), recordID)
-		if err != nil {
-			log.Printf("Cert: Failed to clean up Cloudflare TXT record: %v", err)
-		} else {
-			log.Printf("Cert: Cleaned up Cloudflare TXT record")
-		}
+	if err := api.DeleteDNSRecord(context.Background(), zoneID, recordID); err != nil {
+		log.Printf("Cert: Failed to delete TXT record: %v", err)
+	} else {
+		log.Printf("Cert: Deleted TXT record")
 	}
 }

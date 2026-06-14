@@ -10,9 +10,8 @@ func main() {
 
 	go StartAPI(config, *configPath)
 
-	var certManager *CertManager
 	if config.Cert.Enabled {
-		certManager = StartCert(config.Cert)
+		go StartCert(config.Cert)
 	}
 
 	if config.DDNS.Enabled {
@@ -20,7 +19,7 @@ func main() {
 	}
 
 	if config.Reverse.Enabled {
-		go StartReverse(config.Reverse, certManager)
+		go StartReverse(config.Reverse)
 	}
 
 	if config.Forward.Enabled {

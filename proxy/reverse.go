@@ -1,14 +1,13 @@
 package main
 
 import (
-	"crypto/tls"
 	"log"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
 )
 
-func StartReverse(cfg ReverseConfig, cm *CertManager) {
+func StartReverse(cfg ReverseConfig) {
 	mux := http.NewServeMux()
 
 	for _, route := range cfg.Routes {
@@ -28,18 +27,8 @@ func StartReverse(cfg ReverseConfig, cm *CertManager) {
 		Handler: mux,
 	}
 
-	if cm != nil {
-		server.TLSConfig = &tls.Config{
-			GetCertificate: cm.GetCertificate,
-		}
-		log.Printf("Reverse: Starting on %s (TLS)", cfg.Listen)
-		if err := server.ListenAndServeTLS("", ""); err != nil {
-			log.Fatalf("Reverse: Listen error: %v", err)
-		}
-	} else {
-		log.Printf("Reverse: Starting on %s", cfg.Listen)
-		if err := server.ListenAndServe(); err != nil {
-			log.Fatalf("Reverse: Listen error: %v", err)
-		}
+	log.Printf("Reverse: Starting on %s", cfg.Listen)
+	if err := server.ListenAndServe(); err != nil {
+		log.Fatalf("Reverse: Listen error: %v", err)
 	}
 }
