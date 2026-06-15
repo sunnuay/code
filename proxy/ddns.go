@@ -16,16 +16,7 @@ func StartDDNS(config DDNSConfig) {
 		log.Fatalf("DDNS: Failed to initialize API: %v", err)
 	}
 
-	parts := strings.Split(config.Domain, ".")
-	var zoneID *cloudflare.ResourceContainer
-	for i := range parts {
-		candidate := strings.Join(parts[i:], ".")
-		id, err := api.ZoneIDByName(candidate)
-		if err == nil && id != "" {
-			zoneID = cloudflare.ZoneIdentifier(id)
-			break
-		}
-	}
+	zoneID := lookupZoneID(api, config.Domain)
 	if zoneID == nil {
 		log.Fatalf("DDNS: Failed to find ZoneID for domain: %s", config.Domain)
 	}
@@ -42,6 +33,17 @@ func StartDDNS(config DDNSConfig) {
 		}
 		<-ticker.C
 	}
+}
+
+func lookupZoneID(api *cloudflare.API, domain string) *cloudflare.ResourceContainer {
+	parts := strings.Split(domain, ".")
+	for i := range parts {
+		candidate := strings.Join(parts[i:], ".")
+		if id, err := api.ZoneIDByName(candidate); err == nil && id != "" {
+			return cloudflare.ZoneIdentifier(id)
+		}
+	}
+	return nil
 }
 
 func getPublicIPv6() string {
