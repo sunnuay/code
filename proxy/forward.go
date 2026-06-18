@@ -8,51 +8,54 @@ import (
 	"time"
 )
 
-type Forward struct{}
-
-func (p *Forward) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	if req.Method == http.MethodConnect {
-		p.handleTunneling(w, req)
-	} else {
-		p.handleHTTP(w, req)
+func StartForward(config ForwardConfig) {
+	log.Printf("Forward: Listening on %s", config.Listen)
+	if err := http.ListenAndServe(config.Listen, http.HandlerFunc(proxyHandler)); err != nil {
+		log.Fatalf("Forward: Failed to listen: %v", err)
 	}
 }
 
-func (p *Forward) handleTunneling(w http.ResponseWriter, req *http.Request) {
+func proxyHandler(w http.ResponseWriter, req *http.Request) {
+	if req.Method == http.MethodConnect {
+		handleTunneling(w, req)
+	} else {
+		handleHTTP(w, req)
+	}
+}
+
+func handleTunneling(w http.ResponseWriter, req *http.Request) {
 	destConn, err := net.DialTimeout("tcp", req.Host, 10*time.Second)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusServiceUnavailable)
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
-
 	hijacker, ok := w.(http.Hijacker)
 	if !ok {
+		destConn.Close()
 		http.Error(w, "Hijacking not supported", http.StatusInternalServerError)
-		_ = destConn.Close()
 		return
 	}
 
 	clientConn, _, err := hijacker.Hijack()
 	if err != nil {
+		destConn.Close()
 		http.Error(w, err.Error(), http.StatusServiceUnavailable)
-		_ = destConn.Close()
 		return
 	}
 
-	go func() {
-		_, _ = io.Copy(destConn, clientConn)
-		_ = destConn.Close()
-	}()
+	clientConn.Write([]byte("HTTP/1.1 200 Connection Established\r\n\r\n"))
 
 	go func() {
-		_, _ = io.Copy(clientConn, destConn)
-		_ = clientConn.Close()
+		io.Copy(destConn, clientConn)
+		destConn.Close()
 	}()
+
+	io.Copy(clientConn, destConn)
+	clientConn.Close()
 }
 
-func (p *Forward) handleHTTP(w http.ResponseWriter, req *http.Request) {
+func handleHTTP(w http.ResponseWriter, req *http.Request) {
 	req.RequestURI = ""
 
 	resp, err := http.DefaultTransport.RoundTrip(req)
@@ -60,10 +63,7 @@ func (p *Forward) handleHTTP(w http.ResponseWriter, req *http.Request) {
 		http.Error(w, err.Error(), http.StatusServiceUnavailable)
 		return
 	}
-
-	defer func() {
-		_ = resp.Body.Close()
-	}()
+	defer resp.Body.Close()
 
 	for k, vv := range resp.Header {
 		for _, v := range vv {
@@ -72,18 +72,5 @@ func (p *Forward) handleHTTP(w http.ResponseWriter, req *http.Request) {
 	}
 	w.WriteHeader(resp.StatusCode)
 
-	if _, err := io.Copy(w, resp.Body); err != nil {
-		log.Printf("Forward: HTTP copy error: %v", err)
-	}
-}
-
-func StartForward(cfg ForwardConfig) {
-	server := &http.Server{
-		Addr:    cfg.Listen,
-		Handler: &Forward{},
-	}
-	log.Printf("Forward: Starting on %s", cfg.Listen)
-	if err := server.ListenAndServe(); err != nil {
-		log.Fatalf("Forward: Listen error: %v", err)
-	}
+	io.Copy(w, resp.Body)
 }

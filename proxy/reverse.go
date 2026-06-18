@@ -29,6 +29,6 @@ func StartReverse(cfg ReverseConfig) {
 
 	log.Printf("Reverse: Starting on %s", cfg.Listen)
 	if err := server.ListenAndServe(); err != nil {
-		log.Fatalf("Reverse: Listen error: %v", err)
+		log.Fatalf("Reverse: Failed to listen: %v", err)
 	}
 }

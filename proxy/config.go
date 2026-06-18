@@ -93,15 +93,15 @@ func LoadConfig(filename string) *Config {
 	if err != nil {
 		if os.IsNotExist(err) {
 			if err := config.Save(filename); err != nil {
-				log.Fatalf("Failed to save config: %v", err)
+				log.Fatalf("Config: Failed to save: %v", err)
 			}
 			return config
 		}
-		log.Fatalf("Failed to read config: %v", err)
+		log.Fatalf("Config: Failed to read: %v", err)
 	}
 
 	if err := yaml.Unmarshal(data, config); err != nil {
-		log.Fatalf("Failed to parse config: %v", err)
+		log.Fatalf("Config: Failed to parse: %v", err)
 	}
 	return config
 }

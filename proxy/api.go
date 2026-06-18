@@ -36,16 +36,17 @@ func StartAPI(config *Config, configPath string) {
 		log.Print("API: Restarting process...")
 		execPath, err := os.Executable()
 		if err != nil {
-			log.Fatalf("API: Restart failed: %v", err)
+			log.Fatalf("API: Failed to restart: %v", err)
 		}
 		if err := syscall.Exec(execPath, os.Args, os.Environ()); err != nil {
-			log.Fatalf("API: Restart failed: %v", err)
+			log.Fatalf("API: Failed to restart: %v", err)
 		}
 	})
 
-	server := &http.Server{Addr: config.API.Listen, Handler: corsMiddleware(mux)}
 	log.Printf("API: Listening on %s", config.API.Listen)
-	log.Fatal(server.ListenAndServe())
+	if err := http.ListenAndServe(config.API.Listen, corsMiddleware(mux)); err != nil {
+		log.Fatalf("API: Failed to listen: %v", err)
+	}
 }
 
 func writeJSON(w http.ResponseWriter, code int, data any) {
