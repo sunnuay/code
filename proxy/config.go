@@ -54,11 +54,11 @@ func DefaultConfig() *Config {
 	return &Config{
 		Forward: ForwardConfig{
 			Enabled: true,
-			Listen:  ":10000",
+			Listen:  ":10001",
 		},
 		Reverse: ReverseConfig{
 			Enabled: true,
-			Listen:  ":10001",
+			Listen:  ":9999",
 			Routes: []RouteConfig{
 				{Path: "/server", Target: "http://127.0.0.1:8080"},
 			},
@@ -72,7 +72,7 @@ func DefaultConfig() *Config {
 			CacheDir: "./cert",
 		},
 		API: APIConfig{
-			Listen: ":9999",
+			Listen: ":10000",
 		},
 	}
 }
