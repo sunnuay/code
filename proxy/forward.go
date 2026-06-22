@@ -40,17 +40,18 @@ func (conn *readerConn) Read(p []byte) (int, error) {
 func handleConn(conn net.Conn) {
 	defer conn.Close()
 
-	var b [1]byte
-	if _, err := io.ReadFull(conn, b[:]); err != nil {
+	var buf [1]byte
+
+	if _, err := io.ReadFull(conn, buf[:]); err != nil {
 		return
 	}
 
 	wrapped := &readerConn{
 		Conn:   conn,
-		reader: io.MultiReader(bytes.NewReader(b[:]), conn),
+		reader: io.MultiReader(bytes.NewReader(buf[:]), conn),
 	}
 
-	if b[0] == 0x05 {
+	if buf[0] == 0x05 {
 		handleSocks5(wrapped)
 	} else {
 		handleHTTP(wrapped)
@@ -59,7 +60,8 @@ func handleConn(conn net.Conn) {
 
 func handleSocks5(conn net.Conn) {
 	defer conn.Close()
-	buf := make([]byte, 260)
+
+	var buf [257]byte
 
 	if _, err := io.ReadFull(conn, buf[:2]); err != nil {
 		return
@@ -80,20 +82,20 @@ func handleSocks5(conn net.Conn) {
 			return
 		}
 		host = net.JoinHostPort(net.IP(buf[:4]).String(), strconv.Itoa(int(binary.BigEndian.Uint16(buf[4:6]))))
-	case 0x03:
-		if _, err := io.ReadFull(conn, buf[:1]); err != nil {
-			return
-		}
-		l := buf[0]
-		if _, err := io.ReadFull(conn, buf[:l+2]); err != nil {
-			return
-		}
-		host = net.JoinHostPort(string(buf[:l]), strconv.Itoa(int(binary.BigEndian.Uint16(buf[l:l+2]))))
 	case 0x04:
 		if _, err := io.ReadFull(conn, buf[:18]); err != nil {
 			return
 		}
 		host = net.JoinHostPort(net.IP(buf[:16]).String(), strconv.Itoa(int(binary.BigEndian.Uint16(buf[16:18]))))
+	case 0x03:
+		if _, err := io.ReadFull(conn, buf[:1]); err != nil {
+			return
+		}
+		l := buf[0] // l <= 255
+		if _, err := io.ReadFull(conn, buf[:l+2]); err != nil {
+			return
+		}
+		host = net.JoinHostPort(string(buf[:l]), strconv.Itoa(int(binary.BigEndian.Uint16(buf[l:l+2]))))
 	default:
 		return
 	}
@@ -102,9 +104,10 @@ func handleSocks5(conn net.Conn) {
 	if err != nil {
 		conn.Write([]byte{0x05, 0x01, 0x00, 0x01, 0, 0, 0, 0, 0, 0})
 		return
+	} else {
+		conn.Write([]byte{0x05, 0x00, 0x00, 0x01, 0, 0, 0, 0, 0, 0})
 	}
 	defer target.Close()
-	conn.Write([]byte{0x05, 0x00, 0x00, 0x01, 0, 0, 0, 0, 0, 0})
 
 	relay(conn, target)
 }
