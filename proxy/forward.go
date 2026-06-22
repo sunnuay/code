@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"io"
 	"log"
 	"net"
@@ -32,8 +33,30 @@ func (conn *readerConn) Read(p []byte) (int, error) {
 	return conn.reader.Read(p)
 }
 
-func handleConn(conn net.Conn) {}
+func handleConn(conn net.Conn) {
+	defer conn.Close()
 
-func handleHTTP(conn net.Conn) {}
+	var b [1]byte
+	if _, err := io.ReadFull(conn, b[:]); err != nil {
+		return
+	}
 
-func handleSocks(conn net.Conn) {}
+	wrapped := &readerConn{
+		Conn:   conn,
+		reader: io.MultiReader(bytes.NewReader(b[:]), conn),
+	}
+
+	if b[0] == 0x05 {
+		handleSocks(wrapped)
+	} else {
+		handleHTTP(wrapped)
+	}
+}
+
+func handleSocks(conn net.Conn) {
+	defer conn.Close()
+}
+
+func handleHTTP(conn net.Conn) {
+	defer conn.Close()
+}
