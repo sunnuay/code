@@ -22,7 +22,7 @@ def grpc_server():
     api_pb2_grpc.add_CoreServicer_to_server(CoreServicer(), server)
     server.add_insecure_port("127.0.0.1:50051")
     server.start()
-    print("lisening")
+    print("listening")
     try:
         server.wait_for_termination()
     except KeyboardInterrupt:

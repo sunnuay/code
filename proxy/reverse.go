@@ -7,28 +7,20 @@ import (
 	"net/url"
 )
 
-func StartReverse(cfg ReverseConfig) {
+func StartReverse(config ReverseConfig) {
 	mux := http.NewServeMux()
 
-	for _, route := range cfg.Routes {
-		targetURL, err := url.Parse(route.Target)
+	for _, route := range config.Routes {
+		target, err := url.Parse(route.Target)
 		if err != nil {
-			log.Fatalf("Reverse: Invalid target URL for path %s: %v", route.Path, err)
+			log.Fatalf("Reverse: Invalid target: %s", route.Target)
 		}
-
-		proxy := httputil.NewSingleHostReverseProxy(targetURL)
-
+		proxy := httputil.NewSingleHostReverseProxy(target)
 		mux.Handle(route.Path, proxy)
-		log.Printf("Reverse: Route %s -> %s", route.Path, route.Target)
 	}
 
-	server := &http.Server{
-		Addr:    cfg.Listen,
-		Handler: mux,
-	}
-
-	log.Printf("Reverse: Starting on %s", cfg.Listen)
-	if err := server.ListenAndServe(); err != nil {
+	log.Printf("Reverse: Listening on %s", config.Listen)
+	if err := http.ListenAndServe(config.Listen, mux); err != nil {
 		log.Fatalf("Reverse: Failed to listen: %v", err)
 	}
 }
