@@ -60,7 +60,7 @@ func DefaultConfig() *Config {
 			Enabled: true,
 			Listen:  ":9999",
 			Routes: []RouteConfig{
-				{Path: "/server", Target: "http://127.0.0.1:8080"},
+				{Path: "/server/", Target: "http://127.0.0.1:8080"},
 			},
 		},
 		DDNS: DDNSConfig{
