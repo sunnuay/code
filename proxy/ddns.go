@@ -93,6 +93,6 @@ func upsertDNSRecord(api *cloudflare.API, zoneID *cloudflare.ResourceContainer, 
 		log.Printf("DDNS: Update failed: %v", err)
 		return false
 	}
-	log.Printf("DDNS: Success %s -> %s", domain, ip)
+	log.Printf("DDNS: Update succeeded: %s -> %s", domain, ip)
 	return true
 }

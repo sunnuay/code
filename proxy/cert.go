@@ -76,7 +76,7 @@ func obtainCert(api *cloudflare.API, config CertConfig, zoneID *cloudflare.Resou
 	}
 	client := &acme.Client{Key: accountKey, DirectoryURL: acme.LetsEncryptURL}
 
-	_, err = client.Register(ctx, &acme.Account{Contact: []string{"mailto:" + config.Email}}, acme.AcceptTOS)
+	_, err = client.Register(ctx, &acme.Account{}, acme.AcceptTOS)
 	if err != nil {
 		return err
 	}

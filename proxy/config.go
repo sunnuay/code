@@ -41,7 +41,6 @@ type DDNSConfig struct {
 type CertConfig struct {
 	Enabled  bool   `yaml:"enabled" json:"enabled"`
 	CacheDir string `yaml:"cache_dir" json:"cache_dir"`
-	Email    string `yaml:"email" json:"email"`
 	Domain   string `yaml:"domain" json:"domain"`
 	APIToken string `yaml:"api_token" json:"api_token"`
 }

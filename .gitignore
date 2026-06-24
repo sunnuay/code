@@ -2,13 +2,10 @@
 /.cache
 /build
 # Go
-/cert
 /config.yaml
 /go.work.sum
 # Python
 /.venv
-/server/__pycache__
-/server/api/__pycache__
 /uv.lock
 # TypeScript
 /node_modules
