@@ -21,8 +21,11 @@ import (
 )
 
 func StartCert(config CertConfig) {
-	if err := os.MkdirAll(config.CacheDir, 0o755); err != nil {
-		log.Fatalf("Cert: Failed to create cache dir: %v", err)
+	if err := os.MkdirAll(filepath.Dir(config.Cert), 0o755); err != nil {
+		log.Fatalf("Cert: Failed to create cert parent dir: %v", err)
+	}
+	if err := os.MkdirAll(filepath.Dir(config.Key), 0o755); err != nil {
+		log.Fatalf("Cert: Failed to create key parent dir: %v", err)
 	}
 
 	api, err := cloudflare.NewWithAPIToken(config.APIToken)
@@ -46,13 +49,11 @@ func StartCert(config CertConfig) {
 
 func renewCert(api *cloudflare.API, config CertConfig, zoneID *cloudflare.ResourceContainer) {
 	renewBefore := 30 * 24 * time.Hour
-	certPath := filepath.Join(config.CacheDir, "cert.pem")
-	keyPath := filepath.Join(config.CacheDir, "key.pem")
 
-	if c, err := tls.LoadX509KeyPair(certPath, keyPath); err == nil {
+	if c, err := tls.LoadX509KeyPair(config.Cert, config.Key); err == nil {
 		if x509Cert, err := x509.ParseCertificate(c.Certificate[0]); err == nil {
 			if time.Until(x509Cert.NotAfter) > renewBefore {
-				log.Printf("Cert: Loaded from cache, expires: %s", x509Cert.NotAfter.Format(time.RFC3339))
+				log.Printf("Cert: Loaded from config, expires: %s", x509Cert.NotAfter.Format(time.RFC3339))
 				return
 			}
 		}
@@ -152,8 +153,8 @@ func generateCert(client *acme.Client, ctx context.Context, config CertConfig, o
 	var keyPEM bytes.Buffer
 	pem.Encode(&keyPEM, &pem.Block{Type: "EC PRIVATE KEY", Bytes: keyBytes})
 
-	os.WriteFile(filepath.Join(config.CacheDir, "cert.pem"), certPEM.Bytes(), 0o644)
-	os.WriteFile(filepath.Join(config.CacheDir, "key.pem"), keyPEM.Bytes(), 0o600)
+	os.WriteFile(config.Cert, certPEM.Bytes(), 0o644)
+	os.WriteFile(config.Key, keyPEM.Bytes(), 0o600)
 
 	return nil
 }

@@ -40,7 +40,8 @@ type DDNSConfig struct {
 
 type CertConfig struct {
 	Enabled  bool   `yaml:"enabled" json:"enabled"`
-	CacheDir string `yaml:"cache_dir" json:"cache_dir"`
+	Cert     string `yaml:"cert" json:"cert"`
+	Key      string `yaml:"key" json:"key"`
 	Domain   string `yaml:"domain" json:"domain"`
 	APIToken string `yaml:"api_token" json:"api_token"`
 }
@@ -67,8 +68,9 @@ func DefaultConfig() *Config {
 			Interval: 600,
 		},
 		Cert: CertConfig{
-			Enabled:  false,
-			CacheDir: "./cert",
+			Enabled: false,
+			Cert:    ".cache/cert.pem",
+			Key:     ".cache/key.pem",
 		},
 		API: APIConfig{
 			Listen: ":10000",
