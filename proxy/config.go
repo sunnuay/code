@@ -23,6 +23,9 @@ type ForwardConfig struct {
 type ReverseConfig struct {
 	Enabled bool          `yaml:"enabled" json:"enabled"`
 	Listen  string        `yaml:"listen" json:"listen"`
+	TLS     bool          `yaml:"tls" json:"tls"`
+	Cert    string        `yaml:"cert" json:"cert"`
+	Key     string        `yaml:"key" json:"key"`
 	Routes  []RouteConfig `yaml:"routes" json:"routes"`
 }
 
@@ -59,6 +62,9 @@ func DefaultConfig() *Config {
 		Reverse: ReverseConfig{
 			Enabled: true,
 			Listen:  ":9999",
+			TLS:     false,
+			Cert:    ".cache/cert.pem",
+			Key:     ".cache/key.pem",
 			Routes: []RouteConfig{
 				{Path: "/server/", Target: "http://127.0.0.1:8080"},
 			},

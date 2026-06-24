@@ -18,9 +18,16 @@ func StartReverse(config ReverseConfig) {
 		mux.Handle(route.Path, proxy)
 	}
 
-	log.Printf("Reverse: Listening on %s", config.Listen)
-	if err := http.ListenAndServe(config.Listen, mux); err != nil {
-		log.Fatalf("Reverse: Failed to listen: %v", err)
+	if config.TLS {
+		log.Printf("Reverse: Listening on %s (TLS)", config.Listen)
+		if err := http.ListenAndServeTLS(config.Listen, config.Cert, config.Key, mux); err != nil {
+			log.Fatalf("Reverse: Failed to listen: %v", err)
+		}
+	} else {
+		log.Printf("Reverse: Listening on %s", config.Listen)
+		if err := http.ListenAndServe(config.Listen, mux); err != nil {
+			log.Fatalf("Reverse: Failed to listen: %v", err)
+		}
 	}
 }
 
