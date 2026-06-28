@@ -14,6 +14,8 @@ function proxy_off
     set -e all_proxy
 end
 
+fish_add_path $HOME/.local/bin
+
 set -gx GOPATH $HOME/.local/share/go
 fish_add_path $GOPATH/bin
 
