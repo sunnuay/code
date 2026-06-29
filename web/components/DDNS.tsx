@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import type { DDNSConfig } from "../App";
-import { Card, CardHeader, ToggleRow, Input, NumberInput, SaveButton } from "./ui";
+import { Card, CardHeader, ToggleRow, Input, NumberInput, SaveButton } from "./Primitives";
 
 interface Props {
   config: DDNSConfig;

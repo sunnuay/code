@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Plus, Trash2 } from "lucide-react";
 import type { ReverseConfig, RouteConfig } from "../App";
-import { Card, CardHeader, ToggleRow, Input, SaveButton } from "./ui";
+import { Card, CardHeader, ToggleRow, Input, SaveButton } from "./Primitives";
 
 interface Props {
   config: ReverseConfig;

@@ -77,5 +77,8 @@ require("conform").setup({
 		typescriptreact = { "prettier" },
 	},
 })
+vim.keymap.set("n", "<leader>cf", function()
+	require("conform").format({ lsp_format = "fallback" })
+end)
 
 -- :lua vim.pack.update()

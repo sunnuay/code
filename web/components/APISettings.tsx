@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { RefreshCw } from "lucide-react";
 import type { APIConfig } from "../App";
-import { Card, Input, SaveButton } from "./ui";
+import { Card, Input, SaveButton } from "./Primitives";
 
 interface Props {
   config: APIConfig;

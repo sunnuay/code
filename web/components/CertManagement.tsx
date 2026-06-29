@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import type { CertConfig } from "../App";
-import { Card, CardHeader, ToggleRow, Input, SaveButton } from "./ui";
+import { Card, CardHeader, ToggleRow, Input, SaveButton } from "./Primitives";
 
 interface Props {
   config: CertConfig;
