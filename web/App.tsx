@@ -1,15 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import {
-  ShieldCheck,
-  ArrowRightLeft,
-  Globe,
-  Lock,
-  Settings,
-} from "lucide-react";
-import Sidebar from "./components/Sidebar";
-import type { MenuItem } from "./components/Sidebar";
-import HeaderBar from "./components/HeaderBar";
 import TabContent from "./components/TabContent";
+import { SaveButton, RestartButton, ErrorBar } from "./components/Primitives";
 
 export interface APIConfig {
   listen: string;
@@ -80,12 +71,12 @@ const defaultConfig: Config = {
 
 const API_BASE = "http://localhost:10000";
 
-const menuItems: MenuItem[] = [
-  { id: "forward", name: "正向代理", icon: ShieldCheck },
-  { id: "reverse", name: "反向代理", icon: ArrowRightLeft },
-  { id: "ddns", name: "动态域名", icon: Globe },
-  { id: "cert", name: "自动证书", icon: Lock },
-  { id: "settings", name: "系统设置", icon: Settings },
+const menuItems = [
+  { id: "forward", name: "Forward" },
+  { id: "reverse", name: "Reverse" },
+  { id: "ddns", name: "DDNS" },
+  { id: "cert", name: "Cert" },
+  { id: "settings", name: "Settings" },
 ];
 
 const App = () => {
@@ -93,21 +84,18 @@ const App = () => {
   const [config, setConfig] = useState<Config>(defaultConfig);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [message, setMessage] = useState<string | null>(null);
+  const [saved, setSaved] = useState(false);
   const [restarting, setRestarting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchConfig = useCallback(async () => {
     setLoading(true);
-    setError(null);
     try {
       const res = await fetch(`${API_BASE}/api/config`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       setConfig(await res.json());
-    } catch (e: unknown) {
-      setError(
-        `无法连接到服务器: ${e instanceof Error ? e.message : String(e)}`,
-      );
+    } catch {
+      // Silently fail
     } finally {
       setLoading(false);
     }
@@ -117,71 +105,115 @@ const App = () => {
     fetchConfig();
   }, [fetchConfig]);
 
-  const saveConfig = useCallback(async (updated: Config) => {
+  const updateSection = useCallback(
+    <K extends keyof Config>(key: K, value: Config[K]) => {
+      setConfig((prev) => ({ ...prev, [key]: value }));
+      setSaved(false);
+    },
+    [],
+  );
+
+  const handleSaveAll = useCallback(async () => {
     setSaving(true);
     setError(null);
-    setMessage(null);
+    setSaved(false);
     try {
       const res = await fetch(`${API_BASE}/api/config`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updated),
+        body: JSON.stringify(config),
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      setConfig(await res.json());
-      setMessage("配置已保存 (需重启服务生效)");
-      setTimeout(() => setMessage(null), 4000);
+      const fresh = await res.json();
+      setConfig(fresh);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2500);
     } catch (e: unknown) {
-      setError(`保存失败: ${e instanceof Error ? e.message : String(e)}`);
+      setError(e instanceof Error ? e.message : "Failed to save");
     } finally {
       setSaving(false);
     }
-  }, []);
+  }, [config]);
 
-  const handleRestart = async () => {
+  const handleRestart = useCallback(async () => {
     setRestarting(true);
-    setMessage("正在重启服务...");
+    setError(null);
     try {
       await fetch(`${API_BASE}/api/restart`, { method: "POST" });
-    } catch {}
+    } catch {
+      // Restart endpoint may not respond before the service dies
+    }
     setTimeout(() => {
       setRestarting(false);
-      setMessage(null);
       fetchConfig();
-    }, 1000);
-  };
-
-  const update =
-    <K extends keyof Config>(key: K) =>
-    (val: Config[K]) => {
-      void saveConfig({ ...config, [key]: val });
-    };
-
-  const currentName = menuItems.find((i) => i.id === activeTab)?.name ?? "";
+    }, 1500);
+  }, [fetchConfig]);
 
   return (
-    <div className="flex h-screen bg-white font-sans text-black antialiased">
-      <Sidebar
-        menuItems={menuItems}
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-      />
-      <main className="flex h-screen flex-1 flex-col overflow-hidden">
-        <HeaderBar title={currentName} error={error} message={message} />
-        <div className="flex-1 overflow-auto p-6">
-          <div className="mx-auto max-w-3xl">
+    <div
+      className="min-h-screen bg-[#F5F4F1] flex items-start justify-center p-6 pt-20 pb-24"
+      style={{
+        backgroundImage:
+          "radial-gradient(circle, #E6E4DE 1px, transparent 1px)",
+        backgroundSize: "28px 28px",
+      }}
+    >
+      <div className="w-full max-w-2xl">
+        {/* Main card */}
+        <div className="bg-white rounded-2xl shadow-[0_2px_16px_rgba(0,0,0,0.03),0_12px_48px_rgba(0,0,0,0.04)] ring-1 ring-black/[0.03] overflow-hidden">
+          {/* Header: nav pills + actions */}
+          <div className="px-5 pt-4 pb-3 flex items-center justify-between border-b border-[#F0EFEB]">
+            <div className="flex items-center gap-1">
+              {menuItems.map((item) => {
+                const isActive = activeTab === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => setActiveTab(item.id)}
+                    className={`px-3.5 py-2 rounded-full text-[13px] font-medium transition-all duration-200 ${
+                      isActive
+                        ? "bg-[#1E1E3F] text-white shadow-sm"
+                        : "text-[#6B6B6B] hover:text-[#171717] hover:bg-[#F5F4F1]"
+                    }`}
+                  >
+                    {item.name}
+                  </button>
+                );
+              })}
+            </div>
+            <div className="flex items-center gap-2">
+              <RestartButton
+                onClick={handleRestart}
+                restarting={restarting}
+                label="Restart"
+              />
+              <SaveButton
+                onClick={handleSaveAll}
+                saving={saving}
+                saved={saved}
+                label="Save All"
+              />
+            </div>
+          </div>
+
+          {/* Global error */}
+          {error && (
+            <div className="px-6 pt-4">
+              <ErrorBar message={error} onDismiss={() => setError(null)} />
+            </div>
+          )}
+
+          {/* Content */}
+          <div className="px-6 py-6">
             <TabContent
               activeTab={activeTab}
               config={config}
               loading={loading}
-              saving={saving}
-              restarting={restarting}
-              onSave={update}
-              onRestart={handleRestart}
+              onChange={updateSection}
             />
           </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 };

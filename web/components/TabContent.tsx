@@ -9,27 +9,29 @@ interface TabContentProps {
   activeTab: string;
   config: Config;
   loading: boolean;
-  saving: boolean;
-  restarting: boolean;
-  onSave: <K extends keyof Config>(key: K) => (val: Config[K]) => void;
-  onRestart: () => void;
+  onChange: <K extends keyof Config>(key: K, value: Config[K]) => void;
 }
 
 const TabContent = ({
   activeTab,
   config,
   loading,
-  saving,
-  restarting,
-  onSave,
-  onRestart,
+  onChange,
 }: TabContentProps) => {
   if (loading) {
     return (
       <div className="flex h-64 items-center justify-center">
-        <div className="flex flex-col items-center gap-3 text-gray-400">
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-black border-t-transparent" />
-          <span className="text-sm">加载配置中...</span>
+        <div className="flex flex-col items-center gap-4">
+          <div className="flex items-center gap-1.5">
+            {[0, 1, 2].map((i) => (
+              <div
+                key={i}
+                className="h-2 w-2 rounded-full bg-[#D5D3CC] animate-pulse"
+                style={{ animationDelay: `${i * 150}ms` }}
+              />
+            ))}
+          </div>
+          <span className="text-sm text-[#A3A3A3]">Loading configuration...</span>
         </div>
       </div>
     );
@@ -40,38 +42,35 @@ const TabContent = ({
       return (
         <ForwardProxy
           config={config.forward}
-          onSave={onSave("forward")}
-          saving={saving}
+          onChange={(c) => onChange("forward", c)}
         />
       );
     case "reverse":
       return (
         <ReverseProxy
           config={config.reverse}
-          onSave={onSave("reverse")}
-          saving={saving}
+          onChange={(c) => onChange("reverse", c)}
         />
       );
     case "ddns":
       return (
-        <DDNS config={config.ddns} onSave={onSave("ddns")} saving={saving} />
+        <DDNS
+          config={config.ddns}
+          onChange={(c) => onChange("ddns", c)}
+        />
       );
     case "cert":
       return (
         <CertManagement
           config={config.cert}
-          onSave={onSave("cert")}
-          saving={saving}
+          onChange={(c) => onChange("cert", c)}
         />
       );
     case "settings":
       return (
         <APISettings
           config={config.api}
-          onSave={onSave("api")}
-          saving={saving}
-          restarting={restarting}
-          onRestart={onRestart}
+          onChange={(c) => onChange("api", c)}
         />
       );
     default:

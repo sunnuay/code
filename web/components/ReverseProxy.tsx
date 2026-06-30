@@ -1,185 +1,198 @@
 import { useState, useEffect } from "react";
-import { Plus, Trash2 } from "lucide-react";
 import type { ReverseConfig, RouteConfig } from "../App";
-import { Card, CardHeader, ToggleRow, Input, SaveButton } from "./Primitives";
+import { SectionHeader, ToggleRow, MonoInput } from "./Primitives";
 
 interface Props {
   config: ReverseConfig;
-  onSave: (c: ReverseConfig) => void;
-  saving: boolean;
+  onChange: (c: ReverseConfig) => void;
 }
 
-const ReverseProxy = ({ config, onSave, saving }: Props) => {
+const tdInputCls =
+  "w-full px-2.5 py-1.5 bg-white border border-[#E8E7E3] rounded-md " +
+  "text-xs text-[#171717] font-mono placeholder:text-[#C5C3BB] " +
+  "focus:outline-none focus:border-[#1E1E3F] focus:ring-2 focus:ring-[#1E1E3F]/10 " +
+  "transition-colors duration-150";
+
+const ReverseProxy = ({ config, onChange }: Props) => {
   const [local, setLocal] = useState<ReverseConfig>(config);
   const [newPath, setNewPath] = useState("");
   const [newTarget, setNewTarget] = useState("");
 
-  useEffect(() => { setLocal(config); }, [config]);
+  useEffect(() => {
+    setLocal(config);
+  }, [config]);
+
+  const update = (patch: Partial<ReverseConfig>) => {
+    const next = { ...local, ...patch };
+    setLocal(next);
+    onChange(next);
+  };
 
   const addRoute = () => {
     const path = newPath.trim();
     const target = newTarget.trim();
     if (!path || !target) return;
-    setLocal({ ...local, routes: [...local.routes, { path, target }] });
+    update({ routes: [...local.routes, { path, target }] });
     setNewPath("");
     setNewTarget("");
   };
 
   const removeRoute = (idx: number) => {
-    setLocal({ ...local, routes: local.routes.filter((_, i) => i !== idx) });
+    update({ routes: local.routes.filter((_, i) => i !== idx) });
   };
 
-  const updateRoute = (idx: number, field: keyof RouteConfig, value: string) => {
+  const updateRoute = (
+    idx: number,
+    field: keyof RouteConfig,
+    value: string,
+  ) => {
     const updated = [...local.routes];
     updated[idx] = { ...updated[idx], [field]: value };
-    setLocal({ ...local, routes: updated });
+    update({ routes: updated });
   };
-
-  const inputCls =
-    "w-full px-3 py-1.5 border border-gray-200 rounded-md text-sm focus:outline-none focus:border-black focus:ring-1 focus:ring-black disabled:bg-gray-50 transition-colors";
 
   return (
     <div className="space-y-5">
-      <Card className="p-6">
-        <CardHeader title="全局设置" status={{ enabled: local.enabled }} />
+      <div className="flex items-center justify-between">
+        <SectionHeader title="Reverse Proxy" />
+        <ToggleRow
+          label=""
+          checked={local.enabled}
+          onChange={(v) => update({ enabled: v })}
+        />
+      </div>
 
-        <div className="space-y-5">
-          <ToggleRow
-            label="启用反向代理"
-            checked={local.enabled}
-            onChange={(v) => setLocal({ ...local, enabled: v })}
-            disabled={saving}
+      <MonoInput
+        label="Listen Address"
+        value={local.listen}
+        onChange={(v) => update({ listen: v })}
+        placeholder=":443"
+      />
+
+      <ToggleRow
+        label="TLS"
+        checked={local.tls}
+        onChange={(v) => update({ tls: v })}
+      />
+
+      {local.tls && (
+        <div className="grid grid-cols-2 gap-3 pl-4 border-l-2 border-[#F0EFEB]">
+          <MonoInput
+            label="Cert Path"
+            value={local.cert}
+            onChange={(v) => update({ cert: v })}
+            placeholder=".cache/cert.pem"
           />
-
-          <Input
-            label="监听地址"
-            value={local.listen}
-            onChange={(v) => setLocal({ ...local, listen: v })}
-            placeholder=":443"
-            disabled={saving}
+          <MonoInput
+            label="Key Path"
+            value={local.key}
+            onChange={(v) => update({ key: v })}
+            placeholder=".cache/key.pem"
           />
-
-          <ToggleRow
-            label="启用 TLS"
-            checked={local.tls}
-            onChange={(v) => setLocal({ ...local, tls: v })}
-            disabled={saving}
-          />
-
-          {local.tls && (
-            <>
-              <Input
-                label="证书路径"
-                value={local.cert}
-                onChange={(v) => setLocal({ ...local, cert: v })}
-                placeholder=".cache/cert.pem"
-                disabled={saving}
-              />
-              <Input
-                label="密钥路径"
-                value={local.key}
-                onChange={(v) => setLocal({ ...local, key: v })}
-                placeholder=".cache/key.pem"
-                disabled={saving}
-              />
-            </>
-          )}
         </div>
-      </Card>
+      )}
 
-      <Card>
-        <div className="px-6 py-4 border-b border-gray-100">
-          <h2 className="text-lg font-semibold text-black">代理规则</h2>
-        </div>
+      {/* Route table */}
+      <div>
+        <h3 className="text-sm font-medium text-[#525252] mb-3">
+          Proxy Rules
+        </h3>
 
-        <table className="w-full text-left">
-          <thead>
-            <tr className="bg-gray-50 text-xs text-gray-500 uppercase tracking-wider">
-              <th className="px-6 py-2.5 font-medium">源路径</th>
-              <th className="px-6 py-2.5 font-medium">目标地址</th>
-              <th className="px-6 py-2.5 font-medium text-right">操作</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-100">
-            {local.routes.length === 0 && (
-              <tr>
-                <td colSpan={3} className="px-6 py-8 text-center text-sm text-gray-400">
-                  暂无代理规则，点击下方添加
-                </td>
+        <div className="border border-[#E8E7E3] rounded-lg overflow-hidden">
+          <table className="w-full text-left">
+            <thead>
+              <tr className="bg-[#FAFAF8] text-xs text-[#A3A3A3]">
+                <th className="px-3 py-2 font-medium">Source Path</th>
+                <th className="px-1 py-2 w-6" />
+                <th className="px-3 py-2 font-medium">Target</th>
+                <th className="px-3 py-2 font-medium w-10" />
               </tr>
-            )}
-            {local.routes.map((route, idx) => (
-              <tr key={idx} className="hover:bg-gray-50/50 transition-colors">
-                <td className="px-6 py-2.5">
-                  <input
-                    type="text"
-                    value={route.path}
-                    onChange={(e) => updateRoute(idx, "path", e.target.value)}
-                    disabled={saving}
-                    placeholder="/api/"
-                    className={inputCls}
-                  />
-                </td>
-                <td className="px-6 py-2.5">
-                  <input
-                    type="text"
-                    value={route.target}
-                    onChange={(e) => updateRoute(idx, "target", e.target.value)}
-                    disabled={saving}
-                    placeholder="http://127.0.0.1:3000"
-                    className={inputCls}
-                  />
-                </td>
-                <td className="px-6 py-2.5 text-right">
-                  <button
-                    onClick={() => removeRoute(idx)}
-                    disabled={saving}
-                    className="text-gray-400 hover:text-black transition-colors disabled:opacity-30"
+            </thead>
+            <tbody className="divide-y divide-[#F0EFEB]">
+              {local.routes.length === 0 && (
+                <tr>
+                  <td
+                    colSpan={4}
+                    className="px-3 py-8 text-center text-sm text-[#A3A3A3]"
                   >
-                    <Trash2 size={16} />
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                    No proxy rules — add one below
+                  </td>
+                </tr>
+              )}
+              {local.routes.map((route, idx) => (
+                <tr key={idx} className="group hover:bg-[#FAFAF8]/80 transition-colors">
+                  <td className="px-3 py-1.5">
+                    <input
+                      type="text"
+                      value={route.path}
+                      onChange={(e) => updateRoute(idx, "path", e.target.value)}
+                      placeholder="/api/"
+                      className={tdInputCls}
+                    />
+                  </td>
+                  <td className="px-1 py-1.5 text-center text-xs text-[#C5C3BB] select-none">
+                    &rarr;
+                  </td>
+                  <td className="px-3 py-1.5">
+                    <input
+                      type="text"
+                      value={route.target}
+                      onChange={(e) => updateRoute(idx, "target", e.target.value)}
+                      placeholder="http://127.0.0.1:3000"
+                      className={tdInputCls}
+                    />
+                  </td>
+                  <td className="px-3 py-1.5 text-center">
+                    <button
+                      onClick={() => removeRoute(idx)}
+                      className="text-[#C5C3BB] hover:text-red-500 transition-colors text-sm leading-none"
+                      title="Remove"
+                    >
+                      &times;
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
 
-        <div className="px-6 py-3 border-t border-gray-100 bg-gray-50/50 flex gap-3 items-end">
-          <div className="flex-1">
-            <label className="block text-xs text-gray-400 mb-1">源路径</label>
-            <input
-              type="text"
-              value={newPath}
-              onChange={(e) => setNewPath(e.target.value)}
-              disabled={saving}
-              placeholder="/api/"
-              className={inputCls}
-            />
+          {/* Add route form */}
+          <div className="px-3 py-2 border-t border-[#F0EFEB] bg-[#FAFAF8]/60 flex gap-2 items-end">
+            <div className="flex-1">
+              <input
+                type="text"
+                value={newPath}
+                onChange={(e) => setNewPath(e.target.value)}
+                placeholder="Path — /api/"
+                className={tdInputCls}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") addRoute();
+                }}
+              />
+            </div>
+            <div className="flex-1">
+              <input
+                type="text"
+                value={newTarget}
+                onChange={(e) => setNewTarget(e.target.value)}
+                placeholder="Target — http://..."
+                className={tdInputCls}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") addRoute();
+                }}
+              />
+            </div>
+            <button
+              onClick={addRoute}
+              disabled={!newPath.trim() || !newTarget.trim()}
+              className="px-2.5 py-1.5 bg-[#1E1E3F] hover:bg-[#2D2D5E] text-white text-xs font-medium rounded-lg
+                disabled:opacity-30 disabled:cursor-not-allowed transition-colors whitespace-nowrap"
+            >
+              + Add
+            </button>
           </div>
-          <div className="flex-1">
-            <label className="block text-xs text-gray-400 mb-1">目标地址</label>
-            <input
-              type="text"
-              value={newTarget}
-              onChange={(e) => setNewTarget(e.target.value)}
-              disabled={saving}
-              placeholder="http://127.0.0.1:3000"
-              className={inputCls}
-            />
-          </div>
-          <button
-            onClick={addRoute}
-            disabled={saving || !newPath.trim() || !newTarget.trim()}
-            className="inline-flex items-center px-3.5 py-1.5 bg-black text-white text-sm font-medium rounded-md hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors whitespace-nowrap"
-          >
-            <Plus size={14} className="mr-1.5" /> 添加
-          </button>
         </div>
-
-        <div className="px-6 py-3 border-t border-gray-100 flex justify-end">
-          <SaveButton saving={saving} onClick={() => onSave(local)} />
-        </div>
-      </Card>
+      </div>
     </div>
   );
 };

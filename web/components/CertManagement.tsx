@@ -1,70 +1,73 @@
 import { useState, useEffect } from "react";
 import type { CertConfig } from "../App";
-import { Card, CardHeader, ToggleRow, Input, SaveButton } from "./Primitives";
+import {
+  SectionHeader,
+  ToggleRow,
+  MonoInput,
+  Input,
+} from "./Primitives";
 
 interface Props {
   config: CertConfig;
-  onSave: (c: CertConfig) => void;
-  saving: boolean;
+  onChange: (c: CertConfig) => void;
 }
 
-const CertManagement = ({ config, onSave, saving }: Props) => {
+const CertManagement = ({ config, onChange }: Props) => {
   const [local, setLocal] = useState<CertConfig>(config);
 
-  useEffect(() => { setLocal(config); }, [config]);
+  useEffect(() => {
+    setLocal(config);
+  }, [config]);
+
+  const update = (patch: Partial<CertConfig>) => {
+    const next = { ...local, ...patch };
+    setLocal(next);
+    onChange(next);
+  };
 
   return (
-    <Card className="p-6">
-      <CardHeader title="证书自动化配置" status={{ enabled: local.enabled }} />
-
-      <div className="space-y-5">
+    <div className="space-y-5">
+      <div className="flex items-center justify-between">
+        <SectionHeader title="Auto Certificate" />
         <ToggleRow
-          label="启用自动证书"
+          label=""
           checked={local.enabled}
-          onChange={(v) => setLocal({ ...local, enabled: v })}
-          disabled={saving}
+          onChange={(v) => update({ enabled: v })}
         />
-
-        <Input
-          label="域名"
-          value={local.domain}
-          onChange={(v) => setLocal({ ...local, domain: v })}
-          placeholder="example.com"
-          disabled={saving}
-        />
-
-        <Input
-          label="API Token"
-          type="password"
-          value={local.api_token}
-          onChange={(v) => setLocal({ ...local, api_token: v })}
-          placeholder="Cloudflare API Token"
-          disabled={saving}
-        />
-
-        <Input
-          label="证书路径"
-          value={local.cert}
-          onChange={(v) => setLocal({ ...local, cert: v })}
-          placeholder=".cache/cert.pem"
-          hint="Let's Encrypt 签发的证书保存路径"
-          disabled={saving}
-        />
-
-        <Input
-          label="密钥路径"
-          value={local.key}
-          onChange={(v) => setLocal({ ...local, key: v })}
-          placeholder=".cache/key.pem"
-          hint="证书私钥保存路径"
-          disabled={saving}
-        />
-
-        <div className="pt-2 flex justify-end">
-          <SaveButton saving={saving} onClick={() => onSave(local)} />
-        </div>
       </div>
-    </Card>
+
+      <MonoInput
+        label="Domain"
+        value={local.domain}
+        onChange={(v) => update({ domain: v })}
+        placeholder="example.com"
+      />
+
+      <Input
+        label="API Token"
+        type="password"
+        value={local.api_token}
+        onChange={(v) => update({ api_token: v })}
+        placeholder="Cloudflare API Token"
+      />
+
+      <div className="grid grid-cols-2 gap-3">
+        <MonoInput
+          label="Cert Path"
+          value={local.cert}
+          onChange={(v) => update({ cert: v })}
+          placeholder=".cache/cert.pem"
+          hint="Let's Encrypt certificate destination"
+        />
+        <MonoInput
+          label="Key Path"
+          value={local.key}
+          onChange={(v) => update({ key: v })}
+          placeholder=".cache/key.pem"
+          hint="Private key destination"
+        />
+      </div>
+    </div>
   );
 };
 

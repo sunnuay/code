@@ -1,43 +1,43 @@
 import { useState, useEffect } from "react";
 import type { ForwardConfig } from "../App";
-import { Card, CardHeader, ToggleRow, Input, SaveButton } from "./Primitives";
+import { SectionHeader, ToggleRow, MonoInput } from "./Primitives";
 
 interface Props {
   config: ForwardConfig;
-  onSave: (c: ForwardConfig) => void;
-  saving: boolean;
+  onChange: (c: ForwardConfig) => void;
 }
 
-const ForwardProxy = ({ config, onSave, saving }: Props) => {
+const ForwardProxy = ({ config, onChange }: Props) => {
   const [local, setLocal] = useState<ForwardConfig>(config);
 
-  useEffect(() => { setLocal(config); }, [config]);
+  useEffect(() => {
+    setLocal(config);
+  }, [config]);
+
+  const update = (patch: Partial<ForwardConfig>) => {
+    const next = { ...local, ...patch };
+    setLocal(next);
+    onChange(next);
+  };
 
   return (
-    <Card className="p-6">
-      <CardHeader title="全局设置" status={{ enabled: local.enabled }} />
-
-      <div className="space-y-5">
+    <div className="space-y-5">
+      <div className="flex items-center justify-between">
+        <SectionHeader title="Forward Proxy" />
         <ToggleRow
-          label="启用正向代理"
+          label=""
           checked={local.enabled}
-          onChange={(v) => setLocal({ ...local, enabled: v })}
-          disabled={saving}
+          onChange={(v) => update({ enabled: v })}
         />
-
-        <Input
-          label="监听地址"
-          value={local.listen}
-          onChange={(v) => setLocal({ ...local, listen: v })}
-          placeholder=":10001"
-          disabled={saving}
-        />
-
-        <div className="pt-2 flex justify-end">
-          <SaveButton saving={saving} onClick={() => onSave(local)} />
-        </div>
       </div>
-    </Card>
+
+      <MonoInput
+        label="Listen Address"
+        value={local.listen}
+        onChange={(v) => update({ listen: v })}
+        placeholder=":10001"
+      />
+    </div>
   );
 };
 

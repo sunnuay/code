@@ -1,60 +1,64 @@
 import { useState, useEffect } from "react";
 import type { DDNSConfig } from "../App";
-import { Card, CardHeader, ToggleRow, Input, NumberInput, SaveButton } from "./Primitives";
+import {
+  SectionHeader,
+  ToggleRow,
+  MonoInput,
+  Input,
+  NumberInput,
+} from "./Primitives";
 
 interface Props {
   config: DDNSConfig;
-  onSave: (c: DDNSConfig) => void;
-  saving: boolean;
+  onChange: (c: DDNSConfig) => void;
 }
 
-const DDNS = ({ config, onSave, saving }: Props) => {
+const DDNS = ({ config, onChange }: Props) => {
   const [local, setLocal] = useState<DDNSConfig>(config);
 
-  useEffect(() => { setLocal(config); }, [config]);
+  useEffect(() => {
+    setLocal(config);
+  }, [config]);
+
+  const update = (patch: Partial<DDNSConfig>) => {
+    const next = { ...local, ...patch };
+    setLocal(next);
+    onChange(next);
+  };
 
   return (
-    <Card className="p-6">
-      <CardHeader title="域名配置" status={{ enabled: local.enabled }} />
-
-      <div className="space-y-5">
+    <div className="space-y-5">
+      <div className="flex items-center justify-between">
+        <SectionHeader title="Dynamic DNS" />
         <ToggleRow
-          label="启用 DDNS"
+          label=""
           checked={local.enabled}
-          onChange={(v) => setLocal({ ...local, enabled: v })}
-          disabled={saving}
+          onChange={(v) => update({ enabled: v })}
         />
-
-        <Input
-          label="域名"
-          value={local.domain}
-          onChange={(v) => setLocal({ ...local, domain: v })}
-          placeholder="example.com"
-          disabled={saving}
-        />
-
-        <Input
-          label="API Token"
-          type="password"
-          value={local.api_token}
-          onChange={(v) => setLocal({ ...local, api_token: v })}
-          placeholder="Cloudflare API Token"
-          disabled={saving}
-        />
-
-        <NumberInput
-          label="同步间隔 (秒)"
-          value={local.interval}
-          onChange={(v) => setLocal({ ...local, interval: v })}
-          min={10}
-          disabled={saving}
-        />
-
-        <div className="pt-2 flex justify-end">
-          <SaveButton saving={saving} onClick={() => onSave(local)} />
-        </div>
       </div>
-    </Card>
+
+      <MonoInput
+        label="Domain"
+        value={local.domain}
+        onChange={(v) => update({ domain: v })}
+        placeholder="example.com"
+      />
+
+      <Input
+        label="API Token"
+        type="password"
+        value={local.api_token}
+        onChange={(v) => update({ api_token: v })}
+        placeholder="Cloudflare API Token"
+      />
+
+      <NumberInput
+        label="Sync Interval (seconds)"
+        value={local.interval}
+        onChange={(v) => update({ interval: v })}
+        min={10}
+      />
+    </div>
   );
 };
 
