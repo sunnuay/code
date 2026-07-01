@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
-import { type Config, defaultConfig } from "./components/Types";
+import { type Config, defaultConfig, themes } from "./components/Types";
 import { Nav } from "./components/Nav";
 import { Content } from "./components/Content";
-import { ErrorBar } from "./components/UI";
-
-const API = "http://localhost:10000";
+import { ErrorBar, useWebConfig } from "./components/UI";
 
 export default function App() {
   const [activeTab, setActiveTab] = useState("forward");
@@ -14,9 +12,19 @@ export default function App() {
   const [saved, setSaved] = useState(false);
   const [restarting, setRestarting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [webConfig, setWebConfig] = useWebConfig();
+
+  // Apply theme class to <html>
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.remove(...themes.map((t) => t.id));
+    if (webConfig.theme !== "latte") {
+      root.classList.add(webConfig.theme);
+    }
+  }, [webConfig.theme]);
 
   useEffect(() => {
-    fetch(`${API}/api/config`)
+    fetch(`${webConfig.apiUrl}/api/config`)
       .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then(setConfig)
       .catch(() => {})
@@ -30,7 +38,7 @@ export default function App() {
     setSaving(true);
     setError(null);
     try {
-      const res = await fetch(`${API}/api/config`, {
+      const res = await fetch(`${webConfig.apiUrl}/api/config`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(config),
@@ -50,11 +58,11 @@ export default function App() {
     setRestarting(true);
     setError(null);
     try {
-      await fetch(`${API}/api/restart`, { method: "POST" });
+      await fetch(`${webConfig.apiUrl}/api/restart`, { method: "POST" });
     } catch {}
     setTimeout(() => {
       setRestarting(false);
-      fetch(`${API}/api/config`)
+      fetch(`${webConfig.apiUrl}/api/config`)
         .then((r) => r.ok && r.json())
         .then((c) => c && setConfig(c))
         .catch(() => {});
@@ -85,6 +93,8 @@ export default function App() {
               config={config}
               loading={loading}
               onChange={update}
+              webConfig={webConfig}
+              onWebConfigChange={setWebConfig}
             />
           </div>
         </div>

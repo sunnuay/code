@@ -1,4 +1,5 @@
 import { useState, useEffect, type FC } from "react";
+import { type WebConfig, defaultWebConfig } from "./Types";
 
 const inputBase =
   "w-full px-3 py-2 bg-ctp-base border border-ctp-surface0 rounded-lg " +
@@ -169,3 +170,24 @@ export const ErrorBar: FC<{ message: string; onDismiss: () => void }> = ({
     </button>
   </div>
 );
+
+export function useWebConfig() {
+  const [cfg, setCfg] = useState<WebConfig>(() => {
+    try {
+      const stored = localStorage.getItem("web-config");
+      if (stored) {
+        return { ...defaultWebConfig, ...JSON.parse(stored) };
+      }
+    } catch { /* ignore corrupt localStorage */ }
+    return defaultWebConfig;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("web-config", JSON.stringify(cfg));
+  }, [cfg]);
+
+  const update = (patch: Partial<WebConfig>) =>
+    setCfg((prev: WebConfig) => ({ ...prev, ...patch }));
+
+  return [cfg, update] as const;
+}

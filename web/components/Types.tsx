@@ -72,3 +72,22 @@ export const tabs = [
   { id: "cert", name: "Cert" },
   { id: "settings", name: "Settings" },
 ] as const;
+
+export type Theme = "latte" | "frappe" | "macchiato" | "mocha";
+
+export interface WebConfig {
+  apiUrl: string;
+  theme: Theme;
+}
+
+export const defaultWebConfig: WebConfig = {
+  apiUrl: "http://127.0.0.1:10000",
+  theme: "latte",
+};
+
+export const themes: { id: Theme; name: string }[] = [
+  { id: "latte", name: "Latte" },
+  { id: "frappe", name: "Frappé" },
+  { id: "macchiato", name: "Macchiato" },
+  { id: "mocha", name: "Mocha" },
+];

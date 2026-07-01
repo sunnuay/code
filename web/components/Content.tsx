@@ -1,4 +1,4 @@
-import type { Config } from "./Types";
+import type { Config, WebConfig } from "./Types";
 import { Forward } from "./Forward";
 import { Reverse } from "./Reverse";
 import { DDNS } from "./DDNS";
@@ -10,9 +10,18 @@ interface Props {
   config: Config;
   loading: boolean;
   onChange: <K extends keyof Config>(key: K, value: Config[K]) => void;
+  webConfig: WebConfig;
+  onWebConfigChange: (patch: Partial<WebConfig>) => void;
 }
 
-export const Content = ({ activeTab, config, loading, onChange }: Props) => {
+export const Content = ({
+  activeTab,
+  config,
+  loading,
+  onChange,
+  webConfig,
+  onWebConfigChange,
+}: Props) => {
   if (loading) {
     return (
       <div className="flex h-64 items-center justify-center">
@@ -49,7 +58,14 @@ export const Content = ({ activeTab, config, loading, onChange }: Props) => {
     case "cert":
       return <Cert config={config.cert} onChange={on("cert")} />;
     case "settings":
-      return <Settings config={config.api} onChange={on("api")} />;
+      return (
+        <Settings
+          config={config.api}
+          onChange={on("api")}
+          webConfig={webConfig}
+          onWebConfigChange={onWebConfigChange}
+        />
+      );
     default:
       return null;
   }

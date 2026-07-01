@@ -129,7 +129,7 @@ export const Reverse = ({ config, onChange }: Props) => {
                         onChange={(e) =>
                           updateRoute(i, "target", e.target.value)
                         }
-                        placeholder="http://127.0.0.1:3000"
+                        placeholder=""
                         className={tdCls}
                       />
                     </td>
@@ -167,7 +167,7 @@ export const Reverse = ({ config, onChange }: Props) => {
             <button
               onClick={addRoute}
               disabled={!newPath.trim() || !newTarget.trim()}
-              className="bg-ctp-pink hover:bg-ctp-pink/85 text-ctp-base rounded-lg px-2.5 py-1.5 text-xs font-medium whitespace-nowrap transition-colors disabled:cursor-not-allowed disabled:opacity-30"
+              className="bg-ctp-pink hover:bg-ctp-pink/85 text-ctp-base rounded-full px-2.5 py-1.5 text-xs font-medium whitespace-nowrap transition-colors disabled:cursor-not-allowed disabled:opacity-30"
             >
               + Add
             </button>
