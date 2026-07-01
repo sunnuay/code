@@ -1,6 +1,6 @@
 import type { APIConfig, WebConfig, Theme } from "./Types";
 import { themes } from "./Types";
-import { useConfigSection, SectionHeader, Input } from "./UI";
+import { useConfigSection, SectionHeader, Input, PillButton } from "./UI";
 
 interface Props {
   config: APIConfig;
@@ -44,27 +44,19 @@ export const Settings = ({
       />
 
       <div>
-        <label className="block text-xs font-medium text-ctp-subtext0 mb-1.5 tracking-wide">
+        <label className="text-ctp-subtext0 mb-1.5 block text-xs font-medium tracking-wide">
           Theme
         </label>
         <div className="flex items-center gap-1">
-          {themes.map(({ id, name }) => {
-            const active = webConfig.theme === id;
-            return (
-              <button
-                key={id}
-                type="button"
-                onClick={() => onWebConfigChange({ theme: id as Theme })}
-                className={`rounded-full px-3.5 py-2 text-[13px] font-medium transition-all duration-200 ${
-                  active
-                    ? "bg-ctp-pink text-ctp-base shadow-sm"
-                    : "text-ctp-subtext0 hover:text-ctp-text hover:bg-ctp-surface0"
-                }`}
-              >
-                {name}
-              </button>
-            );
-          })}
+          {themes.map(({ id, name }) => (
+            <PillButton
+              key={id}
+              active={webConfig.theme === id}
+              onClick={() => onWebConfigChange({ theme: id as Theme })}
+            >
+              {name}
+            </PillButton>
+          ))}
         </div>
       </div>
     </div>

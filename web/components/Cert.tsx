@@ -1,5 +1,5 @@
 import type { CertConfig } from "./Types";
-import { useConfigSection, SectionHeader, ToggleRow, Input } from "./UI";
+import { useConfigSection, SectionWithToggle, Input } from "./UI";
 
 interface Props {
   config: CertConfig;
@@ -11,13 +11,11 @@ export const Cert = ({ config, onChange }: Props) => {
 
   return (
     <div className="space-y-5">
-      <div className="flex items-center justify-between">
-        <SectionHeader title="Auto Certificate" />
-        <ToggleRow
-          checked={local.enabled}
-          onChange={(v) => update({ enabled: v })}
-        />
-      </div>
+      <SectionWithToggle
+        title="Auto Certificate"
+        enabled={local.enabled}
+        onToggle={(v) => update({ enabled: v })}
+      />
 
       <Input
         mono

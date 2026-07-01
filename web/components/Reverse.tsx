@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { ReverseConfig, RouteConfig } from "./Types";
-import { useConfigSection, SectionHeader, ToggleRow, Input } from "./UI";
+import { useConfigSection, SectionWithToggle, ToggleRow, Input } from "./UI";
 
 interface Props {
   config: ReverseConfig;
@@ -8,9 +8,9 @@ interface Props {
 }
 
 const tdCls =
-  "w-full px-2.5 py-1.5 bg-ctp-base border border-ctp-surface0 rounded-md " +
-  "text-xs text-ctp-text font-mono placeholder:text-ctp-overlay1 " +
-  "focus:outline-none focus:border-ctp-pink focus:ring-2 focus:ring-ctp-pink/15 transition-colors";
+  `w-full px-2.5 py-1.5 bg-ctp-base border border-ctp-surface0 rounded-md ` +
+  `text-xs text-ctp-text font-mono placeholder:text-ctp-overlay1 ` +
+  `focus:outline-none focus:border-ctp-pink focus:ring-2 focus:ring-ctp-pink/15 transition-colors`;
 
 export const Reverse = ({ config, onChange }: Props) => {
   const [local, update] = useConfigSection(config, onChange);
@@ -40,13 +40,11 @@ export const Reverse = ({ config, onChange }: Props) => {
 
   return (
     <div className="space-y-5">
-      <div className="flex items-center justify-between">
-        <SectionHeader title="Reverse Proxy" />
-        <ToggleRow
-          checked={local.enabled}
-          onChange={(v) => update({ enabled: v })}
-        />
-      </div>
+      <SectionWithToggle
+        title="Reverse Proxy"
+        enabled={local.enabled}
+        onToggle={(v) => update({ enabled: v })}
+      />
 
       <Input
         mono

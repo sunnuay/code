@@ -4,6 +4,8 @@ import { Nav } from "./components/Nav";
 import { Content } from "./components/Content";
 import { ErrorBar, useWebConfig } from "./components/UI";
 
+const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
 export default function App() {
   const [activeTab, setActiveTab] = useState("forward");
   const [config, setConfig] = useState<Config>(defaultConfig);
@@ -14,7 +16,6 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
   const [webConfig, setWebConfig] = useWebConfig();
 
-  // Apply theme class to <html>
   useEffect(() => {
     const root = document.documentElement;
     root.classList.remove(...themes.map((t) => t.id));
@@ -60,19 +61,18 @@ export default function App() {
     try {
       await fetch(`${webConfig.apiUrl}/api/restart`, { method: "POST" });
     } catch {}
-    setTimeout(() => {
-      setRestarting(false);
-      fetch(`${webConfig.apiUrl}/api/config`)
-        .then((r) => r.ok && r.json())
-        .then((c) => c && setConfig(c))
-        .catch(() => {});
-    }, 1500);
+    await delay(1500);
+    setRestarting(false);
+    try {
+      const res = await fetch(`${webConfig.apiUrl}/api/config`);
+      if (res.ok) setConfig(await res.json());
+    } catch {}
   };
 
   return (
     <div className="bg-ctp-base flex min-h-screen items-start justify-center p-6 pt-20 pb-24">
       <div className="w-full max-w-2xl">
-        <div className="bg-ctp-mantle ring-ctp-crust overflow-hidden rounded-2xl shadow-[0_2px_16px_rgba(0,0,0,0.03),0_12px_48px_rgba(0,0,0,0.04)] ring-1">
+        <div className="bg-ctp-mantle ring-ctp-crust overflow-hidden rounded-2xl shadow-lg ring-1">
           <Nav
             activeTab={activeTab}
             onTabChange={setActiveTab}

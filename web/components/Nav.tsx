@@ -1,5 +1,5 @@
 import { tabs } from "./Types";
-import { SaveButton, RestartButton } from "./UI";
+import { PillButton, SaveButton, RestartButton } from "./UI";
 
 interface Props {
   activeTab: string;
@@ -22,22 +22,15 @@ export const Nav = ({
 }: Props) => (
   <div className="border-ctp-surface0 flex items-center justify-between border-b px-5 pt-4 pb-3">
     <nav className="flex items-center gap-1">
-      {tabs.map(({ id, name }) => {
-        const active = activeTab === id;
-        return (
-          <button
-            key={id}
-            onClick={() => onTabChange(id)}
-            className={`rounded-full px-3.5 py-2 text-[13px] font-medium transition-all duration-200 ${
-              active
-                ? "bg-ctp-pink text-ctp-base shadow-sm"
-                : "text-ctp-subtext0 hover:text-ctp-text hover:bg-ctp-surface0"
-            }`}
-          >
-            {name}
-          </button>
-        );
-      })}
+      {tabs.map(({ id, name }) => (
+        <PillButton
+          key={id}
+          active={activeTab === id}
+          onClick={() => onTabChange(id)}
+        >
+          {name}
+        </PillButton>
+      ))}
     </nav>
     <div className="flex items-center gap-2">
       <RestartButton onClick={onRestart} restarting={restarting} />

@@ -1,15 +1,14 @@
-import { useState, useEffect, type FC } from "react";
+import { useState, useEffect, type FC, type ReactNode } from "react";
 import { type WebConfig, defaultWebConfig } from "./Types";
 
 const inputBase =
-  "w-full px-3 py-2 bg-ctp-base border border-ctp-surface0 rounded-lg " +
-  "text-sm text-ctp-text placeholder:text-ctp-overlay1 " +
-  "focus:outline-none focus:border-ctp-pink focus:ring-2 focus:ring-ctp-pink/15 " +
-  "disabled:opacity-40 disabled:cursor-not-allowed disabled:bg-ctp-surface0 " +
-  "transition-colors duration-150";
+  `w-full px-3 py-2 bg-ctp-base border border-ctp-surface0 rounded-lg ` +
+  `text-sm text-ctp-text placeholder:text-ctp-overlay1 ` +
+  `focus:outline-none focus:border-ctp-pink focus:ring-2 focus:ring-ctp-pink/15 ` +
+  `disabled:opacity-40 disabled:cursor-not-allowed disabled:bg-ctp-surface0 ` +
+  `transition-colors duration-150`;
 
-const labelClass =
-  "block text-xs font-medium text-ctp-subtext0 mb-1.5 tracking-wide";
+const labelClass = `block text-xs font-medium text-ctp-subtext0 mb-1.5 tracking-wide`;
 
 export function useConfigSection<T>(config: T, onChange: (c: T) => void) {
   const [local, setLocal] = useState<T>(config);
@@ -19,13 +18,44 @@ export function useConfigSection<T>(config: T, onChange: (c: T) => void) {
   }, [config]);
 
   const update = (patch: Partial<T>) => {
-    const next = { ...local, ...patch };
-    setLocal(next);
-    onChange(next);
+    setLocal((prev) => {
+      const next = { ...prev, ...patch };
+      onChange(next);
+      return next;
+    });
   };
 
   return [local, update] as const;
 }
+
+export const PillButton: FC<{
+  active?: boolean;
+  onClick: () => void;
+  children: ReactNode;
+}> = ({ active, onClick, children }) => (
+  <button
+    type="button"
+    onClick={onClick}
+    className={`rounded-full px-3.5 py-2 text-sm font-medium transition-all duration-200 ${
+      active
+        ? "bg-ctp-pink text-ctp-base shadow-sm"
+        : "text-ctp-subtext0 hover:text-ctp-text hover:bg-ctp-surface0"
+    }`}
+  >
+    {children}
+  </button>
+);
+
+export const SectionWithToggle: FC<{
+  title: string;
+  enabled: boolean;
+  onToggle: (v: boolean) => void;
+}> = ({ title, enabled, onToggle }) => (
+  <div className="flex items-center justify-between">
+    <SectionHeader title={title} />
+    <ToggleRow checked={enabled} onChange={onToggle} />
+  </div>
+);
 
 export const Toggle: FC<{
   checked: boolean;
@@ -118,7 +148,7 @@ export const NumberInput: FC<{
 );
 
 export const SectionHeader: FC<{ title: string }> = ({ title }) => (
-  <h2 className="text-ctp-text text-[15px] font-semibold tracking-tight">
+  <h2 className="text-ctp-text text-base font-semibold tracking-tight">
     {title}
   </h2>
 );
@@ -132,7 +162,7 @@ export const SaveButton: FC<{
   <button
     onClick={onClick}
     disabled={saving || saved}
-    className={`rounded-full px-3.5 py-2 text-[13px] font-medium transition-all duration-200 ${
+    className={`rounded-full px-3.5 py-2 text-sm font-medium transition-all duration-200 ${
       saved
         ? "bg-ctp-surface0 text-ctp-overlay1"
         : "bg-ctp-pink text-ctp-base hover:bg-ctp-pink/85 shadow-sm"
@@ -150,7 +180,7 @@ export const RestartButton: FC<{
   <button
     onClick={onClick}
     disabled={restarting}
-    className={`text-ctp-subtext0 hover:text-ctp-text hover:bg-ctp-surface0 rounded-full px-3.5 py-2 text-[13px] font-medium transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-40`}
+    className={`text-ctp-subtext0 hover:text-ctp-text hover:bg-ctp-surface0 rounded-full px-3.5 py-2 text-sm font-medium transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-40`}
   >
     {restarting ? "Restarting..." : label}
   </button>
@@ -166,7 +196,7 @@ export const ErrorBar: FC<{ message: string; onDismiss: () => void }> = ({
       onClick={onDismiss}
       className="text-ctp-red/60 hover:text-ctp-red text-base leading-none transition-colors"
     >
-      ×
+      &times;
     </button>
   </div>
 );
@@ -178,7 +208,7 @@ export function useWebConfig() {
       if (stored) {
         return { ...defaultWebConfig, ...JSON.parse(stored) };
       }
-    } catch { /* ignore corrupt localStorage */ }
+    } catch {}
     return defaultWebConfig;
   });
 
@@ -187,7 +217,7 @@ export function useWebConfig() {
   }, [cfg]);
 
   const update = (patch: Partial<WebConfig>) =>
-    setCfg((prev: WebConfig) => ({ ...prev, ...patch }));
+    setCfg((prev) => ({ ...prev, ...patch }));
 
   return [cfg, update] as const;
 }

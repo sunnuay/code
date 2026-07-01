@@ -45,28 +45,23 @@ export const Content = ({
 
   const on =
     <K extends keyof Config>(key: K) =>
-    (c: Config[K]) =>
-      onChange(key, c);
+    (value: Config[K]) =>
+      onChange(key, value);
 
-  switch (activeTab) {
-    case "forward":
-      return <Forward config={config.forward} onChange={on("forward")} />;
-    case "reverse":
-      return <Reverse config={config.reverse} onChange={on("reverse")} />;
-    case "ddns":
-      return <DDNS config={config.ddns} onChange={on("ddns")} />;
-    case "cert":
-      return <Cert config={config.cert} onChange={on("cert")} />;
-    case "settings":
-      return (
-        <Settings
-          config={config.api}
-          onChange={on("api")}
-          webConfig={webConfig}
-          onWebConfigChange={onWebConfigChange}
-        />
-      );
-    default:
-      return null;
-  }
+  const content: Record<string, JSX.Element> = {
+    forward: <Forward config={config.forward} onChange={on("forward")} />,
+    reverse: <Reverse config={config.reverse} onChange={on("reverse")} />,
+    ddns: <DDNS config={config.ddns} onChange={on("ddns")} />,
+    cert: <Cert config={config.cert} onChange={on("cert")} />,
+    settings: (
+      <Settings
+        config={config.api}
+        onChange={on("api")}
+        webConfig={webConfig}
+        onWebConfigChange={onWebConfigChange}
+      />
+    ),
+  };
+
+  return content[activeTab] ?? null;
 };
