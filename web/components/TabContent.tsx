@@ -26,12 +26,12 @@ const TabContent = ({
             {[0, 1, 2].map((i) => (
               <div
                 key={i}
-                className="h-2 w-2 rounded-full bg-[#D5D3CC] animate-pulse"
+                className="h-2 w-2 rounded-full bg-ctp-overlay1 animate-pulse"
                 style={{ animationDelay: `${i * 150}ms` }}
               />
             ))}
           </div>
-          <span className="text-sm text-[#A3A3A3]">Loading configuration...</span>
+          <span className="text-sm text-ctp-overlay1">Loading configuration...</span>
         </div>
       </div>
     );

@@ -31,7 +31,7 @@ const APISettings = ({ config, onChange }: Props) => {
         placeholder=":10000"
       />
 
-      <p className="text-xs text-[#A3A3A3]">
+      <p className="text-xs text-ctp-overlay1">
         Changes to the listen address require a restart to take effect.
       </p>
     </div>

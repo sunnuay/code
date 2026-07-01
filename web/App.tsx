@@ -150,19 +150,12 @@ const App = () => {
   }, [fetchConfig]);
 
   return (
-    <div
-      className="min-h-screen bg-[#F5F4F1] flex items-start justify-center p-6 pt-20 pb-24"
-      style={{
-        backgroundImage:
-          "radial-gradient(circle, #E6E4DE 1px, transparent 1px)",
-        backgroundSize: "28px 28px",
-      }}
-    >
+    <div className="bg-ctp-base flex min-h-screen items-start justify-center p-6 pt-20 pb-24">
       <div className="w-full max-w-2xl">
         {/* Main card */}
-        <div className="bg-white rounded-2xl shadow-[0_2px_16px_rgba(0,0,0,0.03),0_12px_48px_rgba(0,0,0,0.04)] ring-1 ring-black/[0.03] overflow-hidden">
+        <div className="bg-ctp-mantle ring-ctp-crust overflow-hidden rounded-2xl shadow-[0_2px_16px_rgba(0,0,0,0.03),0_12px_48px_rgba(0,0,0,0.04)] ring-1">
           {/* Header: nav pills + actions */}
-          <div className="px-5 pt-4 pb-3 flex items-center justify-between border-b border-[#F0EFEB]">
+          <div className="border-ctp-surface0 flex items-center justify-between border-b px-5 pt-4 pb-3">
             <div className="flex items-center gap-1">
               {menuItems.map((item) => {
                 const isActive = activeTab === item.id;
@@ -170,10 +163,10 @@ const App = () => {
                   <button
                     key={item.id}
                     onClick={() => setActiveTab(item.id)}
-                    className={`px-3.5 py-2 rounded-full text-[13px] font-medium transition-all duration-200 ${
+                    className={`rounded-full px-3.5 py-2 text-[13px] font-medium transition-all duration-200 ${
                       isActive
-                        ? "bg-[#1E1E3F] text-white shadow-sm"
-                        : "text-[#6B6B6B] hover:text-[#171717] hover:bg-[#F5F4F1]"
+                        ? "bg-ctp-pink text-ctp-base shadow-sm"
+                        : "text-ctp-subtext0 hover:text-ctp-text hover:bg-ctp-surface0"
                     }`}
                   >
                     {item.name}
