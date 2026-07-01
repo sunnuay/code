@@ -1,43 +1,32 @@
-import { useState, useEffect } from "react";
-import type { DDNSConfig } from "../App";
+import type { DDNSConfig } from "./Types";
 import {
+  useConfigSection,
   SectionHeader,
   ToggleRow,
-  MonoInput,
   Input,
   NumberInput,
-} from "./Primitives";
+} from "./UI";
 
 interface Props {
   config: DDNSConfig;
   onChange: (c: DDNSConfig) => void;
 }
 
-const DDNS = ({ config, onChange }: Props) => {
-  const [local, setLocal] = useState<DDNSConfig>(config);
-
-  useEffect(() => {
-    setLocal(config);
-  }, [config]);
-
-  const update = (patch: Partial<DDNSConfig>) => {
-    const next = { ...local, ...patch };
-    setLocal(next);
-    onChange(next);
-  };
+export const DDNS = ({ config, onChange }: Props) => {
+  const [local, update] = useConfigSection(config, onChange);
 
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between">
         <SectionHeader title="Dynamic DNS" />
         <ToggleRow
-          label=""
           checked={local.enabled}
           onChange={(v) => update({ enabled: v })}
         />
       </div>
 
-      <MonoInput
+      <Input
+        mono
         label="Domain"
         value={local.domain}
         onChange={(v) => update({ domain: v })}
@@ -61,5 +50,3 @@ const DDNS = ({ config, onChange }: Props) => {
     </div>
   );
 };
-
-export default DDNS;

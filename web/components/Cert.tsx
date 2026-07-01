@@ -1,42 +1,26 @@
-import { useState, useEffect } from "react";
-import type { CertConfig } from "../App";
-import {
-  SectionHeader,
-  ToggleRow,
-  MonoInput,
-  Input,
-} from "./Primitives";
+import type { CertConfig } from "./Types";
+import { useConfigSection, SectionHeader, ToggleRow, Input } from "./UI";
 
 interface Props {
   config: CertConfig;
   onChange: (c: CertConfig) => void;
 }
 
-const CertManagement = ({ config, onChange }: Props) => {
-  const [local, setLocal] = useState<CertConfig>(config);
-
-  useEffect(() => {
-    setLocal(config);
-  }, [config]);
-
-  const update = (patch: Partial<CertConfig>) => {
-    const next = { ...local, ...patch };
-    setLocal(next);
-    onChange(next);
-  };
+export const Cert = ({ config, onChange }: Props) => {
+  const [local, update] = useConfigSection(config, onChange);
 
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between">
         <SectionHeader title="Auto Certificate" />
         <ToggleRow
-          label=""
           checked={local.enabled}
           onChange={(v) => update({ enabled: v })}
         />
       </div>
 
-      <MonoInput
+      <Input
+        mono
         label="Domain"
         value={local.domain}
         onChange={(v) => update({ domain: v })}
@@ -52,14 +36,16 @@ const CertManagement = ({ config, onChange }: Props) => {
       />
 
       <div className="grid grid-cols-2 gap-3">
-        <MonoInput
+        <Input
+          mono
           label="Cert Path"
           value={local.cert}
           onChange={(v) => update({ cert: v })}
           placeholder=".cache/cert.pem"
           hint="Let's Encrypt certificate destination"
         />
-        <MonoInput
+        <Input
+          mono
           label="Key Path"
           value={local.key}
           onChange={(v) => update({ key: v })}
@@ -70,5 +56,3 @@ const CertManagement = ({ config, onChange }: Props) => {
     </div>
   );
 };
-
-export default CertManagement;
