@@ -36,7 +36,7 @@ asio::awaitable<void> async_main(asio::io_context &io_context) {
       co_return res;
     });
 
-    short port = 10001;
+    short port = 9090;
     Server server(io_context, port, router);
     server.start();
     std::println("Serving on {}", port);
