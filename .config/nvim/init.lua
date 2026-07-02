@@ -43,8 +43,12 @@ vim.pack.add({ { src = "https://github.com/akinsho/toggleterm.nvim" } })
 require("toggleterm").setup({ open_mapping = "<C-/>" })
 local Terminal = require("toggleterm.terminal").Terminal
 local lazygit = Terminal:new({ cmd = "lazygit", direction = "float" })
+local claude = Terminal:new({ cmd = "claude", direction = "float" })
 vim.keymap.set("n", "<leader>g", function()
 	lazygit:toggle()
+end)
+vim.keymap.set("n", "<leader>c", function()
+	claude:toggle()
 end)
 
 -- saghen/blink.cmp
